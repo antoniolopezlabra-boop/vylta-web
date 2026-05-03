@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VYLTA — La agenda de citas más fácil para tu negocio. Gestiona citas, clientes y recordatorios por WhatsApp. Para barberías, estéticas, spas y consultorios en México.">
+  <meta name="keywords" content="agenda de citas, citas online, sistema de citas, app citas mexico, software barberia, agenda salon belleza, whatsapp business, agenda spa">
+  <meta name="author" content="VYLTA">
+  <meta property="og:title" content="VYLTA — Cada cliente regresa">
+  <meta property="og:description" content="La agenda de citas más fácil para tu negocio. Gestiona citas, clientes y WhatsApp en un solo lugar.">
+  <meta property="og:url" content="https://vylta.lat">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_MX">
+  <link rel="canonical" href="https://vylta.lat">
+  <title>VYLTA — Agenda de citas para tu negocio · Cada cliente regresa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #10B981;
+      --green-dark: #059669;
+      --teal: #14B8A6;
+      --emerald: #34D399;
+      --indigo: #6366F1;
+      --purple: #8B5CF6;
+      --bg: #FAFBFC;
+      --surface: #FFFFFF;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --text-light: #94A3B8;
+      --border: #E2E8F0;
+      --gradient-hero: linear-gradient(135deg, #10B981 0%, #14B8A6 50%, #06B6D4 100%);
+      --gradient-soft: linear-gradient(135deg, rgba(16,185,129,.08) 0%, rgba(99,102,241,.08) 100%);
+      --gradient-button: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      --gradient-luxury: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+      --shadow-sm: 0 1px 2px rgba(15,23,42,.05);
+      --shadow: 0 4px 6px -1px rgba(15,23,42,.07), 0 2px 4px -2px rgba(15,23,42,.05);
+      --shadow-lg: 0 20px 25px -5px rgba(15,23,42,.1), 0 8px 10px -6px rgba(15,23,42,.05);
+      --shadow-glow: 0 0 40px rgba(16,185,129,.25);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 24px; max-width: 1200px; margin: 0 auto;
+    }
+    .logo {
+      font-size: 24px; font-weight: 900; letter-spacing: -0.5px;
+      background: var(--gradient-hero);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 32px; align-items: center; }
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 15px;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--green); }
+    .nav-cta {
+      background: var(--gradient-button); color: white !important;
+      padding: 10px 20px; border-radius: 10px; font-weight: 600;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: var(--shadow-glow); color: white !important; }
+    @media (max-width: 768px) {
+      .nav-links a:not(.nav-cta) { display: none; }
+    }
+
+    .hero {
+      position: relative; padding: 140px 0 100px;
+      background: linear-gradient(180deg, #FFFFFF 0%, #F0FDFA 50%, #FAFBFC 100%);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -200px; right: -200px;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(16,185,129,.15) 0%, transparent 70%);
+      animation: float 8s ease-in-out infinite;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: -300px; left: -200px;
+      width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(99,102,241,.1) 0%, transparent 70%);
+      animation: float 10s ease-in-out infinite reverse;
+    }
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(30px, -30px); }
+    }
+    .hero-inner { position: relative; z-index: 1; text-align: center; max-width: 800px; margin: 0 auto; }
+    .badge {
+      display: inline-block; padding: 6px 14px;
+      background: rgba(16,185,129,.1); color: var(--green-dark);
+      border: 1px solid rgba(16,185,129,.2);
+      border-radius: 100px; font-size: 13px; font-weight: 600;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: clamp(36px, 6vw, 64px); font-weight: 900;
+      line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 24px;
+    }
+    h1 .gradient {
+      background: var(--gradient-hero);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: clamp(16px, 2vw, 20px); color: var(--text-muted);
+      max-width: 640px; margin: 0 auto 40px; line-height: 1.6;
+    }
+    .cta-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 12px; font-weight: 600; font-size: 16px;
+      text-decoration: none; transition: all .25s; border: none; cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--gradient-button); color: white;
+      box-shadow: 0 4px 14px rgba(16,185,129,.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16,185,129,.4); }
+    .btn-secondary {
+      background: white; color: var(--text); border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--green); color: var(--green); }
+    .hero-stats {
+      display: flex; gap: 48px; justify-content: center; flex-wrap: wrap;
+      margin-top: 64px; padding-top: 40px; border-top: 1px solid var(--border);
+    }
+    .stat-num { font-size: 28px; font-weight: 800; color: var(--green); }
+    .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+    section.block { padding: 100px 0; }
+    .section-head { text-align: center; max-width: 720px; margin: 0 auto 64px; }
+    .section-head h2 {
+      font-size: clamp(28px, 4vw, 44px); font-weight: 800;
+      letter-spacing: -1px; margin-bottom: 16px;
+    }
+    .section-head p { font-size: 18px; color: var(--text-muted); }
+    .section-eyebrow {
+      display: inline-block; font-size: 13px; font-weight: 700;
+      color: var(--green); text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .features-grid {
+      display: grid; gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    .feature {
+      background: white; border-radius: 20px; padding: 32px;
+      border: 1px solid var(--border); transition: all .3s;
+      position: relative; overflow: hidden;
+    }
+    .feature::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--gradient-hero); transform: scaleX(0); transform-origin: left;
+      transition: transform .3s;
+    }
+    .feature:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: transparent; }
+    .feature:hover::before { transform: scaleX(1); }
+    .feature-icon {
+      width: 56px; height: 56px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--gradient-soft);
+      margin-bottom: 20px; font-size: 28px;
+    }
+    .feature h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .feature p { color: var(--text-muted); font-size: 15px; line-height: 1.6; }
+
+    .plans-section { background: linear-gradient(180deg, #FAFBFC 0%, #FFFFFF 100%); }
+    .plans-grid {
+      display: grid; gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      max-width: 1100px; margin: 0 auto;
+    }
+    .plan {
+      background: white; border-radius: 24px; padding: 40px 32px;
+      border: 2px solid var(--border); position: relative;
+      display: flex; flex-direction: column; transition: all .3s;
+    }
+    .plan:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .plan-popular {
+      border-color: var(--green);
+      background: linear-gradient(180deg, white 0%, rgba(16,185,129,.02) 100%);
+    }
+    .plan-popular::before {
+      content: 'MÁS POPULAR'; position: absolute; top: -12px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--gradient-button); color: white;
+      padding: 4px 14px; border-radius: 100px; font-size: 11px; font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .plan-luxury { border-color: #C7D2FE; background: linear-gradient(180deg, rgba(99,102,241,.04) 0%, rgba(139,92,246,.04) 100%); }
+    .plan-name { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px; }
+    .plan-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 8px; }
+    .plan-price .num { font-size: 48px; font-weight: 900; letter-spacing: -2px; }
+    .plan-price .currency { font-size: 18px; color: var(--text-muted); font-weight: 600; }
+    .plan-price .period { font-size: 14px; color: var(--text-muted); }
+    .plan-tagline { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; }
+    .plan-features { list-style: none; margin-bottom: 32px; flex: 1; }
+    .plan-features li {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 8px 0; font-size: 14px; color: var(--text);
+    }
+    .plan-features li::before {
+      content: '✓'; color: var(--green); font-weight: 800;
+      flex-shrink: 0; font-size: 16px;
+    }
+    .plan-luxury .plan-features li::before { color: var(--purple); }
+    .plan .btn { justify-content: center; }
+
+    .steps {
+      display: grid; gap: 32px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+    .step { text-align: center; }
+    .step-num {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--gradient-button); color: white;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 22px;
+      box-shadow: var(--shadow-glow); margin-bottom: 20px;
+    }
+    .step h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .step p { color: var(--text-muted); }
+
+    .cta-block { background: var(--gradient-hero); position: relative; overflow: hidden; }
+    .cta-block::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background-image: radial-gradient(circle at 20% 50%, rgba(255,255,255,.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255,255,255,.1) 0%, transparent 50%);
+    }
+    .cta-content { position: relative; z-index: 1; text-align: center; color: white; padding: 80px 24px; }
+    .cta-content h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 800; margin-bottom: 16px; letter-spacing: -1px; }
+    .cta-content p { font-size: 18px; opacity: .95; margin-bottom: 32px; }
+    .cta-content .btn-primary { background: white; color: var(--green-dark); }
+    .cta-content .btn-primary:hover { box-shadow: 0 8px 30px rgba(0,0,0,.2); }
+
+    footer {
+      background: #0F172A; color: #94A3B8; padding: 64px 0 32px;
+    }
+    .footer-grid {
+      display: grid; gap: 48px;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      margin-bottom: 48px;
+    }
+    @media (max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+    .footer-brand .logo { font-size: 28px; }
+    .footer-brand p { margin-top: 16px; max-width: 320px; line-height: 1.6; font-size: 14px; }
+    .footer-col h4 {
+      color: white; font-size: 14px; font-weight: 700;
+      margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 10px; }
+    .footer-col a {
+      color: #94A3B8; text-decoration: none; font-size: 14px;
+      transition: color .2s;
+    }
+    .footer-col a:hover { color: var(--emerald); }
+    .footer-bottom {
+      padding-top: 32px; border-top: 1px solid #1E293B;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+      font-size: 13px;
+    }
+    .footer-bottom .made {
+      background: linear-gradient(135deg, #34D399, #6366F1);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">VYLTA</a>
+      <div class="nav-links">
+        <a href="#caracteristicas">Características</a>
+        <a href="#planes">Planes</a>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#planes" class="nav-cta">Comenzar</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <span class="badge">✨ Hecho en México · Para negocios mexicanos</span>
+        <h1>La agenda donde <span class="gradient">cada cliente regresa</span></h1>
+        <p>VYLTA gestiona tus citas, clientes y recordatorios automáticos por WhatsApp en un solo lugar. Diseñado para barberías, estéticas, spas y consultorios.</p>
+        <div class="cta-row">
+          <a href="#planes" class="btn btn-primary">Comenzar gratis →</a>
+          <a href="#como-funciona" class="btn btn-secondary">Ver cómo funciona</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="stat-num">$0</div>
+            <div class="stat-label">Plan Básico</div>
+          </div>
+          <div>
+            <div class="stat-num">2 min</div>
+            <div class="stat-label">Configuración inicial</div>
+          </div>
+          <div>
+            <div class="stat-num">24/7</div>
+            <div class="stat-label">Recordatorios automáticos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="caracteristicas" class="block">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Características</span>
+        <h2>Todo lo que necesitas para no perder ni una cita</h2>
+        <p>VYLTA combina lo esencial de un CRM, un calendario y un sistema de recordatorios automáticos en una sola app móvil.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature">
+          <div class="feature-icon">📅</div>
+          <h3>Calendario inteligente</h3>
+          <p>Agenda con validación automática de horarios, bloqueos de comida, descansos y conflictos. Sin doble agendamiento.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">💬</div>
+          <h3>WhatsApp Business</h3>
+          <p>Recordatorios automáticos al agendar, 24h antes y 2h antes. Se envían desde el número oficial de VYLTA, certificado por Meta.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔗</div>
+          <h3>Link de citas público</h3>
+          <p>Tu propia página personalizada (book.vylta.lat/tu-negocio). Tus clientes agendan directamente sin pedirte horario.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📊</div>
+          <h3>Reportes en tiempo real</h3>
+          <p>Ingresos del día, semana y mes. Citas completadas, canceladas, asistencia. Toma decisiones con datos.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">👥</div>
+          <h3>Equipo y colaboradores</h3>
+          <p>Asigna citas a tus colaboradores, configura horarios individuales y permite citas simultáneas (Plan Luxury).</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🤖</div>
+          <h3>Asistente IA de soporte</h3>
+          <p>¿Dudas de cómo usar la app? Nuestro asistente de IA te responde en segundos, todos los días (Premium y Luxury).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="planes" class="block plans-section">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Planes</span>
+        <h2>Precios claros, sin sorpresas</h2>
+        <p>Empieza con el Plan Básico. Crece cuando estés listo. Cancela cuando quieras desde la app.</p>
+      </div>
+      <div class="plans-grid">
+        <div class="plan">
+          <div class="plan-name">Básico</div>
+          <div class="plan-price">
+            <span class="currency">$</span>
+            <span class="num">0</span>
+            <span class="period">MXN/mes</span>
+          </div>
+          <p class="plan-tagline">Para arrancar con lo esencial</p>
+          <ul class="plan-features">
+            <li>Hasta 10 citas al mes</li>
+            <li>Catálogo de servicios</li>
+            <li>Registro de clientes</li>
+            <li>Link público de citas</li>
+            <li>Bloqueos de tiempo (comida)</li>
+            <li>Modo claro y oscuro</li>
+            <li>Exportación CSV mensual</li>
+          </ul>
+          <a href="#" class="btn btn-secondary">Comenzar</a>
+        </div>
+
+        <div class="plan plan-popular">
+          <div class="plan-name">Premium</div>
+          <div class="plan-price">
+            <span class="currency">$</span>
+            <span class="num">399</span>
+            <span class="period">MXN/mes</span>
+          </div>
+          <p class="plan-tagline">Para crecer y profesionalizar</p>
+          <ul class="plan-features">
+            <li><strong>Citas ilimitadas</strong></li>
+            <li>Recordatorios WhatsApp automáticos</li>
+            <li>Confirmación al agendar</li>
+            <li>Recordatorio 24h y 2h antes</li>
+            <li>Reportes detallados</li>
+            <li>Lista de espera</li>
+            <li>Asistente IA de soporte</li>
+          </ul>
+          <a href="#" class="btn btn-primary">Comenzar Premium</a>
+        </div>
+
+        <div class="plan plan-luxury">
+          <div class="plan-name">Luxury</div>
+          <div class="plan-price">
+            <span class="currency">$</span>
+            <span class="num">799</span>
+            <span class="period">MXN/mes</span>
+          </div>
+          <p class="plan-tagline">Para equipos y clínicas</p>
+          <ul class="plan-features">
+            <li>Equipo de hasta 5 colaboradores</li>
+            <li>Citas simultáneas</li>
+            <li>Horarios individuales por colaborador</li>
+            <li>Email marketing</li>
+            <li>Cumpleaños automáticos</li>
+            <li>Recuperación de clientes inactivos</li>
+            <li>Soporte prioritario</li>
+          </ul>
+          <a href="#" class="btn btn-secondary">Comenzar Luxury</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="como-funciona" class="block">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-eyebrow">Cómo funciona</span>
+        <h2>De cero a recibir citas en 5 minutos</h2>
+        <p>El setup wizard te guía paso a paso. Sin instalaciones complicadas, sin contratos.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Regístrate</h3>
+          <p>Descarga la app, crea tu cuenta y completa el wizard de 4 pasos en 2 minutos.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Configura tu negocio</h3>
+          <p>Agrega servicios, horarios y comparte tu link de citas (book.vylta.lat/tu-negocio).</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Recibe citas</h3>
+          <p>Tus clientes agendan solos. Recibe recordatorios automáticos. Cada cliente regresa.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-block">
+    <div class="cta-content">
+      <h2>Empieza hoy. Es gratis.</h2>
+      <p>Sin tarjeta de crédito. Sin compromisos. Cancela cuando quieras.</p>
+      <a href="#planes" class="btn btn-primary">Comenzar ahora →</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="logo">VYLTA</a>
+          <p>La agenda de citas más fácil para tu negocio. Hecho en Querétaro, México.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Producto</h4>
+          <ul>
+            <li><a href="#caracteristicas">Características</a></li>
+            <li><a href="#planes">Planes</a></li>
+            <li><a href="#como-funciona">Cómo funciona</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="/privacy">Privacidad</a></li>
+            <li><a href="/terms">Términos</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contacto</h4>
+          <ul>
+            <li><a href="mailto:soporte@vylta.lat">soporte@vylta.lat</a></li>
+            <li><a href="mailto:legal@vylta.lat">legal@vylta.lat</a></li>
+            <li><a href="mailto:privacidad@vylta.lat">privacidad@vylta.lat</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 VYLTA · Querétaro, México · <span class="made">Cada cliente regresa</span></div>
+        <div>Hecho con 💚 para micro-negocios</div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
