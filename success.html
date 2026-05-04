@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0A0E1A">
+<meta name="description" content="¡Bienvenido a VYLTA! Tu suscripción se activó correctamente.">
+<meta name="robots" content="noindex,nofollow">
+<title>¡Listo! · Bienvenido a VYLTA</title>
+<link rel="canonical" href="https://vylta.lat/success.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0E1A;
+  --bg-elev:#0F1424;
+  --bg-elev-2:#161B2E;
+  --border:rgba(255,255,255,.08);
+  --border-strong:rgba(255,255,255,.14);
+  --text:#F1F5F9;
+  --text-muted:#94A3B8;
+  --text-dim:#64748B;
+  --green:#10B981;
+  --green-bright:#34D399;
+  --teal:#14B8A6;
+  --cyan:#06B6D4;
+  --indigo:#6366F1;
+  --purple:#A78BFA;
+  --pink:#F472B6;
+  --amber:#FBBF24;
+  --gradient-primary:linear-gradient(135deg,#10B981 0%,#06B6D4 100%);
+  --gradient-glow:radial-gradient(ellipse at center,rgba(16,185,129,.25) 0%,transparent 70%);
+  --gradient-mesh:radial-gradient(at 27% 37%,rgba(16,185,129,.18) 0,transparent 50%),radial-gradient(at 97% 21%,rgba(20,184,166,.13) 0,transparent 50%),radial-gradient(at 52% 99%,rgba(99,102,241,.13) 0,transparent 50%),radial-gradient(at 10% 89%,rgba(6,182,212,.13) 0,transparent 50%);
+  --shadow-card:0 1px 0 0 rgba(255,255,255,.04) inset,0 24px 48px -12px rgba(0,0,0,.5);
+  --radius-sm:8px;
+  --radius:14px;
+  --radius-lg:20px;
+  --radius-xl:28px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',-apple-system,system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  overflow-x:hidden;
+}
+::selection{background:rgba(16,185,129,.3);color:var(--text)}
+img,svg{display:block;max-width:100%}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+a{color:inherit;text-decoration:none}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;letter-spacing:-.02em}
+
+/* Noise */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.6'/%3E%3C/svg%3E");
+  opacity:.025;mix-blend-mode:overlay;
+}
+
+/* Mesh background */
+body::after{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:var(--gradient-mesh);
+  animation:meshMove 22s ease-in-out infinite alternate;
+}
+@keyframes meshMove{
+  0%{transform:scale(1) rotate(0deg)}
+  100%{transform:scale(1.2) rotate(8deg)}
+}
+
+/* ═══ NAV ═══ */
+nav.top{
+  position:relative;z-index:10;
+  padding:24px 0;
+  border-bottom:1px solid var(--border);
+}
+.nav-inner{
+  max-width:1240px;margin:0 auto;
+  padding:0 24px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo{
+  font-size:22px;font-weight:900;letter-spacing:-.04em;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.logo-mark{
+  width:30px;height:30px;border-radius:9px;
+  background:var(--gradient-primary);
+  display:grid;place-items:center;
+  position:relative;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(255,255,255,.1) inset,0 8px 24px -8px rgba(16,185,129,.5);
+}
+.logo-mark::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 50%,rgba(255,255,255,.2) 100%);
+}
+.logo-mark svg{position:relative;z-index:1}
+.logo-text{background:linear-gradient(135deg,#fff 0%,#94A3B8 120%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.nav-back{
+  font-size:13px;font-weight:500;color:var(--text-muted);
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:8px;
+  transition:color .2s,background .2s;
+}
+.nav-back:hover{color:var(--text);background:rgba(255,255,255,.04)}
+
+/* ═══ MAIN ═══ */
+main{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:80px 24px 60px;
+  position:relative;z-index:2;
+}
+@media(max-width:640px){main{padding:48px 20px 40px}}
+
+.success-card{
+  max-width:560px;width:100%;
+  text-align:center;
+}
+
+/* Check icon */
+.success-icon-wrap{
+  position:relative;
+  width:120px;height:120px;
+  margin:0 auto 36px;
+}
+.success-icon-glow{
+  position:absolute;inset:-30px;
+  background:radial-gradient(circle,rgba(16,185,129,.4) 0%,transparent 70%);
+  filter:blur(20px);
+  animation:glowPulse 3s ease-in-out infinite;
+}
+@keyframes glowPulse{
+  0%,100%{opacity:.6;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.05)}
+}
+.success-icon{
+  position:relative;
+  width:120px;height:120px;border-radius:50%;
+  background:var(--gradient-primary);
+  display:grid;place-items:center;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.15) inset,
+    0 1px 0 rgba(255,255,255,.25) inset,
+    0 20px 60px -10px rgba(16,185,129,.6);
+  animation:iconBounce .8s cubic-bezier(.34,1.56,.64,1) .2s both;
+}
+@keyframes iconBounce{
+  0%{transform:scale(0) rotate(-180deg);opacity:0}
+  100%{transform:scale(1) rotate(0deg);opacity:1}
+}
+.success-icon::before{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:linear-gradient(135deg,transparent 50%,rgba(255,255,255,.2) 100%);
+}
+.success-icon svg{
+  position:relative;z-index:1;
+  stroke-dasharray:30;stroke-dashoffset:30;
+  animation:checkDraw .6s ease-out 1s forwards;
+}
+@keyframes checkDraw{
+  to{stroke-dashoffset:0}
+}
+
+/* Eyebrow */
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 14px;border-radius:100px;
+  background:rgba(16,185,129,.08);
+  border:1px solid rgba(16,185,129,.2);
+  font-size:12px;font-weight:600;
+  color:var(--green-bright);
+  margin-bottom:20px;
+  backdrop-filter:blur(8px);
+  animation:fadeUp .6s ease-out .4s both;
+}
+.pulse{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green-bright);
+  box-shadow:0 0 0 0 rgba(52,211,153,.7);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(52,211,153,.7)}
+  70%{box-shadow:0 0 0 8px rgba(52,211,153,0)}
+  100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}
+}
+
+/* Title */
+h1{
+  font-size:clamp(32px,5vw,48px);
+  font-weight:900;letter-spacing:-.04em;line-height:1.05;
+  margin-bottom:16px;
+  animation:fadeUp .6s ease-out .5s both;
+}
+h1 .gradient{
+  background:linear-gradient(135deg,#34D399 0%,#06B6D4 50%,#A78BFA 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+p.subtitle{
+  font-size:clamp(16px,2vw,18px);
+  color:var(--text-muted);
+  line-height:1.6;
+  margin-bottom:40px;
+  animation:fadeUp .6s ease-out .6s both;
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* Steps */
+.steps{
+  background:linear-gradient(180deg,rgba(255,255,255,.04) 0%,rgba(255,255,255,.01) 100%);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:32px;
+  margin-bottom:32px;
+  text-align:left;
+  animation:fadeUp .6s ease-out .7s both;
+}
+@media(max-width:640px){.steps{padding:24px}}
+
+.steps-title{
+  font-size:13px;font-weight:700;
+  color:var(--text-muted);text-transform:uppercase;letter-spacing:.16em;
+  margin-bottom:20px;
+}
+
+.step{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:14px 0;
+  border-bottom:1px solid var(--border);
+}
+.step:last-child{border-bottom:none;padding-bottom:0}
+.step:first-child{padding-top:0}
+
+.step-num{
+  flex-shrink:0;
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(16,185,129,.12);
+  border:1px solid rgba(16,185,129,.25);
+  color:var(--green-bright);
+  font-size:13px;font-weight:700;
+  display:grid;place-items:center;
+  font-family:'JetBrains Mono',monospace;
+}
+
+.step-content{flex:1;min-width:0}
+.step-h{font-size:15px;font-weight:600;color:var(--text);margin-bottom:2px;letter-spacing:-.01em}
+.step-p{font-size:13px;color:var(--text-muted);line-height:1.55}
+
+/* Actions */
+.actions{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  margin-bottom:32px;
+  animation:fadeUp .6s ease-out .8s both;
+}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 24px;border-radius:12px;
+  font-size:15px;font-weight:600;
+  transition:transform .15s ease,box-shadow .25s,background .2s,color .2s;
+  white-space:nowrap;cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.btn-primary{
+  background:var(--gradient-primary);color:#031913;
+  box-shadow:0 0 0 1px rgba(255,255,255,.15) inset,0 1px 0 rgba(255,255,255,.25) inset,0 8px 20px -6px rgba(16,185,129,.5);
+  font-weight:700;
+}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 0 0 1px rgba(255,255,255,.2) inset,0 1px 0 rgba(255,255,255,.3) inset,0 14px 30px -6px rgba(16,185,129,.6)}
+.btn-primary:active{transform:translateY(0)}
+.btn-secondary{
+  background:rgba(255,255,255,.05);color:var(--text);
+  border:1px solid var(--border-strong);
+  backdrop-filter:blur(8px);
+}
+.btn-secondary:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2)}
+
+/* Support */
+.support{
+  font-size:14px;color:var(--text-muted);
+  animation:fadeUp .6s ease-out .9s both;
+}
+.support a{
+  color:var(--green-bright);
+  font-weight:500;
+  transition:color .2s;
+}
+.support a:hover{color:var(--text)}
+
+/* Footer */
+footer{
+  padding:32px 0;
+  border-top:1px solid var(--border);
+  position:relative;z-index:2;
+  text-align:center;
+  font-size:12px;color:var(--text-dim);
+}
+.footer-inner{
+  max-width:1240px;margin:0 auto;
+  padding:0 24px;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:14px;
+}
+.footer-status{
+  display:inline-flex;align-items:center;gap:8px;
+}
+.status-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--green-bright);
+  box-shadow:0 0 12px var(--green-bright);
+  animation:pulse 2s infinite;
+}
+
+/* Confetti decoration (subtle) */
+.confetti{
+  position:absolute;
+  width:8px;height:8px;
+  background:var(--green-bright);
+  border-radius:2px;
+  opacity:0;
+  pointer-events:none;
+}
+.confetti.c1{top:20%;left:15%;background:var(--green-bright);animation:fall1 3s ease-out 1s infinite}
+.confetti.c2{top:30%;right:15%;background:var(--cyan);animation:fall2 3.5s ease-out 1.2s infinite}
+.confetti.c3{top:25%;left:30%;background:var(--purple);animation:fall1 4s ease-out 1.5s infinite}
+.confetti.c4{top:18%;right:35%;background:var(--amber);animation:fall2 3s ease-out 1.8s infinite}
+.confetti.c5{top:35%;left:60%;background:var(--green);animation:fall1 3.5s ease-out 2s infinite}
+.confetti.c6{top:22%;right:55%;background:var(--pink);animation:fall2 4s ease-out 2.2s infinite}
+@keyframes fall1{
+  0%{opacity:0;transform:translateY(-20px) rotate(0deg)}
+  10%{opacity:1}
+  100%{opacity:0;transform:translateY(120vh) rotate(720deg)}
+}
+@keyframes fall2{
+  0%{opacity:0;transform:translateY(-20px) rotate(0deg)}
+  10%{opacity:1}
+  100%{opacity:0;transform:translateY(120vh) rotate(-720deg)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="top">
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <span class="logo-mark">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 5h18M5 5v14a2 2 0 002 2h10a2 2 0 002-2V5M9 11l2 2 4-4" stroke="#031913" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="logo-text">VYLTA</span>
+    </a>
+    <a href="/" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Volver al inicio
+    </a>
+  </div>
+</nav>
+
+<!-- Confetti -->
+<span class="confetti c1"></span>
+<span class="confetti c2"></span>
+<span class="confetti c3"></span>
+<span class="confetti c4"></span>
+<span class="confetti c5"></span>
+<span class="confetti c6"></span>
+
+<!-- MAIN -->
+<main>
+  <div class="success-card">
+
+    <div class="success-icon-wrap">
+      <div class="success-icon-glow"></div>
+      <div class="success-icon">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none">
+          <path d="M5 13l4 4L19 7" stroke="#031913" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="eyebrow">
+      <span class="pulse"></span>
+      Pago confirmado
+    </div>
+
+    <h1>
+      ¡Bienvenido a<br>
+      <span class="gradient">VYLTA</span>!
+    </h1>
+
+    <p class="subtitle">
+      Tu suscripción está activa. Recibirás un correo de confirmación con tu recibo en los próximos minutos.
+    </p>
+
+    <div class="steps">
+      <div class="steps-title">Próximos pasos</div>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-h">Abre la app de VYLTA</div>
+          <div class="step-p">En tu celular, abre la app de VYLTA con la cuenta donde realizaste el pago.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-h">Refresca tu sesión</div>
+          <div class="step-p">Cierra y vuelve a abrir la app, o desliza hacia abajo para refrescar. Tu plan ya estará activo.</div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-h">Disfruta tus nuevas funciones</div>
+          <div class="step-p">Recordatorios automáticos por WhatsApp, citas ilimitadas, reportes y mucho más.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a href="/" class="btn btn-primary">
+        Ir al inicio
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="mailto:soporte@vylta.lat" class="btn btn-secondary">
+        Contactar soporte
+      </a>
+    </div>
+
+    <p class="support">
+      ¿Tienes alguna duda? Escríbenos a <a href="mailto:soporte@vylta.lat">soporte@vylta.lat</a>
+    </p>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>© 2026 VYLTA · Querétaro, México</div>
+    <div class="footer-status">
+      <span class="status-dot"></span>
+      Pago procesado de forma segura por Stripe
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
