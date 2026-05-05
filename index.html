@@ -417,6 +417,7 @@ section.block{padding:120px 0;position:relative}
   padding:28px;
   position:relative;overflow:hidden;
   transition:border-color .3s,transform .3s;
+  min-width:0;
 }
 .bento-card::before{
   content:"";position:absolute;inset:0;border-radius:var(--radius-lg);
@@ -430,13 +431,16 @@ section.block{padding:120px 0;position:relative}
 .bento-card.span-2{grid-column:span 2}
 .bento-card.span-6{grid-column:span 6}
 .bento-card.row-2{grid-row:span 2}
+
+/* TABLET medio (881-1024 ya usa el grid de 6 cols, así está bien) */
+/* TABLET pequeño y MOBILE: 1 sola columna para evitar overflow del mini-wa dentro del card */
 @media(max-width:880px){
-  .bento{grid-template-columns:repeat(2,1fr)}
-  .bento-card.span-3,.bento-card.span-4,.bento-card.span-6{grid-column:span 2}
-}
-@media(max-width:520px){
   .bento{grid-template-columns:1fr}
-  .bento-card.span-2{grid-column:span 1}
+  .bento-card.span-2,
+  .bento-card.span-3,
+  .bento-card.span-4,
+  .bento-card.span-6{grid-column:span 1}
+  .bento-card.row-2{grid-row:auto}
 }
 .bento-icon{
   width:44px;height:44px;border-radius:12px;
@@ -491,16 +495,18 @@ section.block{padding:120px 0;position:relative}
 .mini-wa{
   width:100%;max-width:260px;background:#0B141A;
   border-radius:14px;padding:14px;border:1px solid var(--border);
+  min-width:0;
 }
 .mini-wa-head{display:flex;align-items:center;gap:8px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:10px}
-.mini-wa-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#25D366,#128C7E);display:grid;place-items:center;color:#fff;font-size:10px;font-weight:800}
-.mini-wa-info{display:flex;flex-direction:column;gap:1px}
+.mini-wa-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#25D366,#128C7E);display:grid;place-items:center;color:#fff;font-size:10px;font-weight:800;flex-shrink:0}
+.mini-wa-info{display:flex;flex-direction:column;gap:1px;min-width:0}
 .mini-wa-name{font-size:12px;font-weight:600;color:var(--text)}
 .mini-wa-status{font-size:9px;color:var(--text-dim)}
 .mini-wa-msgs{display:flex;flex-direction:column;gap:6px}
 .mini-wa-msg{
   padding:8px 10px;border-radius:10px;font-size:11px;
   background:#1F2C33;color:#E9EDEF;max-width:80%;line-height:1.4;
+  word-wrap:break-word;
 }
 .mini-wa-msg.out{align-self:flex-end;background:#005C4B}
 .mini-wa-time{font-size:8px;color:rgba(255,255,255,.5);text-align:right;margin-top:2px}
@@ -587,6 +593,7 @@ section.block{padding:120px 0;position:relative}
   padding:28px;
   position:relative;overflow:hidden;
   transition:transform .3s,border-color .3s;
+  min-width:0;
 }
 .for-card::after{
   content:"";position:absolute;inset:0;
@@ -644,6 +651,7 @@ section.block{padding:120px 0;position:relative}
   position:relative;
   display:flex;flex-direction:column;
   transition:transform .3s,border-color .3s;
+  min-width:0;
 }
 .plan:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.2)}
 .plan.featured{
@@ -882,7 +890,6 @@ footer.in-view .status-dot{animation-play-state:running}
 
   .bento{gap:14px}
   .bento-card{padding:22px}
-  .bento-card.row-2{grid-row:auto}
   .bento-h{font-size:17px}
   .bento-p{font-size:13.5px}
   .bento-icon{width:40px;height:40px;border-radius:10px;margin-bottom:14px}
