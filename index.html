@@ -260,9 +260,30 @@ section.block{padding:120px 0;position:relative}
 .mini-link-cta{display:inline-block;padding:6px 14px;border-radius:8px;background:var(--gradient-primary);color:#031913;font-size:11px;font-weight:700}
 .mini-chart{width:100%;max-width:300px}
 
-.compare{display:grid;grid-template-columns:1fr 1fr;gap:24px;background:linear-gradient(135deg,rgba(244,114,182,.04) 0%,rgba(16,185,129,.04) 100%);border:1px solid var(--border);border-radius:var(--radius-xl);padding:48px;position:relative;overflow:hidden}
-.compare::before{content:"VS";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-size:14px;font-weight:800;letter-spacing:.1em;padding:8px 14px;border-radius:100px;background:var(--bg-elev-2);border:1px solid var(--border-strong);color:var(--text-muted);z-index:1}
-@media(max-width:760px){.compare{grid-template-columns:1fr;padding:28px}.compare::before{position:relative;top:auto;left:auto;transform:none;justify-self:center;display:inline-block}}
+/* ═══ COMPARE — Sin VYLTA vs Con VYLTA ═══
+   Fix May 16 2026: el "VS" se centra como elemento real (no pseudo) para evitar
+   conflictos con z-index y posicionamiento de los iconos circulares dentro de las
+   listas. Usamos un span con clase .compare-vs en el HTML ahora. */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:48px;background:linear-gradient(135deg,rgba(244,114,182,.04) 0%,rgba(16,185,129,.04) 100%);border:1px solid var(--border);border-radius:var(--radius-xl);padding:48px;position:relative;overflow:hidden}
+.compare-vs{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:44px;height:44px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);
+  font-size:13px;font-weight:800;letter-spacing:.08em;
+  border-radius:50%;
+  background:var(--bg-elev-2);
+  border:1px solid var(--border-strong);
+  color:var(--text-muted);
+  z-index:5;
+  box-shadow:0 8px 24px -8px rgba(0,0,0,.6);
+  pointer-events:none;
+}
+@media(max-width:760px){
+  .compare{grid-template-columns:1fr;padding:28px;gap:20px}
+  .compare-vs{position:relative;top:auto;left:auto;transform:none;margin:0 auto;justify-self:center}
+}
 .compare-col h4{font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;margin-bottom:18px;padding:6px 12px;border-radius:8px}
 .compare-col.bad h4{background:rgba(244,114,182,.1);color:var(--pink)}
 .compare-col.good h4{background:rgba(16,185,129,.1);color:var(--green-bright)}
@@ -299,7 +320,7 @@ section.block{padding:120px 0;position:relative}
 .plan.featured::before{content:"";position:absolute;inset:-1px;border-radius:var(--radius-xl);background:conic-gradient(from 0deg,transparent,rgba(16,185,129,.4),transparent 60%);z-index:-1;animation:rotate 4s linear infinite;animation-play-state:paused}
 .plan.featured.in-view::before{animation-play-state:running}
 @keyframes rotate{to{transform:rotate(360deg)}}
-.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gradient-primary);color:#031913;padding:5px 14px;border-radius:100px;font-size:10px;font-weight:800;letter-spacing:.1em;box-shadow:0 8px 20px -6px rgba(16,185,129,.5)}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gradient-primary);color:#031913;padding:5px 14px;border-radius:100px;font-size:10px;font-weight:800;letter-spacing:.1em;box-shadow:0 8px 20px -6px rgba(16,185,129,.5);white-space:nowrap}
 .plan-name{font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.18em;margin-bottom:14px}
 .plan-price{display:flex;align-items:baseline;gap:4px;margin-bottom:6px;font-feature-settings:"tnum"}
 .plan-curr{font-size:18px;font-weight:600;color:var(--text-muted)}
@@ -318,7 +339,7 @@ section.block{padding:120px 0;position:relative}
 .vip-divider{display:flex;align-items:center;gap:16px;margin-bottom:36px;max-width:1100px;margin-left:auto;margin-right:auto}
 .vip-divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,.4),rgba(212,175,55,.5))}
 .vip-divider-line.right{background:linear-gradient(-90deg,transparent,rgba(212,175,55,.4),rgba(212,175,55,.5))}
-.vip-divider-center{display:flex;align-items:center;gap:8px;padding:7px 18px;border-radius:100px;border:1px solid rgba(212,175,55,.35);background:rgba(212,175,55,.06);font-size:11px;font-weight:800;color:var(--vip-gold);letter-spacing:.18em;text-transform:uppercase}
+.vip-divider-center{display:flex;align-items:center;gap:8px;padding:7px 18px;border-radius:100px;border:1px solid rgba(212,175,55,.35);background:rgba(212,175,55,.06);font-size:11px;font-weight:800;color:var(--vip-gold);letter-spacing:.18em;text-transform:uppercase;white-space:nowrap}
 .vip-divider-center svg{width:14px;height:14px}
 
 .vip-intro{max-width:760px;margin:0 auto 36px;text-align:center}
@@ -337,24 +358,61 @@ section.block{padding:120px 0;position:relative}
 
 .vip-plans{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:1100px;margin:0 auto}
 @media(max-width:880px){.vip-plans{grid-template-columns:1fr;max-width:440px}}
-.vip-plan{background:var(--vip-black);border:2px solid var(--vip-gold);border-radius:var(--radius-xl);padding:36px 32px;position:relative;display:flex;flex-direction:column;transition:transform .3s,box-shadow .3s;min-width:0;box-shadow:var(--shadow-vip);overflow:hidden}
-.vip-plan::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(212,175,55,.18),transparent 60%);pointer-events:none}
+/* Espacio extra arriba para que el badge flotante no se corte */
+.vip-plan{
+  background:var(--vip-black);
+  border:2px solid var(--vip-gold);
+  border-radius:var(--radius-xl);
+  padding:48px 32px 36px;       /* +12px top para dar aire al badge */
+  position:relative;
+  display:flex;flex-direction:column;
+  transition:transform .3s,box-shadow .3s;
+  min-width:0;
+  box-shadow:var(--shadow-vip);
+  overflow:visible;             /* permitir que el badge sobresalga */
+}
+/* El halo radial original sí debe estar contenido en la tarjeta */
+.vip-plan::before{
+  content:"";
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(212,175,55,.18),transparent 60%);
+  pointer-events:none;
+  border-radius:var(--radius-xl);
+  overflow:hidden;
+  z-index:0;
+}
 .vip-plan:hover{transform:translateY(-4px);box-shadow:0 0 100px -20px rgba(212,175,55,.5)}
-.vip-plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gradient-vip);color:var(--vip-black);padding:6px 16px;border-radius:100px;font-size:10px;font-weight:900;letter-spacing:.12em;box-shadow:0 8px 20px -6px rgba(212,175,55,.5);z-index:2}
-.vip-plan-emoji{position:relative;font-size:36px;margin-bottom:14px;filter:drop-shadow(0 4px 12px rgba(212,175,55,.4))}
-.vip-plan-name{position:relative;font-size:13px;font-weight:800;color:var(--vip-gold-soft);text-transform:uppercase;letter-spacing:.2em;margin-bottom:14px}
-.vip-plan-price{position:relative;display:flex;align-items:baseline;gap:4px;margin-bottom:6px;font-feature-settings:"tnum"}
+/* ═══ Fix May 16 2026: badge ahora no se recorta — usamos white-space:nowrap
+   y subimos un poco más para que se vea completo sin importar el ancho del
+   contenedor que se haya calculado primero. */
+.vip-plan-badge{
+  position:absolute;
+  top:-14px;left:50%;
+  transform:translateX(-50%);
+  background:var(--gradient-vip);
+  color:var(--vip-black);
+  padding:6px 18px;
+  border-radius:100px;
+  font-size:11px;font-weight:900;
+  letter-spacing:.12em;
+  white-space:nowrap;          /* <- evita que "AHORRAS 1 MES" se parta */
+  box-shadow:0 8px 20px -6px rgba(212,175,55,.5);
+  z-index:3;
+}
+.vip-plan-emoji{position:relative;z-index:1;font-size:36px;margin-bottom:14px;filter:drop-shadow(0 4px 12px rgba(212,175,55,.4))}
+.vip-plan-name{position:relative;z-index:1;font-size:13px;font-weight:800;color:var(--vip-gold-soft);text-transform:uppercase;letter-spacing:.2em;margin-bottom:14px}
+.vip-plan-price{position:relative;z-index:1;display:flex;align-items:baseline;gap:4px;margin-bottom:6px;font-feature-settings:"tnum"}
 .vip-plan-curr{font-size:18px;font-weight:600;color:var(--vip-gold-soft)}
 .vip-plan-num{font-size:48px;font-weight:900;letter-spacing:-.04em;color:#fff;line-height:1}
 .vip-plan-period{font-size:13px;color:var(--vip-gold-soft);margin-left:4px}
-.vip-plan-equiv{position:relative;font-size:12px;color:var(--vip-gold-soft);font-style:italic;margin-bottom:20px}
-.vip-plan-tagline{position:relative;font-size:14px;color:#fff;margin-bottom:24px;line-height:1.5;font-weight:500}
+.vip-plan-equiv{position:relative;z-index:1;font-size:12px;color:var(--vip-gold-soft);font-style:italic;margin-bottom:20px}
+.vip-plan-tagline{position:relative;z-index:1;font-size:14px;color:#fff;margin-bottom:24px;line-height:1.5;font-weight:500}
 .vip-plan-tagline strong{color:var(--vip-gold)}
-.vip-plan-includes{position:relative;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;flex:1;list-style:none}
+.vip-plan-includes{position:relative;z-index:1;display:flex;flex-direction:column;gap:10px;margin-bottom:28px;flex:1;list-style:none}
 .vip-plan-includes li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#fff;line-height:1.5}
 .vip-plan-includes li svg{width:16px;height:16px;flex-shrink:0;margin-top:2px;color:var(--vip-gold)}
-.vip-plan .btn{position:relative;width:100%}
-.vip-plan-foot{position:relative;margin-top:14px;font-size:11px;color:var(--vip-gold-soft);text-align:center;opacity:.8}
+.vip-plan .btn{position:relative;z-index:1;width:100%}
+.vip-plan-foot{position:relative;z-index:1;margin-top:14px;font-size:11px;color:var(--vip-gold-soft);text-align:center;opacity:.8}
 
 .faq{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
 .faq-item{border:1px solid var(--border);border-radius:var(--radius);background:rgba(255,255,255,.02);overflow:hidden;transition:border-color .25s}
@@ -472,9 +530,10 @@ footer.in-view .status-dot{animation-play-state:running}
   .vip-section{margin-top:56px}
   .vip-benefits-card{padding:24px 22px}
   .vip-benefits-list li{font-size:13px}
-  .vip-plan{padding:28px 22px}
+  .vip-plan{padding:44px 22px 28px}
   .vip-plan-num{font-size:38px}
   .vip-plan-emoji{font-size:30px}
+  .vip-plan-badge{font-size:10px;padding:5px 14px}
   .vip-intro h3{font-size:22px}
   .vip-intro p{font-size:14px}
   .vip-divider-center{font-size:9.5px;padding:5px 12px;letter-spacing:.14em}
@@ -791,6 +850,7 @@ footer.in-view .status-dot{animation-play-state:running}
           <li><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm5 13.6L15.6 17 12 13.4 8.4 17 7 15.6 10.6 12 7 8.4 8.4 7 12 10.6 15.6 7 17 8.4 13.4 12 17 15.6z"/></svg> Tus clientes te llaman a las 11 PM para pedir cita</li>
         </ul>
       </div>
+      <span class="compare-vs" aria-hidden="true">VS</span>
       <div class="compare-col good">
         <h4>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-1 14.4L6.6 12 8 10.6l3 3 5-5L17.4 10 11 16.4z"/></svg>
@@ -954,7 +1014,7 @@ footer.in-view .status-dot{animation-play-state:running}
 
       <div class="vip-intro reveal">
         <h3>Para quien quiere <span class="gold">crecer con atención de primera</span></h3>
-        <p>Una experiencia premium donde Antonio López, CEO y desarrollador de VYLTA, te acompaña directamente. Capacitación 1-a-1, sesiones estratégicas y 1 mes GRATIS por la anualidad completa.</p>
+        <p>Una experiencia premium donde el CEO &amp; Socio Director de Operaciones de VYLTA te acompañarán directamente. Capacitación 1-a-1, sesiones estratégicas y 1 mes GRATIS por la anualidad completa.</p>
       </div>
 
       <div class="vip-benefits-card reveal">
@@ -1049,7 +1109,7 @@ footer.in-view .status-dot{animation-play-state:running}
           <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></span>
         </summary>
         <div class="faq-body">
-          Los planes <strong>VIP Premium ($4,390 MXN/año)</strong> y <strong>VIP Luxury ($8,790 MXN/año)</strong> incluyen todo lo de su plan mensual equivalente, MÁS atención directa de Antonio López (CEO y desarrollador de VYLTA) por WhatsApp, capacitación 1-a-1, sesiones estratégicas de crecimiento, configuración inicial asistida y capacitación para tu equipo. Además te regalamos 1 mes GRATIS por pagar la anualidad completa (cobramos solo 11 meses). Es la mejor opción si quieres acompañamiento real para hacer crecer tu negocio con VYLTA, no solo una herramienta. Después de comprar, recibes el contacto directo de Antonio para agendar tu primera sesión.
+          Los planes <strong>VIP Premium ($4,390 MXN/año)</strong> y <strong>VIP Luxury ($8,790 MXN/año)</strong> incluyen todo lo de su plan mensual equivalente, MÁS atención directa del CEO &amp; Socio Director de Operaciones de VYLTA por WhatsApp, capacitación 1-a-1, sesiones estratégicas de crecimiento, configuración inicial asistida y capacitación para tu equipo. Además te regalamos 1 mes GRATIS por pagar la anualidad completa (cobramos solo 11 meses). Es la mejor opción si quieres acompañamiento real para hacer crecer tu negocio con VYLTA, no solo una herramienta. Después de comprar, recibes el contacto directo para agendar tu primera sesión.
         </div>
       </details>
       <details class="faq-item reveal">
@@ -1112,7 +1172,7 @@ footer.in-view .status-dot{animation-play-state:running}
           <span class="faq-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></span>
         </summary>
         <div class="faq-body">
-          Sí. Si tienes una lista de clientes en Excel, Google Sheets o cualquier otra hoja de cálculo, escríbenos a hola@vylta.lat y te ayudamos a importarla a tu cuenta de VYLTA. La carga inicial la hacemos por ti gratis si tienes menos de 500 clientes. Si eres cliente VIP, la migración te la hace personalmente Antonio.
+          Sí. Si tienes una lista de clientes en Excel, Google Sheets o cualquier otra hoja de cálculo, escríbenos a hola@vylta.lat y te ayudamos a importarla a tu cuenta de VYLTA. La carga inicial la hacemos por ti gratis si tienes menos de 500 clientes. Si eres cliente VIP, la migración te la hace personalmente el equipo directivo.
         </div>
       </details>
     </div>
