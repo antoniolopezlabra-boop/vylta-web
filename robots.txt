@@ -1,0 +1,5 @@
+# robots.txt — https://vylta.lat/
+User-agent: *
+Allow: /
+
+Sitemap: https://vylta.lat/sitemap.xml
