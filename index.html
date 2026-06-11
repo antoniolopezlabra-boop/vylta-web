@@ -1057,56 +1057,204 @@ footer.in-view .status-dot{animation-play-state:running}
 </section>
 
 <section id="for-who" class="block">
+  <style>
+    /* ── for-who v2: tabs por giro con producto real ── */
+    .fw-tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:40px 0 28px}
+    .fw-tab{display:flex;align-items:center;gap:8px;padding:12px 20px;border-radius:99px;
+      border:1px solid var(--border);background:var(--bg-elev);color:var(--text-muted);
+      font:inherit;font-size:15px;font-weight:600;cursor:pointer;min-height:44px;
+      transition:color .2s,border-color .2s,background .2s,transform .15s}
+    .fw-tab svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .fw-tab:hover{color:var(--text);transform:translateY(-1px)}
+    .fw-tab:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+    .fw-tab[aria-selected="true"]{color:#06231b;background:var(--gradient-primary);border-color:transparent}
+    .fw-panel{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;align-items:center}
+    .fw-panel[hidden]{display:none}
+    @media (max-width:880px){.fw-panel{grid-template-columns:1fr;gap:28px}}
+    @media (prefers-reduced-motion:no-preference){
+      .fw-panel{transition:opacity .35s ease}
+      @starting-style{.fw-panel{opacity:0}}
+    }
+    .fw-copy h3{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.5px;margin-bottom:12px;text-wrap:balance}
+    .fw-copy .fw-kicker{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--green-bright);margin-bottom:10px}
+    .fw-copy p{color:var(--text-muted);font-size:16.5px;line-height:1.55;margin-bottom:18px}
+    .fw-points{list-style:none;margin:0 0 26px;padding:0;display:grid;gap:12px}
+    .fw-points li{display:flex;gap:10px;align-items:flex-start;color:var(--text);font-size:15.5px;line-height:1.45}
+    .fw-points svg{flex:none;width:20px;height:20px;margin-top:1px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .fw-points b{font-weight:700}
+    .fw-ctas{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+    .fw-cta{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:12px 24px;
+      border-radius:12px;background:var(--gradient-primary);color:#06231b;font-weight:700;font-size:15.5px;
+      box-shadow:0 0 40px -12px rgba(16,185,129,.55);transition:transform .15s,box-shadow .15s}
+    .fw-cta:hover{transform:translateY(-2px);box-shadow:0 0 60px -10px rgba(16,185,129,.75)}
+    .fw-cta:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+    .fw-more{color:var(--text-muted);font-size:15px;font-weight:600;min-height:44px;display:inline-flex;align-items:center}
+    .fw-more:hover{color:var(--green-bright)}
+    .fw-shot{position:relative}
+    .fw-shot::before{content:"";position:absolute;inset:-12%;z-index:-1;border-radius:50%;
+      background:radial-gradient(ellipse at center,color-mix(in oklab,var(--fw-glow,#10B981) 22%,transparent) 0%,transparent 65%)}
+    .fw-browser{border:1px solid var(--border-strong);border-radius:16px;overflow:hidden;
+      background:#0B1020;box-shadow:0 1px 0 0 rgba(255,255,255,.05) inset,0 30px 60px -18px rgba(0,0,0,.65)}
+    .fw-browser-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,.04);
+      border-bottom:1px solid var(--border)}
+    .fw-dots{display:flex;gap:6px}
+    .fw-dots i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.14)}
+    .fw-url{flex:1;max-width:240px;margin-inline:auto;padding:4px 14px;border-radius:8px;background:rgba(255,255,255,.06);
+      color:var(--text-dim);font-size:12px;text-align:center;font-family:var(--mono)}
+    .fw-browser img{display:block;width:100%;height:auto}
+    .fw-trust{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin-top:44px;
+      color:var(--text-dim);font-size:14px}
+    .fw-trust span{display:inline-flex;align-items:center;gap:8px}
+    .fw-trust svg{width:16px;height:16px;stroke:var(--green);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  </style>
   <div class="container">
     <div class="section-head reveal">
       <span class="section-eyebrow">Para tu giro</span>
-      <h2 class="section-h">Hecho para los giros<br>que <span class="gradient">viven de citas</span></h2>
-      <p class="section-sub">Cada negocio es distinto. VYLTA se adapta al tuyo.</p>
+      <h2 class="section-h">Así se ve tu negocio<br><span class="gradient">por dentro de VYLTA</span></h2>
+      <p class="section-sub">Producto real, sin maquillaje. Elige tu giro y mira exactamente lo que vas a usar desde el primer día.</p>
     </div>
 
-    <div class="for-grid">
-      <div class="for-card reveal" style="--c1:#10B981;--c2:#06B6D4">
-        <div class="for-emoji">💈</div>
-        <h4>Barberías</h4>
-        <p>Corte, barba, ceja, color. Servicios rápidos, alto volumen.</p>
-        <ul>
-          <li>Citas de 30 min</li>
-          <li>Servicios combinados</li>
-          <li>Walk-ins fáciles</li>
-        </ul>
+    <div class="fw-tabs reveal" role="tablist" aria-label="Elige tu tipo de negocio">
+      <button class="fw-tab" id="fw-tab-barberia" role="tab" aria-selected="true" aria-controls="fw-panel-barberia">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.5 8.5 20 20M8.5 15.5 20 4"/></svg>
+        Barberías
+      </button>
+      <button class="fw-tab" id="fw-tab-estetica" role="tab" aria-selected="false" aria-controls="fw-panel-estetica" tabindex="-1">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c1.5 3.5 4 5.5 7 6-3 .5-5.5 2.5-7 6-1.5-3.5-4-5.5-7-6 3-.5 5.5-2.5 7-6Z"/><path d="M18 14c.6 1.4 1.6 2.2 3 2.5-1.4.3-2.4 1.1-3 2.5-.6-1.4-1.6-2.2-3-2.5 1.4-.3 2.4-1.1 3-2.5Z"/></svg>
+        Estéticas
+      </button>
+      <button class="fw-tab" id="fw-tab-spa" role="tab" aria-selected="false" aria-controls="fw-panel-spa" tabindex="-1">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21c-4.5-2.5-7.5-6-7.5-9.5C4.5 8 7 6 9.5 6c1 0 2 .4 2.5 1 .5-.6 1.5-1 2.5-1 2.5 0 5 2 5 5.5 0 3.5-3 7-7.5 9.5Z"/><path d="M12 7V3"/></svg>
+        Spas
+      </button>
+      <button class="fw-tab" id="fw-tab-consultorio" role="tab" aria-selected="false" aria-controls="fw-panel-consultorio" tabindex="-1">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3v4a4 4 0 0 0 8 0V3"/><path d="M12 11v4a4 4 0 0 1-8 0v-1"/><circle cx="4" cy="12" r="2"/><circle cx="19" cy="8" r="2"/></svg>
+        Consultorios
+      </button>
+    </div>
+
+    <div class="reveal">
+      <div class="fw-panel" id="fw-panel-barberia" role="tabpanel" aria-labelledby="fw-tab-barberia" style="--fw-glow:#10B981">
+        <div class="fw-copy">
+          <span class="fw-kicker">Barberías y salones</span>
+          <h3>Tu día completo de un vistazo, sin libreta</h3>
+          <p>Cortes de 30 minutos, alto volumen, walk-ins. VYLTA te muestra cuántas citas tienes hoy, cuánto llevas cobrado y qué sigue — antes de tomar las tijeras.</p>
+          <ul class="fw-points">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Cero no-shows sorpresa:</b> confirmación al agendar y recordatorios por WhatsApp 24 h y 2 h antes.</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Agenda que se llena sola:</b> tu link público en la bio de Instagram trabaja mientras cortas.</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Caja clara:</b> cobrado hoy y esta semana, sin sumar tickets a mano.</span></li>
+          </ul>
+          <div class="fw-ctas">
+            <a class="fw-cta" href="https://app.vylta.lat/login">Empezar gratis</a>
+            <a class="fw-more" href="/barberia">Ver VYLTA para barberías →</a>
+          </div>
+        </div>
+        <div class="fw-shot">
+          <div class="fw-browser">
+            <div class="fw-browser-bar"><span class="fw-dots"><i></i><i></i><i></i></span><span class="fw-url">app.vylta.lat</span></div>
+            <img src="/assets/crm/crm-dashboard-1600.webp" srcset="/assets/crm/crm-dashboard-800.webp 800w, /assets/crm/crm-dashboard-1600.webp 1600w" sizes="(max-width:880px) 92vw, 54vw" width="1600" height="773" loading="lazy" decoding="async" alt="Panel real de VYLTA: saludo del día, citas de hoy, pendientes y total cobrado">
+          </div>
+        </div>
       </div>
-      <div class="for-card reveal" style="--c1:#A78BFA;--c2:#F472B6">
-        <div class="for-emoji">💅</div>
-        <h4>Estéticas</h4>
-        <p>Manicure, pedicure, faciales, depilación, extensiones.</p>
-        <ul>
-          <li>Servicios largos</li>
-          <li>Bloqueos por colaboradora</li>
-          <li>Recordatorios al cliente</li>
-        </ul>
+
+      <div class="fw-panel" id="fw-panel-estetica" role="tabpanel" aria-labelledby="fw-tab-estetica" style="--fw-glow:#F472B6" hidden>
+        <div class="fw-copy">
+          <span class="fw-kicker">Estéticas y uñas</span>
+          <h3>Tu catálogo con precios que venden por ti</h3>
+          <p>Polygel, acrílico, gelish, faciales: cada servicio con su duración y precio. Tus clientas eligen y agendan solas — tú solo confirmas.</p>
+          <ul class="fw-points">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Servicios largos bien bloqueados:</b> 120 min son 120 min; nada se encima.</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Precios visibles:</b> menos "¿cuánto cuesta?" por DM, más citas pagadas.</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Recordatorios automáticos:</b> tus clientas llegan, tu tiempo vale.</span></li>
+          </ul>
+          <div class="fw-ctas">
+            <a class="fw-cta" href="https://app.vylta.lat/login">Empezar gratis</a>
+            <a class="fw-more" href="/estetica">Ver VYLTA para estéticas →</a>
+          </div>
+        </div>
+        <div class="fw-shot">
+          <div class="fw-browser">
+            <div class="fw-browser-bar"><span class="fw-dots"><i></i><i></i><i></i></span><span class="fw-url">app.vylta.lat</span></div>
+            <img src="/assets/crm/crm-servicios-1600.webp" srcset="/assets/crm/crm-servicios-800.webp 800w, /assets/crm/crm-servicios-1600.webp 1600w" sizes="(max-width:880px) 92vw, 54vw" width="1600" height="773" loading="lazy" decoding="async" alt="Catálogo real de servicios en VYLTA con duración, precio y estado activo">
+          </div>
+        </div>
       </div>
-      <div class="for-card reveal" style="--c1:#06B6D4;--c2:#6366F1">
-        <div class="for-emoji">🧖‍♀️</div>
-        <h4>Spas</h4>
-        <p>Masajes, tratamientos corporales, hidroterapia, paquetes.</p>
-        <ul>
-          <li>Cabinas múltiples</li>
-          <li>Paquetes y bonos</li>
-          <li>Clientes recurrentes</li>
-        </ul>
+
+      <div class="fw-panel" id="fw-panel-spa" role="tabpanel" aria-labelledby="fw-tab-spa" style="--fw-glow:#06B6D4" hidden>
+        <div class="fw-copy">
+          <span class="fw-kicker">Spas y bienestar</span>
+          <h3>Decisiones con números, no corazonadas</h3>
+          <p>Ingresos del mes, ticket promedio, clientes nuevos y comparativa contra el período anterior. Tu spa merece reportes de empresa grande.</p>
+          <ul class="fw-points">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Reportes ejecutivos en vivo:</b> ve qué tratamientos dejan más y cuándo.</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Clientes recurrentes:</b> identifica quién regresa y quién necesita un empujón.</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Exporta a CSV</b> cuando tu contador lo pida. Un clic.</span></li>
+          </ul>
+          <div class="fw-ctas">
+            <a class="fw-cta" href="https://app.vylta.lat/login">Empezar gratis</a>
+            <a class="fw-more" href="/spa">Ver VYLTA para spas →</a>
+          </div>
+        </div>
+        <div class="fw-shot">
+          <div class="fw-browser">
+            <div class="fw-browser-bar"><span class="fw-dots"><i></i><i></i><i></i></span><span class="fw-url">app.vylta.lat</span></div>
+            <img src="/assets/crm/crm-reportes-1600.webp" srcset="/assets/crm/crm-reportes-800.webp 800w, /assets/crm/crm-reportes-1600.webp 1600w" sizes="(max-width:880px) 92vw, 54vw" width="1600" height="773" loading="lazy" decoding="async" alt="Reportes ejecutivos reales de VYLTA: ingresos, citas, ticket promedio y comparativa mensual">
+          </div>
+        </div>
       </div>
-      <div class="for-card reveal" style="--c1:#FBBF24;--c2:#F472B6">
-        <div class="for-emoji">🩺</div>
-        <h4>Consultorios</h4>
-        <p>Dental, dermatología, nutrición, psicología, fisio.</p>
-        <ul>
-          <li>Consulta + tratamiento</li>
-          <li>Historial por paciente</li>
-          <li>Citas de seguimiento</li>
-        </ul>
+
+      <div class="fw-panel" id="fw-panel-consultorio" role="tabpanel" aria-labelledby="fw-tab-consultorio" style="--fw-glow:#FBBF24" hidden>
+        <div class="fw-copy">
+          <span class="fw-kicker">Consultorios y clínicas</span>
+          <h3>Pacientes que sí llegan a su cita</h3>
+          <p>Dental, dermatología, nutrición, psicología o fisio: cada ausencia es tiempo clínico perdido. VYLTA confirma y recuerda por WhatsApp para que tu agenda se respete.</p>
+          <ul class="fw-points">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Menos inasistencias:</b> recordatorio 24 h y 2 h antes, automático.</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Seguimientos que no se pierden:</b> la próxima consulta queda agendada al salir.</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Datos protegidos:</b> cifrado en tránsito y reposo, cumplimiento LFPDPPP.</span></li>
+          </ul>
+          <div class="fw-ctas">
+            <a class="fw-cta" href="https://app.vylta.lat/login">Empezar gratis</a>
+            <a class="fw-more" href="/consultorio">Ver VYLTA para consultorios →</a>
+          </div>
+        </div>
+        <div class="fw-shot">
+          <div class="fw-browser">
+            <div class="fw-browser-bar"><span class="fw-dots"><i></i><i></i><i></i></span><span class="fw-url">app.vylta.lat</span></div>
+            <img src="/assets/crm/crm-dashboard-1600.webp" srcset="/assets/crm/crm-dashboard-800.webp 800w, /assets/crm/crm-dashboard-1600.webp 1600w" sizes="(max-width:880px) 92vw, 54vw" width="1600" height="773" loading="lazy" decoding="async" alt="Panel de control de VYLTA con la agenda del día y citas pendientes de confirmar">
+          </div>
+        </div>
       </div>
     </div>
+
+    <div class="fw-trust reveal">
+      <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>WhatsApp Business certificado por Meta</span>
+      <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Cifrado TLS 1.3 y AES-256</span>
+      <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Plan gratis para siempre, sin tarjeta</span>
+    </div>
   </div>
+  <script>
+  (function(){
+    const tabs=[...document.querySelectorAll('#for-who [role="tab"]')];
+    const panels=[...document.querySelectorAll('#for-who [role="tabpanel"]')];
+    function select(tab){
+      tabs.forEach(t=>{const on=t===tab;t.setAttribute('aria-selected',on);t.tabIndex=on?0:-1;});
+      panels.forEach(p=>{p.hidden=p.id!==tab.getAttribute('aria-controls');});
+    }
+    tabs.forEach((tab,i)=>{
+      tab.addEventListener('click',()=>select(tab));
+      tab.addEventListener('keydown',e=>{
+        let j=null;
+        if(e.key==='ArrowRight')j=(i+1)%tabs.length;
+        if(e.key==='ArrowLeft')j=(i-1+tabs.length)%tabs.length;
+        if(e.key==='Home')j=0;
+        if(e.key==='End')j=tabs.length-1;
+        if(j!==null){e.preventDefault();tabs[j].focus();select(tabs[j]);}
+      });
+    });
+  })();
+  </script>
 </section>
 
 <section id="pricing" class="block">
