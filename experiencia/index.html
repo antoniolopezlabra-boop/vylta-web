@@ -189,11 +189,11 @@ let ringTimer=null;
 function startRing(){stopRing();const r=()=>{tone(620,.32,'sine',.22);tone(820,.32,'sine',.22,.34);vib([250,120,250]);};r();ringTimer=setInterval(r,1600);}
 function stopRing(){if(ringTimer)clearInterval(ringTimer);ringTimer=null;vib(0);}
 /* real ambient music (Lyria), looped, with ducking under the voice */
-let music=null,fadeT=null;const MUSIC_BASE=.18;
+let music=null,fadeT=null;const MUSIC_BASE=.06;
 function fadeMusic(target,ms){if(!music)return;clearInterval(fadeT);const start=music.volume||0,steps=Math.max(1,Math.round((ms||800)/50));let i=0;fadeT=setInterval(()=>{i++;try{music.volume=Math.max(0,Math.min(1,start+(target-start)*i/steps));}catch(e){}if(i>=steps)clearInterval(fadeT);},50);}
-function startPad(){if(music)return;music=new Audio('assets/audio/ambient.m4a');music.loop=true;music.volume=0;music.play().catch(()=>{});fadeMusic(state.muted?0:MUSIC_BASE,2500);}
+function startPad(){if(music)return;music=new Audio('assets/audio/ambient.m4a');music.loop=true;music.volume=0;music.play().catch(()=>{});fadeMusic(state.muted?0:MUSIC_BASE,4500);}
 function padVol(v){fadeMusic(state.muted?0:v,900);}
-function musicDuck(on){if(!music||state.muted)return;fadeMusic(on?.05:MUSIC_BASE,500);}
+function musicDuck(on){if(!music||state.muted)return;fadeMusic(on?.02:MUSIC_BASE,500);}
 let curVoice=null;
 function voice(key){stopVoice();if(state.muted)return;musicDuck(true);curVoice=new Audio('assets/audio/'+key+'.m4a');curVoice.onended=()=>musicDuck(false);curVoice.play().catch(()=>{musicDuck(false);});}
 function stopVoice(){if(curVoice){try{curVoice.pause();}catch(e){}curVoice=null;}musicDuck(false);}
