@@ -4,308 +4,412 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>VYLTA</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;800&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="assets/vylta-ai.jpg">
-<link rel="preload" as="image" href="assets/vylta-logo.png">
-<link rel="preload" as="fetch" href="assets/audio/v2-call.m4a" crossorigin>
+<title>VYLTA · Tu WhatsApp tiene algo que decirte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+<link rel="preload" as="fetch" href="assets/audio/wa-open.m4a" crossorigin>
 <style>
 :root{
-  --bg:#070B14;--chat:#0b141a;--inbub:#1f2c34;--outbub:#005c4b;--head:#1f2c34;
-  --text:#E9EDEF;--muted:#8696a0;--green:#10B981;--green2:#34D399;--wa:#25D366;
-  --grad:linear-gradient(135deg,#34D399,#06B6D4);--radius:16px;
+  --bg:#070B12;--bg2:#0C1119;--panel:#121826;--panel2:#1A2230;
+  --bd:rgba(255,255,255,.09);--bd2:rgba(255,255,255,.18);
+  --tx:#F2F5F8;--mut:#94A3B8;--dim:#5B6678;
+  --wa:#25D366;--wa-d:#0b3a22;--wa-dk:#075E54;
+  --gold:#E8B873;--gold2:#C9963F;--amber:#FBBF24;--red:#F87171;
+  --green:#10B981;--green2:#34D399;--cyan:#06B6D4;
+  --grad-v:linear-gradient(135deg,#34D399 0%,#06B6D4 100%);
+  --grad-gold:linear-gradient(135deg,#E8B873,#C9963F);
+  --r:16px;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body{font-family:'Inter',system-ui,sans-serif;background:#000;color:var(--text);overflow:hidden;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',system-ui,sans-serif;background:#000;color:var(--tx);overflow:hidden;-webkit-font-smoothing:antialiased;line-height:1.5}
 .serif{font-family:'Playfair Display',serif}
 #app{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
-#stage{position:relative;width:100%;height:100vh;height:100dvh;max-width:430px;background:var(--bg);overflow:hidden}
-@media(min-width:600px){#stage{height:92vh;max-height:880px;border-radius:34px;border:1px solid rgba(255,255,255,.14);box-shadow:0 0 0 10px #0c0f17,0 40px 120px -20px rgba(0,0,0,.9)}}
-.scene.center,#chat .wahead{padding-top:max(14px,env(safe-area-inset-top))}
-.chatbody{padding-bottom:max(26px,env(safe-area-inset-bottom))}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-.ticks{color:#53bdeb;font-weight:700;margin-left:2px}
-#stage::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:90;opacity:.04;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#stage{position:relative;width:100%;height:100vh;height:100dvh;max-width:440px;background:radial-gradient(ellipse at 50% 18%,#13110a 0,var(--bg) 45%,#04060a 100%);overflow:hidden}
+@media(min-width:600px){#stage{height:94vh;max-height:900px;border-radius:36px;border:1px solid var(--bd2);box-shadow:0 0 0 10px #0b0e14,0 50px 130px -20px #000}}
+#stage::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:90;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-.mute{position:absolute;top:14px;right:14px;z-index:80;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.35);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer}
+/* top bar */
+.top{position:absolute;top:0;left:0;right:0;z-index:70;padding:14px 18px max(10px,env(safe-area-inset-top)) 18px;display:flex;align-items:center;gap:10px}
+.top .pill{font-size:10px;letter-spacing:.28em;color:var(--mut);font-weight:600;text-transform:uppercase}
+.pbar{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
+.pbar>i{display:block;height:100%;width:12.5%;background:var(--grad-v);transition:width .6s cubic-bezier(.4,0,.2,1)}
+.mute{width:32px;height:32px;border-radius:50%;border:1px solid var(--bd);background:rgba(255,255,255,.04);color:var(--mut);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer}
 
-.scene{position:absolute;inset:0;z-index:10;display:none;flex-direction:column}
-.scene.active{display:flex}
-.center{align-items:center;justify-content:center;text-align:center;padding:36px 28px}
+/* scenes */
+.scene{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:64px 24px max(28px,env(safe-area-inset-bottom));opacity:0;visibility:hidden;transform:translateY(16px) scale(.99);transition:opacity .7s ease,transform .7s ease,visibility .7s}
+.scene.active{opacity:1;visibility:visible;transform:none}
+h1,h2{font-weight:800;letter-spacing:-.02em;line-height:1.12}
+.lead{font-size:clamp(25px,7vw,33px)}
+.kick{font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--wa);font-weight:700;margin-bottom:14px}
+.sub{color:var(--mut);font-size:15px;margin-top:12px;max-width:31ch}
+.gv{background:var(--grad-v);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.gg{background:var(--grad-gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.wac{color:var(--wa)}
 
-/* ===== GATE ===== */
-#gate{background:radial-gradient(ellipse at 50% 30%,rgba(16,185,129,.13),transparent 60%),var(--bg)}
-#gate .eyebrow{font-size:11px;letter-spacing:.34em;color:var(--green2);text-transform:uppercase;margin-bottom:22px}
-#gate h1{font-size:clamp(28px,8vw,38px);font-weight:800;line-height:1.12;letter-spacing:-.02em}
-#gate h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-#gate p{color:var(--muted);font-size:15.5px;margin-top:16px;max-width:30ch}
-.neon{margin-top:40px;display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:16px;padding:18px 32px;border-radius:40px;border:1px solid var(--green2);background:rgba(16,185,129,.08);color:var(--green2);cursor:pointer;animation:neon 2s ease-in-out infinite}
-@keyframes neon{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.0),0 0 18px rgba(52,211,153,.25);transform:translateY(0)}50%{box-shadow:0 0 0 4px rgba(52,211,153,.06),0 0 34px rgba(52,211,153,.6);transform:translateY(-4px)}}
-.gate-foot{position:absolute;bottom:30px;left:0;right:0;text-align:center;color:#3b4a55;font-size:11px;letter-spacing:.1em}
+/* buttons */
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:700;font-size:16px;padding:16px 26px;border-radius:14px;border:none;cursor:pointer;background:var(--grad-v);color:#04150F;width:100%;max-width:330px;box-shadow:0 12px 34px -10px rgba(37,211,102,.55);transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.btn.glow{animation:glow 2.2s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.0),0 12px 30px -10px rgba(37,211,102,.5);transform:translateY(0)}50%{box-shadow:0 0 28px 2px rgba(52,211,153,.55),0 14px 32px -8px rgba(37,211,102,.6);transform:translateY(-3px)}}
+.btn.gold{background:var(--grad-gold);color:#231703;box-shadow:0 12px 34px -10px rgba(201,150,63,.55)}
+.btn.ghost{background:transparent;color:var(--mut);border:1px solid var(--bd2);box-shadow:none;font-weight:600}
+.btn.sm{font-size:14px;padding:13px 20px}
+.note{font-size:12px;color:var(--dim);margin-top:14px}
 
-/* ===== CALL ===== */
-.callbg{background:linear-gradient(180deg,#0a1622,#050a10)}
-.holo{width:150px;height:150px;border-radius:50%;object-fit:cover;border:2px solid rgba(52,211,153,.5);box-shadow:0 0 50px rgba(52,211,153,.35)}
-.holo.ring{animation:pulse 1.5s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,211,153,.5),0 0 50px rgba(52,211,153,.35)}70%{box-shadow:0 0 0 26px rgba(52,211,153,0),0 0 50px rgba(52,211,153,.35)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0),0 0 50px rgba(52,211,153,.35)}}
-.callname{font-size:27px;font-weight:700;margin-top:26px;letter-spacing:.02em}
-.callsub{color:var(--muted);font-size:13px;margin-top:8px;letter-spacing:.04em}
-.callsub .wa{color:var(--wa)}
-.calltimer{color:var(--green2);font-size:15px;margin-top:14px;font-variant-numeric:tabular-nums}
-.callwave{display:flex;gap:4px;align-items:center;height:40px;margin-top:18px}
-.callwave i{width:4px;border-radius:3px;background:var(--green2);animation:wv 1s ease-in-out infinite}
-@keyframes wv{0%,100%{height:7px;opacity:.5}50%{height:34px;opacity:1}}
-.callbtns{position:absolute;bottom:64px;left:0;right:0;display:flex;justify-content:center;gap:60px}
-.cbtn{width:70px;height:70px;border-radius:50%;border:none;color:#fff;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.cbtn.ans{background:var(--wa);animation:pulse2 1.3s infinite}
-.cbtn.dec{background:#ef4444;transform:rotate(135deg)}
-@keyframes pulse2{0%{box-shadow:0 0 0 0 rgba(37,211,102,.6)}70%{box-shadow:0 0 0 22px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
-.cbtn-lbl{position:absolute;bottom:40px;left:0;right:0;text-align:center;color:var(--muted);font-size:12px}
-.endcall{position:absolute;bottom:64px;left:50%;transform:translateX(-50%);width:64px;height:64px;border-radius:50%;background:#ef4444;border:none;color:#fff;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+/* ===== WhatsApp humanized character ===== */
+.wachar{position:relative;width:128px;height:128px;margin-bottom:8px;animation:breathe 4s ease-in-out infinite}
+.wachar.tired{animation:slump 5s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-5px)}}
+@keyframes slump{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(4px) rotate(1deg)}}
+.wachar svg{width:100%;height:100%;filter:drop-shadow(0 10px 30px rgba(37,211,102,.35))}
+.wachar-glow{position:absolute;inset:-30%;background:radial-gradient(circle,rgba(37,211,102,.25),transparent 65%);z-index:-1}
 
-/* ===== CHAT ===== */
-#chat{background:var(--chat)}
-#chat .wahead{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--head);border-bottom:1px solid #000;flex-shrink:0}
-.wahead .av{width:40px;height:40px;border-radius:50%;object-fit:cover}
-.wahead .n{font-weight:600;font-size:16px}
-.wahead .s{color:var(--green2);font-size:12.5px;min-height:15px}
-.chatbody{flex:1;overflow-y:auto;padding:16px 12px 26px;display:flex;flex-direction:column;gap:8px;
-  background-image:linear-gradient(rgba(7,13,18,.92),rgba(7,13,18,.92)),url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Ccircle cx='20' cy='20' r='1.5'/%3E%3Ccircle cx='60' cy='50' r='1.5'/%3E%3C/g%3E%3C/svg%3E")}
-.msg{max-width:82%;padding:9px 12px;border-radius:10px;font-size:15px;line-height:1.45;position:relative;animation:in .35s ease;white-space:pre-line}
-@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.msg.in{align-self:flex-start;background:var(--inbub);border-radius:2px 10px 10px 10px}
-.msg.out{align-self:flex-end;background:var(--outbub);border-radius:10px 2px 10px 10px}
-.msg .t{display:block;text-align:right;font-size:10.5px;color:rgba(233,237,239,.45);margin-top:3px}
-.msg b{font-weight:700}
-.typing{align-self:flex-start;background:var(--inbub);border-radius:2px 10px 10px 10px;padding:12px 14px;display:flex;gap:4px}
-.typing i{width:7px;height:7px;border-radius:50%;background:#8696a0;animation:td 1.2s infinite}
+/* ===== phone + floating notifications ===== */
+.phone{position:relative;width:172px;height:340px;border-radius:30px;background:linear-gradient(160deg,#1c2330,#0d121b);border:2px solid #2a3342;box-shadow:0 30px 70px -20px #000, inset 0 1px 0 rgba(255,255,255,.06);display:flex;flex-direction:column;overflow:hidden}
+.phone .notch{height:22px;display:flex;align-items:center;justify-content:center}
+.phone .notch::after{content:"";width:46px;height:5px;border-radius:5px;background:#000}
+.phscreen{flex:1;padding:8px;display:flex;flex-direction:column;gap:6px;overflow:hidden}
+.pnote{display:flex;gap:7px;align-items:center;background:rgba(255,255,255,.06);border:1px solid var(--bd);border-radius:9px;padding:7px 8px;opacity:0;transform:translateY(8px);animation:noteIn .4s forwards}
+.pnote .ic{width:22px;height:22px;border-radius:6px;background:var(--wa);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px}
+.pnote .tx{font-size:10px;text-align:left;color:#cdd5e0;line-height:1.25}
+@keyframes noteIn{to{opacity:1;transform:none}}
+.badge{position:absolute;top:6px;right:10px;background:var(--red);color:#fff;font-size:12px;font-weight:800;min-width:24px;height:24px;border-radius:14px;display:flex;align-items:center;justify-content:center;padding:0 6px;z-index:5;box-shadow:0 4px 14px rgba(248,113,113,.6);animation:pop .4s}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.floaters{position:absolute;inset:0;pointer-events:none;z-index:4}
+.floaters span{position:absolute;background:#1f2c34;color:#dfe7ee;font-size:11px;padding:6px 10px;border-radius:12px 12px 12px 3px;white-space:nowrap;opacity:0;box-shadow:0 6px 18px rgba(0,0,0,.4);animation:floatIn .6s forwards}
+@keyframes floatIn{from{opacity:0;transform:translateY(10px) scale(.8)}to{opacity:.96;transform:none}}
+
+/* ===== dialogue bubbles (WhatsApp talking) ===== */
+.dwrap{width:100%;max-width:360px;display:flex;flex-direction:column;gap:9px;margin-top:6px}
+.dbub{align-self:flex-start;max-width:90%;background:#1f2c34;color:#eef3f6;border-radius:12px 12px 12px 3px;padding:11px 14px;font-size:15px;text-align:left;line-height:1.4;opacity:0;transform:translateY(8px) scale(.98);animation:bub .45s forwards;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.dbub b{color:var(--wa)}
+@keyframes bub{to{opacity:1;transform:none}}
+.typing{align-self:flex-start;background:#1f2c34;border-radius:14px;padding:11px 14px;display:flex;gap:4px}
+.typing i{width:7px;height:7px;border-radius:50%;background:#7c8a99;animation:tp 1s infinite}
 .typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
-@keyframes td{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
-.opts-in{align-self:flex-end;display:flex;flex-direction:column;gap:7px;width:78%;margin-top:2px}
-.opt-chip{background:rgba(0,92,75,.35);border:1px solid var(--green);color:var(--green2);font-weight:600;font-size:14.5px;padding:12px 14px;border-radius:10px;cursor:pointer;text-align:center;transition:background .15s,transform .1s}
-.opt-chip:active{transform:scale(.97)}.opt-chip:hover{background:rgba(0,92,75,.55)}
-.divider{align-self:center;background:rgba(31,44,52,.9);color:var(--muted);font-size:11.5px;letter-spacing:.05em;padding:5px 12px;border-radius:12px;margin:6px 0}
-/* slider bubble */
-.slbub{align-self:flex-end;width:80%;background:var(--inbub);border-radius:12px;padding:16px 16px 14px;text-align:center}
-.slbub .v{font-size:38px;font-weight:800;color:var(--green2)}.slbub .v small{font-size:13px;color:var(--muted);font-weight:500}
-.slbub input{-webkit-appearance:none;width:100%;height:6px;border-radius:6px;margin:16px 0 14px;background:linear-gradient(90deg,var(--green2) var(--p,40%),#2a3942 var(--p,40%))}
-.slbub input::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:var(--green2);border:4px solid #0b141a;cursor:pointer}
-.slbub button{background:var(--grad);border:none;color:#04150F;font-weight:700;padding:11px 26px;border-radius:22px;cursor:pointer;font-size:14.5px}
-/* reveal card */
-.reveal{align-self:flex-start;max-width:88%;background:linear-gradient(160deg,#2a1518,#1f2c34);border:1px solid rgba(248,113,113,.3);border-radius:2px 12px 12px 12px;padding:18px 16px;text-align:center}
-.reveal .lbl{color:#fca5a5;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-.reveal .big{font-size:46px;font-weight:800;color:#f87171;line-height:1.05;margin:4px 0;font-variant-numeric:tabular-nums}
-.reveal .sub{color:var(--muted);font-size:13.5px}
-/* demo template card (real VYLTA msg) */
-.tpl{align-self:flex-start;max-width:86%;background:var(--inbub);border-radius:2px 10px 10px 10px;overflow:hidden}
-.tpl .body{padding:11px 13px;font-size:14.5px;line-height:1.5;white-space:pre-line}
-.tpl .src{color:var(--muted);font-size:11.5px;margin-top:6px}
-.tpl .acts{border-top:1px solid rgba(255,255,255,.08)}
-.tpl .acts button{width:100%;background:none;border:none;border-top:1px solid rgba(255,255,255,.06);color:var(--wa);font-weight:600;font-size:14.5px;padding:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
-.tpl .acts button:first-child{border-top:none}
-/* in-chat CTA button */
-.gobtn{align-self:center;margin-top:6px;display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:15.5px;padding:14px 26px;border-radius:30px;border:none;background:var(--grad);color:#04150F;cursor:pointer;box-shadow:0 10px 26px -8px rgba(16,185,129,.5);animation:neon 2.2s ease-in-out infinite}
-/* CTA final block */
-#cta{background:radial-gradient(ellipse at 50% 30%,rgba(16,185,129,.14),transparent 60%),var(--bg)}
-#cta img.logo{width:84px;height:84px;border-radius:20px}
-#cta h2{font-size:clamp(24px,6.5vw,30px);font-weight:800;margin-top:22px;line-height:1.15}
-#cta h2 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-#cta p{color:var(--muted);margin-top:12px;font-size:15px}
-#cta a.go{margin-top:26px;display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:16px;padding:17px 30px;border-radius:30px;border:none;background:var(--grad);color:#04150F;text-decoration:none;box-shadow:0 12px 30px -8px rgba(16,185,129,.5);animation:neon 2.2s ease-in-out infinite}
-#cta .hint{color:#3b4a55;font-size:12px;margin-top:18px;letter-spacing:.04em}
+@keyframes tp{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+
+/* ===== diagnostic ===== */
+.q{font-size:clamp(21px,6vw,27px);font-weight:800;margin-bottom:6px}
+.opts{display:flex;flex-direction:column;gap:9px;width:100%;max-width:340px;margin-top:20px}
+.opt{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid var(--bd);border-radius:13px;background:var(--panel);cursor:pointer;text-align:left;font-size:15px;font-weight:500;transition:.15s}
+.opt:active{transform:scale(.98)}.opt.sel,.opt:hover{border-color:var(--wa);background:var(--panel2)}
+.opt .em{font-size:21px}
+
+/* ===== loss cards ===== */
+.calc{font-size:14px;color:var(--mut);letter-spacing:.05em}
+.lcard{width:100%;max-width:350px;background:var(--panel);border:1px solid var(--bd);border-left:3px solid var(--red);border-radius:12px;padding:13px 15px;text-align:left;opacity:0;transform:translateX(-14px);animation:gin .5s forwards;margin-top:10px}
+.lcard .nm{font-weight:700;font-size:14px}.lcard .ds{font-size:12.5px;color:var(--mut);margin-top:2px}
+.lcard .st{display:inline-block;margin-top:7px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--red);background:rgba(248,113,113,.12);padding:3px 9px;border-radius:8px}
+@keyframes gin{to{opacity:1;transform:none}}
+
+/* ===== break / can't list ===== */
+.cant{width:100%;max-width:350px;display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.cant .li{display:flex;gap:10px;align-items:center;font-size:14.5px;color:#cbd3dd;opacity:0;transform:translateX(-12px);animation:gin .5s forwards;text-align:left}
+.cant .li svg{width:18px;height:18px;flex-shrink:0;color:var(--red)}
+
+/* ===== reveal / order ===== */
+.vlogo{width:74px;height:74px;border-radius:20px;background:var(--grad-v);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 40px -8px rgba(52,211,153,.6);margin-bottom:8px}
+.vlogo svg{width:42px;height:42px}
+.benefits{width:100%;max-width:350px;display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.ben{display:flex;gap:11px;align-items:center;font-size:14px;color:#dfe6ee;text-align:left;background:rgba(255,255,255,.03);border:1px solid var(--bd);border-radius:11px;padding:11px 13px;opacity:0;transform:translateY(8px);animation:noteIn .5s forwards}
+.ben .ck{width:22px;height:22px;border-radius:7px;background:var(--wa-d);color:var(--wa);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px}
+
+/* ===== demo agenda ===== */
+.agenda{width:100%;max-width:330px;background:var(--panel);border:1px solid var(--bd);border-radius:16px;overflow:hidden;margin-top:14px}
+.agenda .ah{background:var(--panel2);padding:11px 14px;font-size:12px;color:var(--mut);text-align:left;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between}
+.appt{display:flex;align-items:center;gap:11px;padding:11px 14px;border-bottom:1px solid var(--bd);opacity:0;transform:translateX(14px);animation:gin .5s forwards}
+.appt .tm{font-size:12px;color:var(--wa);font-weight:700;width:48px;text-align:left}
+.appt .who{flex:1;text-align:left}.appt .who b{font-size:13.5px;display:block}.appt .who span{font-size:11.5px;color:var(--mut)}
+.appt .ok{color:var(--wa);font-size:14px}
+.demostep{font-size:13.5px;color:var(--gold);font-weight:600;margin-top:14px;min-height:20px}
+
+/* ===== result / form ===== */
+.gauge{width:100%;max-width:330px;background:var(--panel);border:1px solid var(--bd);border-radius:16px;padding:18px;margin-top:12px}
+.glab{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.1em}
+.gnow{font-size:19px;font-weight:800;color:var(--red);margin:3px 0 12px}
+.grec{font-size:19px;font-weight:800;margin-top:3px}
+.unlock{font-size:13px;color:var(--wa);font-weight:700;margin-top:12px}
+form{width:100%;max-width:330px;display:flex;flex-direction:column;gap:10px;margin-top:16px}
+form input,form select{width:100%;padding:14px 15px;border-radius:12px;border:1px solid var(--bd2);background:var(--panel);color:var(--tx);font-size:15px;font-family:inherit}
+form input::placeholder{color:var(--dim)}
+.ok-msg{text-align:center}
+
+.center{justify-content:center}
+.fade-up{opacity:0;animation:fu .7s forwards}@keyframes fu{to{opacity:1;transform:none}}
+.muted-s{color:var(--mut)}
 </style>
 </head>
 <body>
 <div id="app"><div id="stage">
-  <button class="mute" id="muteBtn">🔊</button>
+  <div class="top">
+    <span class="pill" id="sceneLbl">Escena 1 de 8</span>
+    <div class="pbar"><i id="pbar"></i></div>
+    <button class="mute" id="muteBtn">🔊</button>
+  </div>
 
-  <!-- GATE -->
-  <section class="scene center active" id="gate">
-    <div class="eyebrow">90 segundos</div>
-    <h1>Hay algo en tu<br>negocio que <span class="g">nadie<br>te ha dicho.</span></h1>
-    <p>Y en los próximos segundos… alguien te lo va a mostrar.</p>
-    <button class="neon" onclick="enter()">Entrar &nbsp;→</button>
-    <div class="gate-foot">VYLTA</div>
-  </section>
-
-  <!-- INCOMING CALL -->
-  <section class="scene center callbg" id="call">
-    <img src="assets/vylta-ai.jpg" width="150" height="150" class="holo ring" alt="VYLTA" fetchpriority="high">
-    <div class="callname">VYLTA</div>
-    <div class="callsub"><span class="wa">●</span> Llamada de WhatsApp…</div>
-    <div class="callbtns one">
-      <button class="cbtn ans" onclick="answer()">📞</button>
+  <!-- ESCENA 1 -->
+  <section class="scene active center" id="s1">
+    <div class="phone" id="ph1">
+      <div class="badge" id="badge1" style="display:none">0</div>
+      <div class="notch"></div>
+      <div class="phscreen" id="ph1s"></div>
     </div>
-    <div class="cbtn-lbl">Contestar</div>
+    <h1 class="lead" style="margin-top:26px">Tienes <span class="gv" id="msgCount">0</span><br>mensajes sin responder</h1>
+    <div class="dwrap" id="d1" style="margin-top:18px"></div>
+    <button class="btn glow" id="b1" style="margin-top:24px;opacity:0" onclick="go('s2')">¿Qué pasó? →</button>
   </section>
 
-  <!-- ACTIVE CALL -->
-  <section class="scene center callbg" id="incall">
-    <img src="assets/vylta-ai.jpg" width="150" height="150" class="holo" alt="VYLTA">
-    <div class="callname">VYLTA</div>
-    <div class="calltimer" id="ctimer">00:00</div>
-    <div class="callwave" id="cwave"></div>
-    <button class="endcall" id="endBtn" style="opacity:0" onclick="toChat()">📞</button>
-  </section>
-
-  <!-- CHAT -->
-  <section class="scene" id="chat">
-    <div class="wahead">
-      <img src="assets/vylta-logo.png" class="av" alt="VYLTA">
-      <div><div class="n">VYLTA</div><div class="s" id="waStatus">en línea</div></div>
+  <!-- ESCENA 2 -->
+  <section class="scene center" id="s2">
+    <div class="phone" id="ph2" style="transform:scale(.82)">
+      <div class="notch"></div><div class="phscreen" id="ph2s"></div>
+      <div class="floaters" id="fl2"></div>
     </div>
-    <div class="chatbody" id="chatBody"></div>
+    <div class="dwrap" id="d2" style="margin-top:14px"></div>
+    <button class="btn glow" id="b2" style="margin-top:18px;opacity:0" onclick="go('s3')">Eso sí me pasa 😮‍💨</button>
   </section>
 
-  <!-- CTA -->
-  <section class="scene center" id="cta">
-    <img src="assets/vylta-logo.png" class="logo" alt="VYLTA">
-    <h2 id="ctaH">Tu negocio puede<br>empezar a <span class="g">llenarse</span><br>esta semana.</h2>
-    <p>Empezar es <b style="color:var(--green2)">gratis</b>. Sin tarjeta.</p>
-    <a class="go" id="ctaBtn" href="#">Activar VYLTA en mi negocio →</a>
-    <div class="hint">El resto lo decides tú.</div>
+  <!-- ESCENA 3: diagnóstico -->
+  <section class="scene center" id="s3">
+    <div class="kick">Diagnóstico · 30 segundos</div>
+    <div id="q-giro">
+      <div class="q serif">¿Qué tipo de negocio<br>tienes?</div>
+      <div class="opts">
+        <div class="opt" onclick="setQ('giro','barberia',this)"><span class="em">💈</span>Barbería</div>
+        <div class="opt" onclick="setQ('giro','estetica',this)"><span class="em">💅</span>Estética / Uñas</div>
+        <div class="opt" onclick="setQ('giro','spa',this)"><span class="em">🧖</span>Spa</div>
+        <div class="opt" onclick="setQ('giro','consultorio',this)"><span class="em">🩺</span>Consultorio / Clínica</div>
+        <div class="opt" onclick="setQ('giro','veterinaria',this)"><span class="em">🐾</span>Veterinaria</div>
+        <div class="opt" onclick="setQ('giro','otro',this)"><span class="em">✨</span>Otro negocio con citas</div>
+      </div>
+    </div>
+    <div id="q-citas" style="display:none">
+      <div class="q serif">¿Cuántas citas<br>manejas por semana?</div>
+      <div class="opts">
+        <div class="opt" onclick="setQ('citas','10',this)"><span class="em">1️⃣</span>1 a 10</div>
+        <div class="opt" onclick="setQ('citas','30',this)"><span class="em">2️⃣</span>11 a 30</div>
+        <div class="opt" onclick="setQ('citas','60',this)"><span class="em">3️⃣</span>31 a 60</div>
+        <div class="opt" onclick="setQ('citas','90',this)"><span class="em">🔥</span>Más de 60</div>
+      </div>
+    </div>
+    <div id="q-dolor" style="display:none">
+      <div class="q serif">¿Qué es lo que más<br>te duele hoy?</div>
+      <div class="opts">
+        <div class="opt" onclick="setQ('dolor','No contesto a tiempo',this)"><span class="em">⏰</span>No contesto a tiempo</div>
+        <div class="opt" onclick="setQ('dolor','Se me olvidan citas',this)"><span class="em">😵</span>Se me olvidan citas</div>
+        <div class="opt" onclick="setQ('dolor','Me cancelan mucho',this)"><span class="em">❌</span>Me cancelan mucho</div>
+        <div class="opt" onclick="setQ('dolor','No doy seguimiento',this)"><span class="em">📭</span>No doy seguimiento</div>
+        <div class="opt" onclick="setQ('dolor','Todo desordenado en WhatsApp',this)"><span class="em">🌀</span>Todo desordenado en WhatsApp</div>
+      </div>
+    </div>
   </section>
+
+  <!-- ESCENA 4: pérdida -->
+  <section class="scene center" id="s4">
+    <div class="calc" id="calcLbl">Calculando caos operativo…</div>
+    <div id="lossCards" style="width:100%;max-width:350px"></div>
+    <div class="dwrap" id="d4" style="margin-top:12px"></div>
+    <button class="btn glow" id="b4" style="margin-top:18px;opacity:0" onclick="go('s5')">Continuar →</button>
+  </section>
+
+  <!-- ESCENA 5: punto de quiebre -->
+  <section class="scene center" id="s5" style="background:radial-gradient(ellipse at 50% 40%,#0a0d12,#04060a)">
+    <div class="wachar tired"><div class="wachar-glow"></div><div id="wa5"></div></div>
+    <div class="cant" id="cant5"></div>
+    <h2 class="lead serif" id="who5" style="margin-top:22px;opacity:0">Entonces…<br><span class="gv">¿quién sí puede?</span></h2>
+    <button class="btn glow" id="b5" style="margin-top:22px;opacity:0" onclick="go('s6')">Muéstrame la solución →</button>
+  </section>
+
+  <!-- ESCENA 6: revelación -->
+  <section class="scene center" id="s6">
+    <div class="vlogo" id="vl6"></div>
+    <h2 class="lead serif">Conoce <span class="gv">VYLTA</span></h2>
+    <p class="sub">La app que convierte tus mensajes, citas y recordatorios en un sistema automático para tu negocio.</p>
+    <div class="dwrap" id="d6" style="margin-top:14px"></div>
+    <div class="benefits" id="ben6"></div>
+    <button class="btn glow" id="b6" style="margin-top:18px;opacity:0" onclick="go('s7')">Ver cómo funciona →</button>
+  </section>
+
+  <!-- ESCENA 7: demo -->
+  <section class="scene center" id="s7">
+    <div class="kick">Así trabaja VYLTA por ti</div>
+    <div class="agenda" id="ag7">
+      <div class="ah"><span>Hoy · tu agenda</span><span id="agcount">0 citas</span></div>
+      <div id="agbody"></div>
+    </div>
+    <div class="demostep" id="demostep"></div>
+    <button class="btn glow" id="b7" style="margin-top:18px;opacity:0" onclick="go('s8')">Quiero esto en mi negocio →</button>
+  </section>
+
+  <!-- ESCENA 8: resultado + lead -->
+  <section class="scene center" id="s8">
+    <div id="s8result">
+      <div class="kick" style="color:var(--gold)">✦ Diagnóstico completado</div>
+      <h2 class="lead serif">Tu negocio opera en<br><span style="color:var(--red)">modo manual</span></h2>
+      <div class="gauge">
+        <div class="glab">Nivel actual</div><div class="gnow">⚠️ Caos controlado</div>
+        <div class="glab">Nivel recomendado</div><div class="grec gv">⚡ Agenda automatizada con VYLTA</div>
+        <div class="unlock">🎁 Desbloqueaste tu prueba gratis</div>
+      </div>
+      <form id="leadForm" onsubmit="return submitLead(event)">
+        <input name="nombre" placeholder="Tu nombre" required autocomplete="name">
+        <input name="negocio" id="leadNegocio" placeholder="Tipo de negocio" required>
+        <input name="wa" placeholder="Tu WhatsApp" inputmode="tel" required autocomplete="tel">
+        <button class="btn gold" type="submit">Quiero mi acceso gratis →</button>
+      </form>
+      <div class="note">Sin tarjeta. Sin compromiso. Configuración rápida.</div>
+    </div>
+    <div id="s8ok" style="display:none" class="ok-msg">
+      <div class="vlogo" style="margin:0 auto 14px"><span id="vl8"></span></div>
+      <h2 class="lead serif">¡Listo! 🎉</h2>
+      <p class="sub" style="margin:14px auto">Estás a un paso de convertir tu WhatsApp en una <b class="wac">máquina de citas</b>.</p>
+      <a class="btn" id="finalCta" href="#">Abrir VYLTA ahora →</a>
+    </div>
+  </section>
+
 </div></div>
 
 <script>
 "use strict";
-const GIROS={barberia:{label:'barbería',ticket:180},estetica:{label:'estética',ticket:350},spa:{label:'spa',ticket:600},consultorio:{label:'consultorio',ticket:500}};
-const RATE={libreta:.25,whatsapp:.15,nada:.30};
-const state={giro:'barberia',citas:30,metodo:'libreta',muted:false};
 const $=id=>document.getElementById(id);
+const state={giro:'barberia',citas:'30',dolor:'',muted:false};
+const GIRO={barberia:{l:'barbería',t:180},estetica:{l:'estética',t:350},spa:{l:'spa',t:600},consultorio:{l:'consultorio',t:500},veterinaria:{l:'veterinaria',t:400},otro:{l:'negocio',t:300}};
+const SVG_WA='<svg viewBox="0 0 120 120"><defs></defs><path d="M60 8C32 8 9 30 9 58c0 11 4 21 10 29L11 112l27-7c7 4 14 6 22 6 28 0 51-22 51-50S88 8 60 8z" fill="#25D366"/><circle cx="44" cy="56" r="5" fill="#063d22"/><circle cx="76" cy="56" r="5" fill="#063d22"/><path d="M46 56c0 3-2 5-2 5M78 56c0 3-2 5-2 5" stroke="#063d22" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".5"/><path d="M48 78c4 4 20 4 24 0" stroke="#063d22" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M92 40c3 2 5 6 4 10" stroke="#9be7b8" stroke-width="3" stroke-linecap="round" fill="none" opacity=".7"/></svg>';
+const SVG_V='<svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16M6 5l6 14 6-14" stroke="#04150F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ORDER=['s1','s2','s3','s4','s5','s6','s7','s8'];
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 
-/* ---------- AUDIO: Web Audio SFX + ambient pad + voice ---------- */
-let AC=null;
-function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC;}
-function tone(freq,dur,type,vol,when){const c=ac();if(!c||state.muted)return;const o=c.createOscillator(),g=c.createGain();o.type=type||'sine';o.frequency.value=freq;o.connect(g);g.connect(c.destination);const t=c.currentTime+(when||0);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol||.18,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.start(t);o.stop(t+dur+.03);}
+/* ---------- audio engine ---------- */
+let AC=null;function ac(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC;}
+function tone(f,d,type,g,delay){const c=ac();if(!c||state.muted)return;const o=c.createOscillator(),gn=c.createGain();o.type=type||'sine';o.frequency.value=f;o.connect(gn);gn.connect(c.destination);const t=c.currentTime+(delay||0);gn.gain.setValueAtTime(0,t);gn.gain.linearRampToValueAtTime(g||.15,t+.02);gn.gain.exponentialRampToValueAtTime(.0001,t+(d||.2));o.start(t);o.stop(t+(d||.2)+.05);}
 function vib(p){if(navigator.vibrate){try{navigator.vibrate(p);}catch(e){}}}
-function sfxMsg(){tone(700,.13,'sine',.16);tone(940,.12,'sine',.14,.12);vib(18);}
-function sfxSend(){tone(1050,.1,'sine',.12);}
-let ringTimer=null;
-function startRing(){stopRing();const r=()=>{tone(620,.32,'sine',.22);tone(820,.32,'sine',.22,.34);vib([250,120,250]);};r();ringTimer=setInterval(r,1600);}
-function stopRing(){if(ringTimer)clearInterval(ringTimer);ringTimer=null;vib(0);}
-/* real ambient music (Lyria), looped, with ducking under the voice */
-let music=null,fadeT=null;const MUSIC_BASE=.06;
-function fadeMusic(target,ms){if(!music)return;clearInterval(fadeT);const start=music.volume||0,steps=Math.max(1,Math.round((ms||800)/50));let i=0;fadeT=setInterval(()=>{i++;try{music.volume=Math.max(0,Math.min(1,start+(target-start)*i/steps));}catch(e){}if(i>=steps)clearInterval(fadeT);},50);}
-function startPad(){if(music)return;music=new Audio('assets/audio/ambient.m4a');music.loop=true;music.volume=0;music.play().catch(()=>{});fadeMusic(state.muted?0:MUSIC_BASE,4500);}
-function padVol(v){fadeMusic(state.muted?0:v,900);}
-function musicDuck(on){if(!music||state.muted)return;fadeMusic(on?.02:MUSIC_BASE,500);}
+function sfxMsg(){tone(680,.13,'sine',.13);tone(920,.12,'sine',.11,.11);vib(16);}
+function sfxSend(){tone(900,.1,'sine',.1);tone(1180,.09,'sine',.08,.08);}
+function sfxType(){tone(300,.04,'square',.03);}
+let ringT=null;
+function startRing(){stopRing();const r=()=>{tone(600,.3,'sine',.18);tone(820,.3,'sine',.18,.32);vib([200,120,200]);};r();ringT=setInterval(r,1500);}
+function stopRing(){if(ringT)clearInterval(ringT);ringT=null;vib(0);}
+/* music */
+let music=null,fadeT=null;const MBASE=.06;
+function fadeMusic(tg,ms){if(!music)return;clearInterval(fadeT);const s=music.volume||0,n=Math.max(1,Math.round((ms||800)/50));let i=0;fadeT=setInterval(()=>{i++;try{music.volume=Math.max(0,Math.min(1,s+(tg-s)*i/n));}catch(e){}if(i>=n)clearInterval(fadeT);},50);}
+function startMusic(){if(music)return;music=new Audio('assets/audio/ambient.m4a');music.loop=true;music.volume=0;music.play().catch(()=>{});fadeMusic(state.muted?0:MBASE,4500);}
+function duck(on){if(!music||state.muted)return;fadeMusic(on?.02:MBASE,500);}
 let curVoice=null;
-function voice(key){stopVoice();if(state.muted)return;musicDuck(true);curVoice=new Audio('assets/audio/'+key+'.m4a');curVoice.onended=()=>musicDuck(false);curVoice.play().catch(()=>{musicDuck(false);});}
-function stopVoice(){if(curVoice){try{curVoice.pause();}catch(e){}curVoice=null;}musicDuck(false);}
-$('muteBtn').onclick=function(){state.muted=!state.muted;this.textContent=state.muted?'🔇':'🔊';if(state.muted){stopVoice();stopRing();fadeMusic(0,400);if(music)setTimeout(()=>{if(state.muted&&music)music.pause();},450);}else{if(music){music.play().catch(()=>{});fadeMusic(MUSIC_BASE,800);}}};
+function voice(key){stopVoice();if(state.muted)return;duck(true);curVoice=new Audio('assets/audio/'+key+'.m4a');curVoice.onended=()=>duck(false);curVoice.play().catch(()=>duck(false));}
+function stopVoice(){if(curVoice){try{curVoice.pause();}catch(e){}curVoice=null;}duck(false);}
+$('muteBtn').onclick=function(){state.muted=!state.muted;this.textContent=state.muted?'🔇':'🔊';if(state.muted){stopVoice();stopRing();fadeMusic(0,400);if(music)setTimeout(()=>{if(state.muted&&music)music.pause();},450);}else if(music){music.play().catch(()=>{});fadeMusic(MBASE,800);}};
+document.addEventListener('visibilitychange',()=>{if(document.hidden){stopRing();stopVoice();if(music)music.pause();}else if(!state.muted&&music){music.play().catch(()=>{});fadeMusic(MBASE,800);}});
 
 /* ---------- scene control ---------- */
-function show(id){document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');}
+let started=false;
+function setProgress(id){const i=ORDER.indexOf(id);$('pbar').style.width=((i+1)/8*100)+'%';$('sceneLbl').textContent='Escena '+(i+1)+' de 8';}
+function go(id){document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');setProgress(id);stopVoice();(SCENE[id]||(()=>{}))();}
+const dbubble=(wrap,html,d)=>{const e=document.createElement('div');e.className='dbub';e.style.animationDelay=(d||0)+'ms';e.innerHTML=html;$(wrap).appendChild(e);};
+async function typeThen(wrap,html,pre){await wait(pre||500);const t=document.createElement('div');t.className='typing';t.innerHTML='<i></i><i></i><i></i>';$(wrap).appendChild(t);for(let k=0;k<3;k++){sfxType();await wait(130);}await wait(700);t.remove();dbubble(wrap,html);sfxMsg();}
 
-/* ---------- flow ---------- */
-function enter(){ac();startPad();show('call');startRing();
-  $('cwave').innerHTML=Array.from({length:20},(_,i)=>`<i style="animation-delay:${(i*.07).toFixed(2)}s"></i>`).join('');}
-document.addEventListener('visibilitychange',()=>{if(document.hidden){stopRing();stopVoice();if(music)music.pause();}else if(!state.muted&&music){music.play().catch(()=>{});fadeMusic(MUSIC_BASE,800);}});
-let ctInt=null;
-function answer(){stopRing();show('incall');voice('v2-call');
-  let s=0;clearInterval(ctInt);ctInt=setInterval(()=>{s++;$('ctimer').textContent='00:'+String(s).padStart(2,'0');},1000);
-  setTimeout(()=>{$('endBtn').style.opacity='1';},4500);
-  /* auto move to chat after the intro voice (~9s) */
-  setTimeout(()=>{if($('incall').classList.contains('active'))toChat();},9800);}
-function toChat(){clearInterval(ctInt);stopVoice();show('chat');runChat();}
-
-/* ---------- chat builders ---------- */
-const body=()=>$('chatBody');
-function scroll(){const b=body();b.scrollTop=b.scrollHeight;}
-function nowTime(){return '';}
-function status(t){$('waStatus').textContent=t;}
-let fauxMin=22*60+55;/* 10:55 p.m. — converge hacia las 11 */
-function stamp(){const h=Math.floor(fauxMin/60)%24,m=fauxMin%60;fauxMin+=Math.random()<.5?1:2;const ap=h<12?'a.m.':'p.m.';let hh=h%12||12;return hh+':'+String(m).padStart(2,'0')+' '+ap;}
-function elMsg(cls,html){const d=document.createElement('div');d.className='msg '+cls;const tk=cls.indexOf('out')>=0?'<span class="ticks">✓✓</span>':'';d.innerHTML=html+'<span class="t">'+stamp()+tk+'</span>';body().appendChild(d);scroll();return d;}
-async function botSays(html,pre){await wait(pre||500);status('escribiendo…');const t=document.createElement('div');t.className='typing';t.innerHTML='<i></i><i></i><i></i>';body().appendChild(t);scroll();
-  await wait(Math.min(2000,650+html.replace(/<[^>]+>/g,'').length*20));t.remove();status('en línea');elMsg('in',html);sfxMsg();}
-function userSays(text){elMsg('out',text);sfxSend();}
-function askOptions(opts,store){return new Promise(res=>{const w=document.createElement('div');w.className='opts-in';
-  opts.forEach(([v,label])=>{const b=document.createElement('button');b.className='opt-chip';b.textContent=label;
-    b.onclick=()=>{if(store)store(v);w.remove();userSays(label);setTimeout(res,550);};w.appendChild(b);});
-  body().appendChild(w);scroll();});}
-function askSlider(){return new Promise(res=>{const w=document.createElement('div');w.className='slbub';
-  w.innerHTML='<div class="v"><span id="slv">30</span> <small>citas / semana</small></div><input type="range" min="5" max="120" value="30" step="5"><button>Enviar</button>';
-  const inp=w.querySelector('input');inp.oninput=()=>{$('slv').textContent=inp.value;state.citas=+inp.value;inp.style.setProperty('--p',((inp.value-5)/115*100)+'%');};
-  w.querySelector('button').onclick=()=>{w.remove();userSays(state.citas+' citas a la semana');setTimeout(res,550);};
-  body().appendChild(w);scroll();});}
-function divider(t){const d=document.createElement('div');d.className='divider';d.textContent=t;body().appendChild(d);scroll();}
-function goButton(label,cb){return new Promise(res=>{const b=document.createElement('button');b.className='gobtn';b.innerHTML=label;
-  b.onclick=()=>{b.remove();if(cb)cb();res();};body().appendChild(b);scroll();});}
-
-function computeLoss(){const m=state.citas*4;const lost=Math.max(2,Math.round(m*RATE[state.metodo]));return{lost,money:lost*GIROS[state.giro].ticket};}
-function fmt(n){return n.toLocaleString('es-MX');}
-
-/* ---------- the conversation ---------- */
-async function runChat(){
-  await botSays('Antes de mostrarte nada… necesito conocerte 👀',700);
-  await botSays('¿A qué te dedicas?',500);
-  await askOptions([['barberia','💈 Barbería'],['estetica','💅 Estética / uñas'],['spa','🧖 Spa'],['consultorio','🩺 Consultorio']],v=>state.giro=v);
-  await botSays('En una buena semana… ¿cuántas citas atiendes?',600);
-  await askSlider();
-  await botSays('¿Y cómo las agendas hoy?',600);
-  await askOptions([['libreta','📒 En una libreta / papel'],['whatsapp','💬 WhatsApp a mano'],['nada','🤷 Nada fijo']],v=>state.metodo=v);
-
-  await botSays('Déjame revisar algo…',700);
-  const L=computeLoss();state.lostMoney=L.money;
-  status('escribiendo…');const tp=document.createElement('div');tp.className='typing';tp.innerHTML='<i></i><i></i><i></i>';body().appendChild(tp);scroll();
-  await wait(2200);tp.remove();status('en línea');
-  const r=document.createElement('div');r.className='reveal';
-  r.innerHTML=`<div class="lbl">Lo que no ves</div><div class="big" id="rc">0</div><div class="sub">clientes que cada mes no confirmaron,<br>lo olvidaron o no volvieron.</div>
-    <div style="height:12px;border-bottom:1px solid rgba(255,255,255,.08);margin:10px 0"></div>
-    <div class="lbl">Eso es</div><div class="big" id="rm" style="font-size:38px">$0</div><div class="sub">al mes. Y ni siquiera lo notas.</div>`;
-  body().appendChild(r);scroll();sfxMsg();voice('v2-reveal');vib([50,40,140]);
-  countTo('rc',L.lost,'');countTo('rm',L.money,'$');
-  await wait(1200);
-  await goButton('Eso me dolió… sigue →');
-
-  // NIGHT scene
-  divider('11:00 p.m.');
-  await botSays('Oye… son las once de la noche. 🌙',700);
-  await botSays('¿De verdad vas a estar contestándole a tus clientes a esta hora? ¿Todos los días?',700);
-  voice('v2-night');
-  await botSays('No te preocupes. <b>Yo no duermo.</b> Yo sí puedo, a cualquier hora.',1400);
-  await goButton('¿Y cómo lo harías? →');
-
-  // DEMO — real VYLTA text messages
-  await botSays('Mira. Así le escribo a cada uno de tus clientes 👇',700);
-  voice('v2-demo');
-  await wait(600);tplReminder();sfxMsg();await wait(1400);tplNoShow();sfxMsg();scroll();
-  await wait(1000);
-  await botSays('Texto. Claro. Por WhatsApp. Sin que tú muevas un dedo.',900);
-  await goButton('Continuar →');
-
-  // META
-  voice('v2-meta');
-  await botSays('Todo esto que acabas de sentir…',700);
-  await botSays('la atención, los recordatorios, las confirmaciones…',1200);
-  await botSays('es <b>exactamente</b> lo que voy a hacer por cada uno de tus clientes. Cada día.',1600);
-  await botSays('Y lo mejor… casi todo eso que estás perdiendo, <b>regresa</b>. 💚',1300);
-  await botSays(`Imagina unos <b>$${fmt(Math.round((state.lostMoney||0)*0.8))}</b> de vuelta en tu ${GIROS[state.giro].label}. Cada mes.`,1300);
-  await wait(800);
-  await goButton('Quiero esto para mi negocio →',()=>toCta());
+/* ---------- SCENE 1 ---------- */
+const NOTES1=['¿Tienes lugar hoy?','¿Cuánto cobras?','¿Me confirmas mi cita?','¿Tienes a las 6?','Hola, ¿agendas?','¿Me reagendas? 🙏'];
+async function scene1(){
+  const scr=$('ph1s');scr.innerHTML='';$('badge1').style.display='none';
+  const N=47;let shown=0;
+  vib(30);
+  for(let i=0;i<6;i++){await wait(360);const n=document.createElement('div');n.className='pnote';n.innerHTML='<div class="ic">💬</div><div class="tx">'+NOTES1[i]+'</div>';scr.appendChild(n);sfxMsg();shown++;}
+  // count up the badge
+  $('badge1').style.display='flex';
+  let c=0;const it=setInterval(()=>{c+=Math.ceil(N/22);if(c>=N){c=N;clearInterval(it);}$('msgCount').textContent=c;$('badge1').textContent=c;},45);
+  await wait(900);
+  voice('wa-open');
+  await typeThen('d1','Oye… <b>tenemos que hablar.</b>',500);
+  await wait(700);$('b1').style.opacity='1';
 }
+/* ---------- SCENE 2 ---------- */
+const FLOAT2=[['¿Tienes lugar hoy?',8,12],['¿Me reagendas?',58,6],['¿Cuánto cobras?',4,34],['¿Horario a las 6?',60,30],['Ya no voy a poder ir 😔',12,58],['¿Me confirmas?',56,54]];
+async function scene2(){
+  $('d2').innerHTML='';const fl=$('fl2');fl.innerHTML='';$('ph2s').innerHTML='';
+  FLOAT2.forEach((f,i)=>{const s=document.createElement('span');s.textContent=f[0];s.style.left=f[1]+'%';s.style.top=f[2]+'%';s.style.animationDelay=(i*.25)+'s';fl.appendChild(s);sfxMsg();});
+  await wait(600);voice('wa-saturado');
+  await typeThen('d2','No me malinterpretes… <b>me gusta ayudarte.</b>',400);
+  await typeThen('d2','Pero me usas como tu agenda, tu recepcionista, tu lista de clientes, tu recordatorio… y hasta tu asistente.',900);
+  await typeThen('d2','Y mientras tú atiendes a alguien… <b>otros se van con tu competencia.</b>',1400);
+  await wait(600);$('b2').style.opacity='1';
+}
+/* ---------- SCENE 3 diagnostic ---------- */
+function scene3(){$('q-giro').style.display='';$('q-citas').style.display='none';$('q-dolor').style.display='none';}
+function setQ(k,v,el){state[k]=v;if(el){el.parentNode.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');}sfxSend();vib(12);
+  setTimeout(()=>{
+    if(k==='giro'){$('q-giro').style.display='none';$('q-citas').style.display='';}
+    else if(k==='citas'){$('q-citas').style.display='none';$('q-dolor').style.display='';}
+    else if(k==='dolor'){go('s4');}
+  },240);}
+/* ---------- SCENE 4 loss ---------- */
+const LOSS=[['👤','Cliente que preguntó por tu horario','No recibió respuesta a tiempo.','Perdido'],['📅','Tenía cita contigo','No recibió recordatorio. No asistió.','No asistió'],['🔁','Quería reagendar','Se quedó enterrado entre tus chats.','Olvidado']];
+async function scene4(){
+  $('calcLbl').style.display='';$('calcLbl').textContent='Calculando caos operativo…';$('lossCards').innerHTML='';$('d4').innerHTML='';
+  vib(40);await wait(1700);$('calcLbl').style.display='none';
+  for(const L of LOSS){const c=document.createElement('div');c.className='lcard';c.innerHTML='<div class="nm">'+L[0]+' '+L[1]+'</div><div class="ds">'+L[2]+'</div><span class="st">'+L[3]+'</span>';$('lossCards').appendChild(c);sfxMsg();vib(20);await wait(950);}
+  voice('wa-perdida');
+  await typeThen('d4','¿Lo ves? No es que tu negocio no venda.',500);
+  await typeThen('d4','Es que muchas oportunidades se quedan atrapadas… <b>aquí dentro de mí.</b>',1100);
+  await typeThen('d4','Cada mensaje sin responder… <b>es una cita menos.</b>',1300);
+  await wait(600);$('b4').style.opacity='1';
+}
+/* ---------- SCENE 5 break ---------- */
+const CANT=['No puedo organizar tu negocio completo.','No puedo confirmar tus citas por ti.','No puedo recordarle a cada cliente que llegue.','No puedo recuperar a los que ya se fueron.','No puedo ordenar tu agenda mientras trabajas.'];
+const XICON='<svg viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>';
+async function scene5(){
+  $('wa5').innerHTML=SVG_WA;$('cant5').innerHTML='';$('who5').style.opacity='0';$('b5').style.opacity='0';
+  await wait(500);voice('wa-quiebre');
+  const intro=document.createElement('div');intro.className='li';intro.style.color='#9aa6b2';intro.innerHTML='<span>Yo puedo <b style="color:#cbd3dd">recibir</b> mensajes…</span>';$('cant5').appendChild(intro);
+  await wait(1400);
+  for(const t of CANT){const li=document.createElement('div');li.className='li';li.innerHTML=XICON+'<span>'+t+'</span>';$('cant5').appendChild(li);tone(220,.18,'sine',.12);vib(14);await wait(1100);}
+  await wait(500);$('who5').style.opacity='1';$('who5').classList.add('fade-up');vib([30,40,90]);
+  await wait(900);$('b5').style.opacity='1';
+}
+/* ---------- SCENE 6 reveal ---------- */
+const BEN=['Agenda tus citas en segundos','Recordatorios automáticos por WhatsApp','Menos cancelaciones y olvidos','Tus clientes reservan desde un link','Clientes, equipo y horarios en un solo lugar'];
+async function scene6(){
+  $('vl6').innerHTML=SVG_V;$('d6').innerHTML='';$('ben6').innerHTML='';$('b6').style.opacity='0';
+  for(const t of ['🎉','✨'])tone(660,.12,'sine',.12);
+  vib([20,30,60]);
+  await wait(400);voice('wa-vylta');
+  await typeThen('d6','VYLTA no me reemplaza…',500);
+  await typeThen('d6','<b>me vuelve inteligente.</b> 🧠',900);
+  await wait(400);
+  BEN.forEach((b,i)=>{const e=document.createElement('div');e.className='ben';e.style.animationDelay=(i*.18)+'s';e.innerHTML='<span class="ck">✓</span>'+b;$('ben6').appendChild(e);});
+  await wait(1600);$('b6').style.opacity='1';
+}
+/* ---------- SCENE 7 demo ---------- */
+const STEPS=[['08:30','nueva reserva','Entra desde tu link público','reserva'],['10:00','recordatorio','VYLTA avisa por WhatsApp 24h antes','rem'],['12:30','confirmada ✓','El cliente confirmó solo','conf']];
+async function scene7(){
+  const b=$('agbody');b.innerHTML='';$('demostep').textContent='';$('agcount').textContent='0 citas';$('b7').style.opacity='0';
+  const msgs=['Entra una reserva nueva…','VYLTA la agenda sola…','Manda el recordatorio por WhatsApp…','El cliente confirma…','Tu agenda queda ordenada ✨'];
+  const data=[['09:00','María G.','Corte + barba'],['11:30','Carlos M.','Servicio'],['16:00','Ana P.','Tratamiento']];
+  for(let i=0;i<data.length;i++){
+    $('demostep').textContent=msgs[i];await wait(900);
+    const a=document.createElement('div');a.className='appt';a.innerHTML='<span class="tm">'+data[i][0]+'</span><span class="who"><b>'+data[i][1]+'</b><span>'+data[i][2]+'</span></span><span class="ok">✓</span>';b.appendChild(a);sfxMsg();vib(16);$('agcount').textContent=(i+1)+' citas';
+    await wait(700);
+  }
+  $('demostep').textContent='Tu WhatsApp deja de cargar con todo. Y tú atiendes mejor. 💚';
+  voice('wa-final');
+  await wait(1400);$('b7').style.opacity='1';
+}
+/* ---------- SCENE 8 ---------- */
+function scene8(){$('leadNegocio').value=GIRO[state.giro].l.charAt(0).toUpperCase()+GIRO[state.giro].l.slice(1);$('vl8').innerHTML=SVG_V;}
+function submitLead(e){e.preventDefault();const f=e.target;const data={nombre:f.nombre.value,negocio:f.negocio.value,wa:f.wa.value,giro:state.giro,citas:state.citas,dolor:state.dolor,ts:new Date().toISOString()};
+  try{localStorage.setItem('vylta_lead',JSON.stringify(data));}catch(_){}
+  tone(660,.14,'sine',.14);tone(880,.13,'sine',.12,.12);tone(1100,.14,'sine',.1,.24);vib([40,50,120]);
+  $('s8result').style.display='none';$('s8ok').style.display='';
+  $('finalCta').href='https://vylta.lat/'+(GIRO[state.giro]?state.giro:'')+'?src=experiencia&utm_source=experiencia&utm_medium=funnel';
+  return false;}
 
-function tplReminder(){const g=GIROS[state.giro];const d=document.createElement('div');d.className='tpl';
-  d.innerHTML=`<div class="body">¡Hola María! 👋\nTe recordamos tu cita de mañana:\n\n📅 martes 2 de junio\n🕙 10:00 AM\n💼 Servicio en tu ${g.label}\n\nPor favor confirma para que tu lugar quede asegurado.\n<span class="src">VYLTA · Tu agenda inteligente</span></div>
-  <div class="acts"><button>↩ Confirmar</button><button>↩ Reagendar</button><button>↩ Cancelar</button></div>`;
-  body().appendChild(d);scroll();}
-function tplNoShow(){const d=document.createElement('div');d.className='tpl';
-  d.innerHTML=`<div class="body">Hola Carlos,\nLamentamos que no pudieras asistir a tu cita 😔 ¡Pero no te preocupes! Aquí te dejamos el enlace para que reagendes cuando gustes, sin ningún problema.\n\nEsperamos verte pronto 💛\n<span class="src">Enviado por VYLTA</span></div>
-  <div class="acts"><button>↗ Reagendar mi cita</button></div>`;
-  body().appendChild(d);scroll();}
+const SCENE={s1:scene1,s2:scene2,s3:scene3,s4:scene4,s5:scene5,s6:scene6,s7:scene7,s8:scene8};
 
-function countTo(id,target,prefix){const el=$(id);let c=0;const step=target/30;const t=setInterval(()=>{c+=step;if(c>=target){c=target;clearInterval(t);}el.textContent=prefix+Math.round(c).toLocaleString('es-MX');},28);}
-
-function toCta(){const g=GIROS[state.giro];padVol(MUSIC_BASE);show('cta');voice('v2-cta');
-  $('ctaH').innerHTML=`Tu ${g.label} puede<br>empezar a <span class="g">llenarse</span><br>esta semana.`;
-  const b=$('ctaBtn');b.textContent=`Activar VYLTA en mi ${g.label} →`;
-  b.href=`https://vylta.lat/${state.giro}?src=experiencia&utm_source=experiencia&utm_medium=funnel`;}
+/* boot: first tap starts audio + scene1 */
+function boot(){if(started)return;started=true;ac();startMusic();scene1();}
+['click','touchstart'].forEach(ev=>document.addEventListener(ev,boot,{once:true}));
+setProgress('s1');
 </script>
 </body>
 </html>
