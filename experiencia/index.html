@@ -8,6 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;800&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/vylta-ai.jpg">
+<link rel="preload" as="image" href="assets/vylta-logo.png">
+<link rel="preload" as="fetch" href="assets/audio/v2-call.m4a" crossorigin>
 <style>
 :root{
   --bg:#070B14;--chat:#0b141a;--inbub:#1f2c34;--outbub:#005c4b;--head:#1f2c34;
@@ -19,8 +22,12 @@ html,body{height:100%}
 body{font-family:'Inter',system-ui,sans-serif;background:#000;color:var(--text);overflow:hidden;-webkit-font-smoothing:antialiased}
 .serif{font-family:'Playfair Display',serif}
 #app{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
-#stage{position:relative;width:100%;height:100%;max-width:430px;background:var(--bg);overflow:hidden}
+#stage{position:relative;width:100%;height:100vh;height:100dvh;max-width:430px;background:var(--bg);overflow:hidden}
 @media(min-width:600px){#stage{height:92vh;max-height:880px;border-radius:34px;border:1px solid rgba(255,255,255,.14);box-shadow:0 0 0 10px #0c0f17,0 40px 120px -20px rgba(0,0,0,.9)}}
+.scene.center,#chat .wahead{padding-top:max(14px,env(safe-area-inset-top))}
+.chatbody{padding-bottom:max(26px,env(safe-area-inset-bottom))}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.ticks{color:#53bdeb;font-weight:700;margin-left:2px}
 #stage::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:90;opacity:.04;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 .mute{position:absolute;top:14px;right:14px;z-index:80;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.35);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer}
@@ -126,7 +133,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#000;color:var(--text);
 
   <!-- INCOMING CALL -->
   <section class="scene center callbg" id="call">
-    <img src="assets/vylta-ai.png" class="holo ring" alt="VYLTA">
+    <img src="assets/vylta-ai.jpg" width="150" height="150" class="holo ring" alt="VYLTA" fetchpriority="high">
     <div class="callname">VYLTA</div>
     <div class="callsub"><span class="wa">●</span> Llamada de WhatsApp…</div>
     <div class="callbtns one">
@@ -137,7 +144,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#000;color:var(--text);
 
   <!-- ACTIVE CALL -->
   <section class="scene center callbg" id="incall">
-    <img src="assets/vylta-ai.png" class="holo" alt="VYLTA">
+    <img src="assets/vylta-ai.jpg" width="150" height="150" class="holo" alt="VYLTA">
     <div class="callname">VYLTA</div>
     <div class="calltimer" id="ctimer">00:00</div>
     <div class="callwave" id="cwave"></div>
@@ -175,13 +182,22 @@ const wait=ms=>new Promise(r=>setTimeout(r,ms));
 let AC=null;
 function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC;}
 function tone(freq,dur,type,vol,when){const c=ac();if(!c||state.muted)return;const o=c.createOscillator(),g=c.createGain();o.type=type||'sine';o.frequency.value=freq;o.connect(g);g.connect(c.destination);const t=c.currentTime+(when||0);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol||.18,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.start(t);o.stop(t+dur+.03);}
-function sfxMsg(){tone(700,.13,'sine',.16);tone(940,.12,'sine',.14,.12);}
+function vib(p){if(navigator.vibrate){try{navigator.vibrate(p);}catch(e){}}}
+function sfxMsg(){tone(700,.13,'sine',.16);tone(940,.12,'sine',.14,.12);vib(18);}
 function sfxSend(){tone(1050,.1,'sine',.12);}
 let ringTimer=null;
-function startRing(){stopRing();const r=()=>{tone(620,.32,'sine',.22);tone(820,.32,'sine',.22,.34);};r();ringTimer=setInterval(r,1600);}
-function stopRing(){if(ringTimer)clearInterval(ringTimer);ringTimer=null;}
+function startRing(){stopRing();const r=()=>{tone(620,.32,'sine',.22);tone(820,.32,'sine',.22,.34);vib([250,120,250]);};r();ringTimer=setInterval(r,1600);}
+function stopRing(){if(ringTimer)clearInterval(ringTimer);ringTimer=null;vib(0);}
 let pad=null,padG=null;
-function startPad(){const c=ac();if(!c||pad)return;padG=c.createGain();padG.gain.value=0;padG.connect(c.destination);pad=[110,110.5,146.8].map(f=>{const o=c.createOscillator();o.type='sine';o.frequency.value=f;o.connect(padG);o.start();return o;});padG.gain.linearRampToValueAtTime(state.muted?0:.03,c.currentTime+4);}
+function startPad(){const c=ac();if(!c||pad)return;
+  const filt=c.createBiquadFilter();filt.type='lowpass';filt.frequency.value=520;filt.Q.value=3;
+  padG=c.createGain();padG.gain.value=0;filt.connect(padG);padG.connect(c.destination);pad=[];
+  /* Am9-ish warm chord: A2 A3 C4 E4 B4 */
+  [[55,'sine',.5],[110,'sine',.26],[261.63,'triangle',.12],[329.63,'triangle',.12],[493.88,'sine',.07]].forEach(([f,t,g])=>{
+    const o=c.createOscillator();o.type=t;o.frequency.value=f;const og=c.createGain();og.gain.value=g;o.connect(og);og.connect(filt);o.start();pad.push(o);
+    const v=c.createOscillator();const vg=c.createGain();v.frequency.value=4.5;vg.gain.value=f*0.004;v.connect(vg);vg.connect(o.frequency);v.start();pad.push(v);/* slight vibrato/chorus */});
+  const lfo=c.createOscillator();const lg=c.createGain();lfo.frequency.value=0.045;lg.gain.value=240;lfo.connect(lg);lg.connect(filt.frequency);lfo.start();pad.push(lfo);
+  padG.gain.linearRampToValueAtTime(state.muted?0:.028,c.currentTime+5);}
 function padVol(v){if(padG)padG.gain.linearRampToValueAtTime(v,ac().currentTime+1);}
 let curVoice=null;
 function voice(key){stopVoice();if(state.muted)return;curVoice=new Audio('assets/audio/'+key+'.m4a');curVoice.play().catch(()=>{});}
@@ -208,7 +224,9 @@ const body=()=>$('chatBody');
 function scroll(){const b=body();b.scrollTop=b.scrollHeight;}
 function nowTime(){return '';}
 function status(t){$('waStatus').textContent=t;}
-function elMsg(cls,html){const d=document.createElement('div');d.className='msg '+cls;d.innerHTML=html;body().appendChild(d);scroll();return d;}
+let fauxMin=22*60+55;/* 10:55 p.m. — converge hacia las 11 */
+function stamp(){const h=Math.floor(fauxMin/60)%24,m=fauxMin%60;fauxMin+=Math.random()<.5?1:2;const ap=h<12?'a.m.':'p.m.';let hh=h%12||12;return hh+':'+String(m).padStart(2,'0')+' '+ap;}
+function elMsg(cls,html){const d=document.createElement('div');d.className='msg '+cls;const tk=cls.indexOf('out')>=0?'<span class="ticks">✓✓</span>':'';d.innerHTML=html+'<span class="t">'+stamp()+tk+'</span>';body().appendChild(d);scroll();return d;}
 async function botSays(html,pre){await wait(pre||500);status('escribiendo…');const t=document.createElement('div');t.className='typing';t.innerHTML='<i></i><i></i><i></i>';body().appendChild(t);scroll();
   await wait(Math.min(2000,650+html.replace(/<[^>]+>/g,'').length*20));t.remove();status('en línea');elMsg('in',html);sfxMsg();}
 function userSays(text){elMsg('out',text);sfxSend();}
@@ -239,14 +257,14 @@ async function runChat(){
   await askOptions([['libreta','📒 En una libreta / papel'],['whatsapp','💬 WhatsApp a mano'],['nada','🤷 Nada fijo']],v=>state.metodo=v);
 
   await botSays('Déjame revisar algo…',700);
-  const L=computeLoss();
+  const L=computeLoss();state.lostMoney=L.money;
   status('escribiendo…');const tp=document.createElement('div');tp.className='typing';tp.innerHTML='<i></i><i></i><i></i>';body().appendChild(tp);scroll();
   await wait(2200);tp.remove();status('en línea');
   const r=document.createElement('div');r.className='reveal';
   r.innerHTML=`<div class="lbl">Lo que no ves</div><div class="big" id="rc">0</div><div class="sub">clientes que cada mes no confirmaron,<br>lo olvidaron o no volvieron.</div>
     <div style="height:12px;border-bottom:1px solid rgba(255,255,255,.08);margin:10px 0"></div>
     <div class="lbl">Eso es</div><div class="big" id="rm" style="font-size:38px">$0</div><div class="sub">al mes. Y ni siquiera lo notas.</div>`;
-  body().appendChild(r);scroll();sfxMsg();voice('v2-reveal');
+  body().appendChild(r);scroll();sfxMsg();voice('v2-reveal');vib([50,40,140]);
   countTo('rc',L.lost,'');countTo('rm',L.money,'$');
   await wait(1200);
   await goButton('Eso me dolió… sigue →');
@@ -272,7 +290,9 @@ async function runChat(){
   await botSays('Todo esto que acabas de sentir…',700);
   await botSays('la atención, los recordatorios, las confirmaciones…',1200);
   await botSays('es <b>exactamente</b> lo que voy a hacer por cada uno de tus clientes. Cada día.',1600);
-  await wait(900);
+  await botSays('Y lo mejor… casi todo eso que estás perdiendo, <b>regresa</b>. 💚',1300);
+  await botSays(`Imagina unos <b>$${fmt(Math.round((state.lostMoney||0)*0.8))}</b> de vuelta en tu ${GIROS[state.giro].label}. Cada mes.`,1300);
+  await wait(800);
   await goButton('Quiero esto para mi negocio →',()=>toCta());
 }
 
