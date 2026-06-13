@@ -63,7 +63,10 @@ h1,h2{font-weight:800;letter-spacing:-.02em;line-height:1.12}
 @keyframes breathe{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-5px)}}
 @keyframes slump{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(4px) rotate(1deg)}}
 .wachar svg{width:100%;height:100%;filter:drop-shadow(0 10px 30px rgba(37,211,102,.35))}
-.wachar-glow{position:absolute;inset:-30%;background:radial-gradient(circle,rgba(37,211,102,.25),transparent 65%);z-index:-1}
+.wachar-glow{position:absolute;inset:-30%;background:radial-gradient(circle,rgba(37,211,102,.22),transparent 62%);z-index:-1}
+.wachar-img{width:170px;height:170px;object-fit:contain;-webkit-mask-image:radial-gradient(circle,#000 54%,transparent 76%);mask-image:radial-gradient(circle,#000 54%,transparent 76%)}
+.charwrap{position:relative;width:200px;height:200px;display:flex;align-items:center;justify-content:center;animation:breathe 4s ease-in-out infinite}
+.charwrap.tired{animation:slump 5s ease-in-out infinite}
 
 /* ===== phone + floating notifications ===== */
 .phone{position:relative;width:172px;height:340px;border-radius:30px;background:linear-gradient(160deg,#1c2330,#0d121b);border:2px solid #2a3342;box-shadow:0 30px 70px -20px #000, inset 0 1px 0 rgba(255,255,255,.06);display:flex;flex-direction:column;overflow:hidden}
@@ -163,8 +166,8 @@ form input::placeholder{color:var(--dim)}
 
   <!-- ESCENA 2 -->
   <section class="scene center" id="s2">
-    <div class="phone" id="ph2" style="transform:scale(.82)">
-      <div class="notch"></div><div class="phscreen" id="ph2s"></div>
+    <div class="charwrap" style="width:240px;height:240px">
+      <img class="wachar-img" style="width:150px;height:150px" src="assets/char/wa-saturado.jpg" alt="WhatsApp saturado">
       <div class="floaters" id="fl2"></div>
     </div>
     <div class="dwrap" id="d2" style="margin-top:14px"></div>
@@ -216,7 +219,7 @@ form input::placeholder{color:var(--dim)}
 
   <!-- ESCENA 5: punto de quiebre -->
   <section class="scene center" id="s5" style="background:radial-gradient(ellipse at 50% 40%,#0a0d12,#04060a)">
-    <div class="wachar tired"><div class="wachar-glow"></div><div id="wa5"></div></div>
+    <div class="charwrap tired"><img class="wachar-img" src="assets/char/wa-cansado.jpg" alt="WhatsApp agotado"></div>
     <div class="cant" id="cant5"></div>
     <h2 class="lead serif" id="who5" style="margin-top:22px;opacity:0">Entonces…<br><span class="gv">¿quién sí puede?</span></h2>
     <button class="btn glow" id="b5" style="margin-top:22px;opacity:0" onclick="go('s6')">Muéstrame la solución →</button>
@@ -262,6 +265,7 @@ form input::placeholder{color:var(--dim)}
       <div class="note">Sin tarjeta. Sin compromiso. Configuración rápida.</div>
     </div>
     <div id="s8ok" style="display:none" class="ok-msg">
+      <img class="wachar-img" style="margin:0 auto 4px;display:block;width:130px;height:130px" src="assets/char/wa-aliviado.jpg" alt="WhatsApp aliviado">
       <div class="vlogo" style="margin:0 auto 14px"><span id="vl8"></span></div>
       <h2 class="lead serif">¡Listo! 🎉</h2>
       <p class="sub" style="margin:14px auto">Estás a un paso de convertir tu WhatsApp en una <b class="wac">máquina de citas</b>.</p>
@@ -327,7 +331,7 @@ async function scene1(){
 /* ---------- SCENE 2 ---------- */
 const FLOAT2=[['¿Tienes lugar hoy?',8,12],['¿Me reagendas?',58,6],['¿Cuánto cobras?',4,34],['¿Horario a las 6?',60,30],['Ya no voy a poder ir 😔',12,58],['¿Me confirmas?',56,54]];
 async function scene2(){
-  $('d2').innerHTML='';const fl=$('fl2');fl.innerHTML='';$('ph2s').innerHTML='';
+  $('d2').innerHTML='';const fl=$('fl2');fl.innerHTML='';
   FLOAT2.forEach((f,i)=>{const s=document.createElement('span');s.textContent=f[0];s.style.left=f[1]+'%';s.style.top=f[2]+'%';s.style.animationDelay=(i*.25)+'s';fl.appendChild(s);sfxMsg();});
   await wait(600);voice('wa-saturado');
   await typeThen('d2','No me malinterpretes… <b>me gusta ayudarte.</b>',400);
@@ -359,7 +363,7 @@ async function scene4(){
 const CANT=['No puedo organizar tu negocio completo.','No puedo confirmar tus citas por ti.','No puedo recordarle a cada cliente que llegue.','No puedo recuperar a los que ya se fueron.','No puedo ordenar tu agenda mientras trabajas.'];
 const XICON='<svg viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>';
 async function scene5(){
-  $('wa5').innerHTML=SVG_WA;$('cant5').innerHTML='';$('who5').style.opacity='0';$('b5').style.opacity='0';
+  $('cant5').innerHTML='';$('who5').style.opacity='0';$('b5').style.opacity='0';
   await wait(500);voice('wa-quiebre');
   const intro=document.createElement('div');intro.className='li';intro.style.color='#9aa6b2';intro.innerHTML='<span>Yo puedo <b style="color:#cbd3dd">recibir</b> mensajes…</span>';$('cant5').appendChild(intro);
   await wait(1400);
