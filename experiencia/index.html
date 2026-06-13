@@ -203,17 +203,16 @@ h1,h2{font-weight:800;letter-spacing:-.02em;line-height:1.12}
   </section>
 
   <!-- ESCENA 8: resultado + CTA (sin form) -->
-  <section class="scene center" id="s8">
-    <img class="wachar-img" style="width:120px;height:120px;margin-bottom:4px" src="assets/char/wa-aliviado.jpg" alt="">
-    <div class="kick" style="color:var(--gold)">✦ Diagnóstico completado</div>
-    <h2 class="lead serif">Tu negocio opera en<br><span style="color:var(--red)">modo manual</span></h2>
-    <div class="gauge">
-      <div class="glab">Nivel actual</div><div class="gnow">⚠️ Caos controlado</div>
-      <div class="glab">Nivel recomendado</div><div class="grec gv">⚡ Agenda automatizada con VYLTA</div>
-      <div class="unlock">🎁 Desbloqueaste tu prueba gratis</div>
+  <section class="scene" id="s8" style="padding:0">
+    <video id="s8vid" class="bgvid" playsinline muted loop preload="auto" poster="assets/video/scene8-poster.jpg"><source src="assets/video/scene8.mp4" type="video/mp4"></video>
+    <div class="bgvid-ov" style="background:linear-gradient(180deg,rgba(7,11,18,.45),rgba(7,11,18,.94))"></div>
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;width:100%;padding:54px 24px max(28px,env(safe-area-inset-bottom))">
+      <div class="kick" style="color:var(--gold)">✦ Tu diagnóstico está listo</div>
+      <h2 class="lead serif">Cada día sin VYLTA<br><span style="color:var(--red)">se te va otra cita.</span></h2>
+      <p class="sub" style="margin-top:12px">Hoy puedes cambiarlo. Tu <b class="wac">link de citas</b> queda listo en 2 minutos — y empezar es <b class="wac">gratis</b>.</p>
+      <a class="btn gold glow" id="finalCta" href="#" style="margin-top:22px">Activar VYLTA gratis →</a>
+      <div class="note">Sin tarjeta · Sin compromiso · Cancela cuando quieras</div>
     </div>
-    <a class="btn gold" id="finalCta" href="#" style="margin-top:18px">Probar VYLTA gratis →</a>
-    <div class="note">Sin tarjeta. Sin compromiso. Configuración rápida.</div>
   </section>
 
 </div></div>
@@ -367,8 +366,9 @@ async function scene7(){
 }
 /* ===== S8 ===== */
 function scene8(){
+  {const v=$('s8vid');if(v){try{v.muted=true;v.currentTime=0;v.play();}catch(e){}}}
   $('finalCta').href='https://vylta.lat/'+(GIRO[state.giro]?state.giro:'')+'?src=experiencia&utm_source=experiencia&utm_medium=funnel';
-  voice('wa-final');
+  voice('wa-cierre');
 }
 
 const SCENE={s1:scene1,s2:scene2,s3:scene3,s4:scene4,s5:scene5,s6:scene6,s7:scene7,s8:scene8};
