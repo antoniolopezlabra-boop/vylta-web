@@ -129,10 +129,10 @@ body{font-family:'Inter',system-ui,sans-serif;background:#000;color:var(--text);
     <img src="assets/vylta-ai.png" class="holo ring" alt="VYLTA">
     <div class="callname">VYLTA</div>
     <div class="callsub"><span class="wa">●</span> Llamada de WhatsApp…</div>
-    <div class="callbtns">
-      <button class="cbtn dec" onclick="declineThenRing()">📞</button>
+    <div class="callbtns one">
       <button class="cbtn ans" onclick="answer()">📞</button>
     </div>
+    <div class="cbtn-lbl">Contestar</div>
   </section>
 
   <!-- ACTIVE CALL -->
@@ -194,13 +194,13 @@ function show(id){document.querySelectorAll('.scene').forEach(s=>s.classList.rem
 /* ---------- flow ---------- */
 function enter(){ac();startPad();show('call');startRing();
   $('cwave').innerHTML=Array.from({length:20},(_,i)=>`<i style="animation-delay:${(i*.07).toFixed(2)}s"></i>`).join('');}
-function declineThenRing(){/* if they decline, it rings again — you can't escape the curiosity */ }
+document.addEventListener('visibilitychange',()=>{if(document.hidden){stopRing();stopVoice();padVol(0);}else if(!state.muted&&padG){padVol(.03);}});
 let ctInt=null;
 function answer(){stopRing();show('incall');voice('v2-call');
   let s=0;clearInterval(ctInt);ctInt=setInterval(()=>{s++;$('ctimer').textContent='00:'+String(s).padStart(2,'0');},1000);
-  setTimeout(()=>{$('endBtn').style.opacity='1';},9000);
-  /* auto move to chat after the intro voice (~15s) */
-  setTimeout(()=>{if($('incall').classList.contains('active'))toChat();},15500);}
+  setTimeout(()=>{$('endBtn').style.opacity='1';},4500);
+  /* auto move to chat after the intro voice (~9s) */
+  setTimeout(()=>{if($('incall').classList.contains('active'))toChat();},9800);}
 function toChat(){clearInterval(ctInt);stopVoice();show('chat');runChat();}
 
 /* ---------- chat builders ---------- */
