@@ -188,21 +188,16 @@ function sfxSend(){tone(1050,.1,'sine',.12);}
 let ringTimer=null;
 function startRing(){stopRing();const r=()=>{tone(620,.32,'sine',.22);tone(820,.32,'sine',.22,.34);vib([250,120,250]);};r();ringTimer=setInterval(r,1600);}
 function stopRing(){if(ringTimer)clearInterval(ringTimer);ringTimer=null;vib(0);}
-let pad=null,padG=null;
-function startPad(){const c=ac();if(!c||pad)return;
-  const filt=c.createBiquadFilter();filt.type='lowpass';filt.frequency.value=520;filt.Q.value=3;
-  padG=c.createGain();padG.gain.value=0;filt.connect(padG);padG.connect(c.destination);pad=[];
-  /* Am9-ish warm chord: A2 A3 C4 E4 B4 */
-  [[55,'sine',.5],[110,'sine',.26],[261.63,'triangle',.12],[329.63,'triangle',.12],[493.88,'sine',.07]].forEach(([f,t,g])=>{
-    const o=c.createOscillator();o.type=t;o.frequency.value=f;const og=c.createGain();og.gain.value=g;o.connect(og);og.connect(filt);o.start();pad.push(o);
-    const v=c.createOscillator();const vg=c.createGain();v.frequency.value=4.5;vg.gain.value=f*0.004;v.connect(vg);vg.connect(o.frequency);v.start();pad.push(v);/* slight vibrato/chorus */});
-  const lfo=c.createOscillator();const lg=c.createGain();lfo.frequency.value=0.045;lg.gain.value=240;lfo.connect(lg);lg.connect(filt.frequency);lfo.start();pad.push(lfo);
-  padG.gain.linearRampToValueAtTime(state.muted?0:.028,c.currentTime+5);}
-function padVol(v){if(padG)padG.gain.linearRampToValueAtTime(v,ac().currentTime+1);}
+/* real ambient music (Lyria), looped, with ducking under the voice */
+let music=null,fadeT=null;const MUSIC_BASE=.18;
+function fadeMusic(target,ms){if(!music)return;clearInterval(fadeT);const start=music.volume||0,steps=Math.max(1,Math.round((ms||800)/50));let i=0;fadeT=setInterval(()=>{i++;try{music.volume=Math.max(0,Math.min(1,start+(target-start)*i/steps));}catch(e){}if(i>=steps)clearInterval(fadeT);},50);}
+function startPad(){if(music)return;music=new Audio('assets/audio/ambient.m4a');music.loop=true;music.volume=0;music.play().catch(()=>{});fadeMusic(state.muted?0:MUSIC_BASE,2500);}
+function padVol(v){fadeMusic(state.muted?0:v,900);}
+function musicDuck(on){if(!music||state.muted)return;fadeMusic(on?.05:MUSIC_BASE,500);}
 let curVoice=null;
-function voice(key){stopVoice();if(state.muted)return;curVoice=new Audio('assets/audio/'+key+'.m4a');curVoice.play().catch(()=>{});}
-function stopVoice(){if(curVoice){try{curVoice.pause();}catch(e){}curVoice=null;}}
-$('muteBtn').onclick=function(){state.muted=!state.muted;this.textContent=state.muted?'🔇':'🔊';if(state.muted){stopVoice();stopRing();padVol(0);}else{padVol(.03);}};
+function voice(key){stopVoice();if(state.muted)return;musicDuck(true);curVoice=new Audio('assets/audio/'+key+'.m4a');curVoice.onended=()=>musicDuck(false);curVoice.play().catch(()=>{musicDuck(false);});}
+function stopVoice(){if(curVoice){try{curVoice.pause();}catch(e){}curVoice=null;}musicDuck(false);}
+$('muteBtn').onclick=function(){state.muted=!state.muted;this.textContent=state.muted?'🔇':'🔊';if(state.muted){stopVoice();stopRing();fadeMusic(0,400);if(music)setTimeout(()=>{if(state.muted&&music)music.pause();},450);}else{if(music){music.play().catch(()=>{});fadeMusic(MUSIC_BASE,800);}}};
 
 /* ---------- scene control ---------- */
 function show(id){document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');}
@@ -210,7 +205,7 @@ function show(id){document.querySelectorAll('.scene').forEach(s=>s.classList.rem
 /* ---------- flow ---------- */
 function enter(){ac();startPad();show('call');startRing();
   $('cwave').innerHTML=Array.from({length:20},(_,i)=>`<i style="animation-delay:${(i*.07).toFixed(2)}s"></i>`).join('');}
-document.addEventListener('visibilitychange',()=>{if(document.hidden){stopRing();stopVoice();padVol(0);}else if(!state.muted&&padG){padVol(.03);}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){stopRing();stopVoice();if(music)music.pause();}else if(!state.muted&&music){music.play().catch(()=>{});fadeMusic(MUSIC_BASE,800);}});
 let ctInt=null;
 function answer(){stopRing();show('incall');voice('v2-call');
   let s=0;clearInterval(ctInt);ctInt=setInterval(()=>{s++;$('ctimer').textContent='00:'+String(s).padStart(2,'0');},1000);
@@ -307,7 +302,7 @@ function tplNoShow(){const d=document.createElement('div');d.className='tpl';
 
 function countTo(id,target,prefix){const el=$(id);let c=0;const step=target/30;const t=setInterval(()=>{c+=step;if(c>=target){c=target;clearInterval(t);}el.textContent=prefix+Math.round(c).toLocaleString('es-MX');},28);}
 
-function toCta(){const g=GIROS[state.giro];padVol(.02);show('cta');voice('v2-cta');
+function toCta(){const g=GIROS[state.giro];padVol(MUSIC_BASE);show('cta');voice('v2-cta');
   $('ctaH').innerHTML=`Tu ${g.label} puede<br>empezar a <span class="g">llenarse</span><br>esta semana.`;
   const b=$('ctaBtn');b.textContent=`Activar VYLTA en mi ${g.label} →`;
   b.href=`https://vylta.lat/${state.giro}?src=experiencia&utm_source=experiencia&utm_medium=funnel`;}
