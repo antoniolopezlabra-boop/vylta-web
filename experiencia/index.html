@@ -189,8 +189,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;heigh
   <!-- 1. LLAMADA -->
   <section class="scene" id="s-call">
     <div class="avatar">🤖</div>
-    <div class="callname">VERA</div>
-    <div class="callsub">Inteligencia de VYLTA</div>
+    <div class="callname">VYLTA</div>
+    <div class="callsub">tu inteligencia de citas</div>
     <div class="callsub" style="color:var(--muted);margin-top:18px;animation:fu 1s">llamada entrante…</div>
     <button class="answer" onclick="goAnswer()">📞</button>
   </section>
@@ -198,7 +198,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;heigh
   <!-- 2. EN LLAMADA -->
   <section class="scene" id="s-incall">
     <div class="avatar" style="animation:none">🤖</div>
-    <div class="callname">VERA</div>
+    <div class="callname">VYLTA</div>
     <div class="timer" id="callTimer">00:00</div>
     <div class="wave" id="wave"></div>
     <div style="height:40px"></div>
@@ -268,7 +268,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;heigh
   <section class="scene" id="s-whats">
     <div class="wa-head">
       <div class="wa-av">🤖</div>
-      <div><div class="n">VERA · VYLTA</div><div class="s" id="waStatus">en línea</div></div>
+      <div><div class="n">VYLTA</div><div class="s" id="waStatus">en línea</div></div>
     </div>
     <div class="wa-body" id="waBody"></div>
     <div class="wa-foot"><button class="btn" id="waNext" style="opacity:0" onclick="go('s-meta');runMeta()">Ver qué acaba de pasar →</button></div>
@@ -323,17 +323,24 @@ let voice=null;
 function pickVoice(){const vs=speechSynthesis.getVoices();voice=vs.find(v=>/es-MX|es-419|es-US/.test(v.lang))||vs.find(v=>v.lang.startsWith('es'))||null;}
 if('speechSynthesis'in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
 const sub=document.getElementById('subtitle');
+const AUDIO_BASE='assets/audio/';let curAudio=null;
+function stopAudio(){if(curAudio){try{curAudio.pause();}catch(e){}curAudio=null;}if('speechSynthesis'in window){try{speechSynthesis.cancel();}catch(e){}}}
+function speakFallback(text){if('speechSynthesis'in window){try{const u=new SpeechSynthesisUtterance(text);u.lang='es-MX';u.rate=.96;u.pitch=1.05;if(voice)u.voice=voice;speechSynthesis.speak(u);}catch(e){}}}
+/* say(text,{key,ms,hold}) — shows subtitle + plays real VYLTA voice (key.m4a); falls back to browser TTS */
 function say(text,opts={}){
   sub.textContent=text; sub.classList.add('show');
-  if(opts.hold!==true){clearTimeout(sub._t);sub._t=setTimeout(()=>sub.classList.remove('show'),(opts.ms||Math.max(2600,text.length*55)));}
-  if(!state.muted&&'speechSynthesis'in window){
-    try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='es-MX';u.rate=.96;u.pitch=1.05;if(voice)u.voice=voice;speechSynthesis.speak(u);}catch(e){}
-  }
+  if(opts.hold!==true){clearTimeout(sub._t);sub._t=setTimeout(()=>sub.classList.remove('show'),(opts.ms||Math.max(3000,text.length*60)));}
+  stopAudio();
+  if(state.muted)return;
+  if(opts.key){
+    curAudio=new Audio(AUDIO_BASE+opts.key+'.m4a');
+    curAudio.play().catch(()=>speakFallback(text));
+  }else{speakFallback(text);}
 }
-function hideSub(){sub.classList.remove('show');if('speechSynthesis'in window)try{speechSynthesis.cancel()}catch(e){}}
+function hideSub(){sub.classList.remove('show');stopAudio();}
 document.getElementById('muteBtn').onclick=function(){
   state.muted=!state.muted;this.textContent=state.muted?'🔇':'🔊';
-  if(state.muted&&'speechSynthesis'in window)try{speechSynthesis.cancel()}catch(e){}
+  if(state.muted)stopAudio();
 };
 
 /* ---- flow ---- */
@@ -342,7 +349,7 @@ function bail(){ location.href='https://vylta.lat/?src=experiencia'; }
 function goAnswer(){
   go('s-incall');
   buildWave(); startTimer();
-  say('Hola. No nos conocemos. Soy VERA, una inteligencia que vive dentro de VYLTA. Llevo un tiempo observando negocios como el tuyo… y necesito mostrarte algo. ¿Me das 90 segundos?',{ms:8500});
+  say('Hola. No nos conocemos. Me llamo VYLTA. Soy la inteligencia que mantiene los negocios llenos. Llevo un tiempo observando lugares como el tuyo… y descubrí algo que necesitas ver. ¿Me das noventa segundos?',{key:'vylta-call',ms:19500});
   setTimeout(()=>{const b=document.getElementById('incallNext');b.style.opacity='1';b.onclick=()=>go('s-q1');},6500);
 }
 function buildWave(){document.getElementById('wave').innerHTML=Array.from({length:22},(_,i)=>`<i style="animation-delay:${(i*.07).toFixed(2)}s"></i>`).join('');}
@@ -365,7 +372,7 @@ function computeLoss(){
 function revealAnim(){
   countTo('lostClients',LOST.clients,'');
   countTo('lostMoney',LOST.money,'$',true);
-  setTimeout(()=>say(`Con ${state.citas} citas a la semana, agendando en ${labelMetodo()}… cada mes se te escapan unos ${LOST.clients} clientes. Eso es cerca de ${fmt(LOST.money)} pesos. No los ves. Pero se van.`,{ms:9000}),500);
+  setTimeout(()=>say('Déjame mostrarte algo que no estás viendo. Cada mes pierdes clientes: los que no confirmaron, los que lo olvidaron, los que simplemente no volvieron. Mira cuántos.',{key:'vylta-reveal',ms:15500}),500);
 }
 function labelMetodo(){return state.metodo==='libreta'?'libreta':state.metodo==='whatsapp'?'WhatsApp a mano':'de memoria';}
 function fmt(n){return n.toLocaleString('es-MX');}
@@ -385,7 +392,7 @@ function buildGhosts(){
   const list=document.getElementById('ghostList');list.innerHTML='';
   data.forEach((g,i)=>{const d=document.createElement('div');d.className='ghost';d.style.animationDelay=(i*.5)+'s';
     d.innerHTML=`<div class="gi">${g.e}</div><div class="gt"><b>${g.b}</b><span>${g.s}</span></div>`;list.appendChild(d);});
-  setTimeout(()=>say('Ella quería volver. A él se le olvidó. A ella nadie le recordó. No es tu culpa: es imposible estar en todo. Pero yo sí puedo.',{ms:8000}),400);
+  setTimeout(()=>say('Ella quería volver. A él se le olvidó. A ella nadie le recordó. No es tu culpa: es imposible estar en todo. Pero yo sí puedo.',{key:'vylta-ghosts',ms:13500}),400);
   setTimeout(()=>{document.getElementById('ghostNext').style.opacity='1';},2200);
 }
 
@@ -393,7 +400,7 @@ function buildGhosts(){
 function startWhats(){
   const body=document.getElementById('waBody');body.innerHTML='';
   const status=document.getElementById('waStatus');
-  say('Mira. A cada cliente le confirmo, le recuerdo 24 horas antes y otra vez 2 horas antes. Por WhatsApp. Sin que tú muevas un dedo.',{ms:8500});
+  say('Mira. A cada cliente le confirmo su cita, le recuerdo 24 horas antes, y otra vez 2 horas antes. Por WhatsApp. Sin que tú muevas un dedo. Los que se iban… regresan.',{key:'vylta-whatsapp',ms:18500});
   const seq=[
     {t:'note',d:600,label:'Confirmación enviada a María · al agendar'},
     {t:'toast',d:1700,label:'✅ María confirmó su cita'},
@@ -419,7 +426,7 @@ function runMeta(){
   const box=document.getElementById('metaLines');box.innerHTML='';
   lines.forEach((l,i)=>{const p=document.createElement('p');p.className='metaline fade-up';p.style.animationDelay=(i*.9)+'s';
     p.style.marginBottom='14px';p.innerHTML=l;box.appendChild(p);});
-  say('Todo esto que acabas de vivir: la llamada, los mensajes, los recordatorios. Es exactamente lo que voy a hacer por tus clientes. Cada día. Automático.',{ms:9000});
+  say('Todo esto que acabas de vivir… la llamada, los mensajes, los recordatorios… es exactamente lo que voy a hacer por tus clientes. Cada día. Automático.',{key:'vylta-meta',ms:13500});
   setTimeout(()=>{document.getElementById('metaNext').style.opacity='1';},3800);
 }
 
@@ -430,7 +437,7 @@ function runCta(){
   const btn=document.getElementById('ctaBtn');
   btn.textContent=`Activar VYLTA en mi ${g.label} →`;
   btn.href=`https://vylta.lat/${state.giro}?src=experiencia&utm_source=experiencia&utm_medium=funnel`;
-  say(`Tu ${g.label} puede empezar a llenarse esta semana. Y empezar es gratis, sin tarjeta. ¿Te muestro cómo se vería con tu nombre?`,{ms:8000});
+  say('Tu negocio puede empezar a llenarse esta semana. Y empezar es gratis, sin tarjeta. ¿Te muestro cómo se vería con tu nombre?',{key:'vylta-cta',ms:11500});
 }
 
 /* observe scene activations that need init */
