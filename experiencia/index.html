@@ -38,6 +38,11 @@ body{font-family:'Inter',system-ui,sans-serif;background:#000;color:var(--tx);ov
 
 /* scenes */
 .scene{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:64px 24px max(28px,env(safe-area-inset-bottom));opacity:0;visibility:hidden;transform:translateY(16px) scale(.99);transition:opacity .7s ease,transform .7s ease,visibility .7s}
+.bgvid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.bgvid-ov{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(7,11,18,.35) 0%,rgba(7,11,18,.55) 45%,rgba(7,11,18,.92) 100%)}
+.s1c{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;width:100%;text-align:center;padding-bottom:6px}
+.taphint{position:absolute;z-index:3;top:50%;left:0;right:0;transform:translateY(-50%);color:#fff;font-size:14px;letter-spacing:.04em;text-shadow:0 2px 12px #000;animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
 .scene.active{opacity:1;visibility:visible;transform:none}
 h1,h2{font-weight:800;letter-spacing:-.02em;line-height:1.12}
 .lead{font-size:clamp(25px,7vw,33px)}
@@ -153,15 +158,15 @@ form input::placeholder{color:var(--dim)}
   </div>
 
   <!-- ESCENA 1 -->
-  <section class="scene active center" id="s1">
-    <div class="phone" id="ph1">
-      <div class="badge" id="badge1" style="display:none">0</div>
-      <div class="notch"></div>
-      <div class="phscreen" id="ph1s"></div>
+  <section class="scene active" id="s1" style="padding:0">
+    <video id="s1vid" class="bgvid" playsinline muted loop autoplay preload="auto" poster="assets/video/scene1-poster.jpg"><source src="assets/video/scene1.mp4" type="video/mp4"></video>
+    <div class="bgvid-ov"></div>
+    <div class="taphint" id="tapHint">toca para vivir la experiencia 🔊</div>
+    <div class="s1c">
+      <h1 class="lead" style="padding:0 24px">Tienes <span class="gv" id="msgCount">47</span><br>mensajes sin responder</h1>
+      <div class="dwrap" id="d1" style="margin-top:16px;padding:0 24px;align-items:flex-start"></div>
+      <button class="btn glow" id="b1" style="margin:22px 0 0;max-width:300px;opacity:0" onclick="go('s2')">¿Qué pasó? →</button>
     </div>
-    <h1 class="lead" style="margin-top:26px">Tienes <span class="gv" id="msgCount">0</span><br>mensajes sin responder</h1>
-    <div class="dwrap" id="d1" style="margin-top:18px"></div>
-    <button class="btn glow" id="b1" style="margin-top:24px;opacity:0" onclick="go('s2')">¿Qué pasó? →</button>
   </section>
 
   <!-- ESCENA 2 -->
@@ -316,16 +321,13 @@ async function typeThen(wrap,html,pre){await wait(pre||500);const t=document.cre
 /* ---------- SCENE 1 ---------- */
 const NOTES1=['¿Tienes lugar hoy?','¿Cuánto cobras?','¿Me confirmas mi cita?','¿Tienes a las 6?','Hola, ¿agendas?','¿Me reagendas? 🙏'];
 async function scene1(){
-  const scr=$('ph1s');scr.innerHTML='';$('badge1').style.display='none';
-  const N=47;let shown=0;
+  const h=$('tapHint');if(h)h.style.display='none';
+  const v=$('s1vid');if(v){try{v.muted=true;v.currentTime=0;v.play();}catch(e){}}
   vib(30);
-  for(let i=0;i<6;i++){await wait(360);const n=document.createElement('div');n.className='pnote';n.innerHTML='<div class="ic">💬</div><div class="tx">'+NOTES1[i]+'</div>';scr.appendChild(n);sfxMsg();shown++;}
-  // count up the badge
-  $('badge1').style.display='flex';
-  let c=0;const it=setInterval(()=>{c+=Math.ceil(N/22);if(c>=N){c=N;clearInterval(it);}$('msgCount').textContent=c;$('badge1').textContent=c;},45);
-  await wait(900);
+  const N=47;let c=0;$('msgCount').textContent='0';const it=setInterval(()=>{c+=3;if(c>=N){c=N;clearInterval(it);}$('msgCount').textContent=c;},55);
+  await wait(700);
   voice('wa-open');
-  await typeThen('d1','Oye… <b>tenemos que hablar.</b>',500);
+  await typeThen('d1','Oye… <b>tenemos que hablar.</b>',600);
   await wait(700);$('b1').style.opacity='1';
 }
 /* ---------- SCENE 2 ---------- */
