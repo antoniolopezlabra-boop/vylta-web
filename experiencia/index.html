@@ -13,7 +13,7 @@
   --bg:#070B12;--bg2:#0C1119;--panel:#121826;--panel2:#1A2230;
   --bd:rgba(255,255,255,.09);--bd2:rgba(255,255,255,.18);
   --tx:#F2F5F8;--mut:#94A3B8;--dim:#5B6678;
-  --wa:#25D366;--wa-d:#0b3a22;--wa-dk:#075E54;
+  --wa:#25D366;--wa-d:#0b3a22;--wa-dk:#075E54;--wa-bub:#1f2c34;
   --gold:#E8B873;--gold2:#C9963F;--amber:#FBBF24;--red:#F87171;
   --green:#10B981;--green2:#34D399;--cyan:#06B6D4;
   --grad-v:linear-gradient(135deg,#34D399 0%,#06B6D4 100%);
@@ -28,134 +28,97 @@ body{font-family:'Inter',system-ui,sans-serif;background:#000;color:var(--tx);ov
 #stage{position:relative;width:100%;height:100vh;height:100dvh;max-width:440px;background:radial-gradient(ellipse at 50% 18%,#13110a 0,var(--bg) 45%,#04060a 100%);overflow:hidden}
 @media(min-width:600px){#stage{height:94vh;max-height:900px;border-radius:36px;border:1px solid var(--bd2);box-shadow:0 0 0 10px #0b0e14,0 50px 130px -20px #000}}
 #stage::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:90;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.mute{position:absolute;top:max(14px,env(safe-area-inset-top));right:16px;z-index:70;width:32px;height:32px;border-radius:50%;border:1px solid var(--bd);background:rgba(10,14,20,.5);backdrop-filter:blur(6px);color:var(--mut);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer}
 
-/* top bar */
-.top{position:absolute;top:0;left:0;right:0;z-index:70;padding:14px 18px max(10px,env(safe-area-inset-top)) 18px;display:flex;align-items:center;gap:10px}
-.top .pill{font-size:10px;letter-spacing:.28em;color:var(--mut);font-weight:600;text-transform:uppercase}
-.pbar{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
-.pbar>i{display:block;height:100%;width:12.5%;background:var(--grad-v);transition:width .6s cubic-bezier(.4,0,.2,1)}
-.mute{width:32px;height:32px;border-radius:50%;border:1px solid var(--bd);background:rgba(255,255,255,.04);color:var(--mut);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer}
-
-/* scenes */
-.scene{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:64px 24px max(28px,env(safe-area-inset-bottom));opacity:0;visibility:hidden;transform:translateY(16px) scale(.99);transition:opacity .7s ease,transform .7s ease,visibility .7s}
-.bgvid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-.bgvid-ov{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(7,11,18,.35) 0%,rgba(7,11,18,.55) 45%,rgba(7,11,18,.92) 100%)}
-.s1c{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;width:100%;text-align:center;padding-bottom:6px}
-.taphint{position:absolute;z-index:3;top:50%;left:0;right:0;transform:translateY(-50%);color:#fff;font-size:14px;letter-spacing:.04em;text-shadow:0 2px 12px #000;animation:pulse 1.8s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+.scene{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:54px 24px max(28px,env(safe-area-inset-bottom));opacity:0;visibility:hidden;transform:translateY(16px) scale(.99);transition:opacity .7s ease,transform .7s ease,visibility .7s}
 .scene.active{opacity:1;visibility:visible;transform:none}
 h1,h2{font-weight:800;letter-spacing:-.02em;line-height:1.12}
 .lead{font-size:clamp(25px,7vw,33px)}
 .kick{font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--wa);font-weight:700;margin-bottom:14px}
 .sub{color:var(--mut);font-size:15px;margin-top:12px;max-width:31ch}
 .gv{background:var(--grad-v);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.gg{background:var(--grad-gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .wac{color:var(--wa)}
+.bgvid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.bgvid-ov{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(7,11,18,.35) 0%,rgba(7,11,18,.55) 45%,rgba(7,11,18,.92) 100%)}
+.s1c{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;width:100%;text-align:center;padding-bottom:6px}
+.taphint{position:absolute;z-index:3;top:50%;left:0;right:0;transform:translateY(-50%);color:#fff;font-size:14px;letter-spacing:.04em;text-shadow:0 2px 12px #000;animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
 
-/* buttons */
-.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:700;font-size:16px;padding:16px 26px;border-radius:14px;border:none;cursor:pointer;background:var(--grad-v);color:#04150F;width:100%;max-width:330px;box-shadow:0 12px 34px -10px rgba(37,211,102,.55);transition:transform .15s}
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:700;font-size:16px;padding:16px 26px;border-radius:14px;border:none;cursor:pointer;background:var(--grad-v);color:#04150F;width:100%;max-width:320px;box-shadow:0 12px 34px -10px rgba(37,211,102,.55);transition:transform .15s}
 .btn:active{transform:scale(.97)}
 .btn.glow{animation:glow 2.2s ease-in-out infinite}
-@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.0),0 12px 30px -10px rgba(37,211,102,.5);transform:translateY(0)}50%{box-shadow:0 0 28px 2px rgba(52,211,153,.55),0 14px 32px -8px rgba(37,211,102,.6);transform:translateY(-3px)}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,0),0 12px 30px -10px rgba(37,211,102,.5);transform:translateY(0)}50%{box-shadow:0 0 28px 2px rgba(52,211,153,.55),0 14px 32px -8px rgba(37,211,102,.6);transform:translateY(-3px)}}
 .btn.gold{background:var(--grad-gold);color:#231703;box-shadow:0 12px 34px -10px rgba(201,150,63,.55)}
-.btn.ghost{background:transparent;color:var(--mut);border:1px solid var(--bd2);box-shadow:none;font-weight:600}
-.btn.sm{font-size:14px;padding:13px 20px}
 .note{font-size:12px;color:var(--dim);margin-top:14px}
 
-/* ===== WhatsApp humanized character ===== */
-.wachar{position:relative;width:128px;height:128px;margin-bottom:8px;animation:breathe 4s ease-in-out infinite}
-.wachar.tired{animation:slump 5s ease-in-out infinite}
-@keyframes breathe{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-5px)}}
-@keyframes slump{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(4px) rotate(1deg)}}
-.wachar svg{width:100%;height:100%;filter:drop-shadow(0 10px 30px rgba(37,211,102,.35))}
-.wachar-glow{position:absolute;inset:-30%;background:radial-gradient(circle,rgba(37,211,102,.22),transparent 62%);z-index:-1}
-.wachar-img{width:170px;height:170px;object-fit:contain;-webkit-mask-image:radial-gradient(circle,#000 54%,transparent 76%);mask-image:radial-gradient(circle,#000 54%,transparent 76%)}
-.charwrap{position:relative;width:200px;height:200px;display:flex;align-items:center;justify-content:center;animation:breathe 4s ease-in-out infinite}
+/* character */
+.charwrap{position:relative;display:flex;align-items:center;justify-content:center;animation:breathe 4s ease-in-out infinite}
 .charwrap.tired{animation:slump 5s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes slump{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(4px) rotate(1deg)}}
+.wachar-img{object-fit:contain;-webkit-mask-image:radial-gradient(circle,#000 54%,transparent 76%);mask-image:radial-gradient(circle,#000 54%,transparent 76%)}
 
-/* ===== phone + floating notifications ===== */
-.phone{position:relative;width:172px;height:340px;border-radius:30px;background:linear-gradient(160deg,#1c2330,#0d121b);border:2px solid #2a3342;box-shadow:0 30px 70px -20px #000, inset 0 1px 0 rgba(255,255,255,.06);display:flex;flex-direction:column;overflow:hidden}
-.phone .notch{height:22px;display:flex;align-items:center;justify-content:center}
-.phone .notch::after{content:"";width:46px;height:5px;border-radius:5px;background:#000}
-.phscreen{flex:1;padding:8px;display:flex;flex-direction:column;gap:6px;overflow:hidden}
-.pnote{display:flex;gap:7px;align-items:center;background:rgba(255,255,255,.06);border:1px solid var(--bd);border-radius:9px;padding:7px 8px;opacity:0;transform:translateY(8px);animation:noteIn .4s forwards}
-.pnote .ic{width:22px;height:22px;border-radius:6px;background:var(--wa);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px}
-.pnote .tx{font-size:10px;text-align:left;color:#cdd5e0;line-height:1.25}
-@keyframes noteIn{to{opacity:1;transform:none}}
-.badge{position:absolute;top:6px;right:10px;background:var(--red);color:#fff;font-size:12px;font-weight:800;min-width:24px;height:24px;border-radius:14px;display:flex;align-items:center;justify-content:center;padding:0 6px;z-index:5;box-shadow:0 4px 14px rgba(248,113,113,.6);animation:pop .4s}
-@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
-.floaters{position:absolute;inset:0;pointer-events:none;z-index:4}
-.floaters span{position:absolute;background:#1f2c34;color:#dfe7ee;font-size:11px;padding:6px 10px;border-radius:12px 12px 12px 3px;white-space:nowrap;opacity:0;box-shadow:0 6px 18px rgba(0,0,0,.4);animation:floatIn .6s forwards}
-@keyframes floatIn{from{opacity:0;transform:translateY(10px) scale(.8)}to{opacity:.96;transform:none}}
-
-/* ===== dialogue bubbles (WhatsApp talking) ===== */
-.dwrap{width:100%;max-width:360px;display:flex;flex-direction:column;gap:9px;margin-top:6px}
-.dbub{align-self:flex-start;max-width:90%;background:#1f2c34;color:#eef3f6;border-radius:12px 12px 12px 3px;padding:11px 14px;font-size:15px;text-align:left;line-height:1.4;opacity:0;transform:translateY(8px) scale(.98);animation:bub .45s forwards;box-shadow:0 6px 18px rgba(0,0,0,.35)}
-.dbub b{color:var(--wa)}
+/* chat (whatsapp) */
+.chat{width:100%;max-width:370px;display:flex;flex-direction:column;gap:8px}
+.bub{max-width:86%;padding:10px 13px;font-size:14.5px;text-align:left;line-height:1.4;opacity:0;transform:translateY(8px) scale(.98);animation:bub .4s forwards;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+.bub.in{align-self:flex-start;background:var(--wa-bub);color:#eef3f6;border-radius:12px 12px 12px 3px}
+.bub.in b{color:var(--wa)}
+.bub.out{align-self:flex-end;background:#134d33;color:#eafff3;border-radius:12px 12px 3px 12px}
+.bub.client{align-self:flex-start;background:var(--wa-bub);color:#eef3f6;border-radius:12px 12px 12px 3px}
+.bub .t{display:block;text-align:right;font-size:10px;color:#7c8a99;margin-top:3px}
+.bub .t .tk{color:#53bdeb;margin-left:2px}
+.bub.left{align-self:flex-start}
 @keyframes bub{to{opacity:1;transform:none}}
-.typing{align-self:flex-start;background:#1f2c34;border-radius:14px;padding:11px 14px;display:flex;gap:4px}
+.typing{align-self:flex-start;background:var(--wa-bub);border-radius:14px;padding:11px 14px;display:flex;gap:4px}
 .typing i{width:7px;height:7px;border-radius:50%;background:#7c8a99;animation:tp 1s infinite}
 .typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
 @keyframes tp{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;width:100%;max-width:370px;margin-top:10px}
+.chip{padding:10px 15px;border:1px solid var(--wa);border-radius:18px;background:rgba(37,211,102,.08);color:#dffce9;font-size:14px;font-weight:600;cursor:pointer;transition:.15s}
+.chip:active{transform:scale(.95)}.chip:hover{background:rgba(37,211,102,.18)}
+.linkbub{align-self:flex-start;display:flex;align-items:center;gap:10px;background:#0b2a1c;border:1px solid var(--wa);border-radius:12px;padding:11px 14px;font-size:13.5px;color:#dffce9;opacity:0;animation:bub .4s forwards}
 
-/* ===== diagnostic ===== */
-.q{font-size:clamp(21px,6vw,27px);font-weight:800;margin-bottom:6px}
-.opts{display:flex;flex-direction:column;gap:9px;width:100%;max-width:340px;margin-top:20px}
-.opt{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid var(--bd);border-radius:13px;background:var(--panel);cursor:pointer;text-align:left;font-size:15px;font-weight:500;transition:.15s}
-.opt:active{transform:scale(.98)}.opt.sel,.opt:hover{border-color:var(--wa);background:var(--panel2)}
-.opt .em{font-size:21px}
+/* scene 2 flood */
+.flood{width:100%;max-width:360px;height:240px;overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(180deg,transparent,#000 12%,#000 88%,transparent)}
+.fmsg{display:flex;align-items:center;gap:9px;background:var(--wa-bub);border-radius:10px;padding:9px 11px;margin-bottom:7px;opacity:0;animation:fIn .35s forwards}
+.fmsg .av{width:26px;height:26px;border-radius:50%;background:#33444f;flex-shrink:0}
+.fmsg .tx{flex:1;text-align:left;font-size:13px}
+.fmsg .rb{font-size:11px;font-weight:700;color:#04150F;background:var(--wa);border:none;border-radius:8px;padding:6px 10px;cursor:pointer}
+@keyframes fIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
+.pend{font-size:13px;color:var(--red);font-weight:700;margin-top:6px}
 
-/* ===== loss cards ===== */
-.calc{font-size:14px;color:var(--mut);letter-spacing:.05em}
-.lcard{width:100%;max-width:350px;background:var(--panel);border:1px solid var(--bd);border-left:3px solid var(--red);border-radius:12px;padding:13px 15px;text-align:left;opacity:0;transform:translateX(-14px);animation:gin .5s forwards;margin-top:10px}
-.lcard .nm{font-weight:700;font-size:14px}.lcard .ds{font-size:12.5px;color:var(--mut);margin-top:2px}
-.lcard .st{display:inline-block;margin-top:7px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--red);background:rgba(248,113,113,.12);padding:3px 9px;border-radius:8px}
-@keyframes gin{to{opacity:1;transform:none}}
-
-/* ===== break / can't list ===== */
+/* loss / break / benefits / agenda / gauge (reused) */
 .cant{width:100%;max-width:350px;display:flex;flex-direction:column;gap:8px;margin-top:18px}
-.cant .li{display:flex;gap:10px;align-items:center;font-size:14.5px;color:#cbd3dd;opacity:0;transform:translateX(-12px);animation:gin .5s forwards;text-align:left}
+.cant .li{display:flex;gap:10px;align-items:center;font-size:14.5px;color:#cbd3dd;opacity:0;transform:translateX(-12px);animation:fIn .5s forwards;text-align:left}
 .cant .li svg{width:18px;height:18px;flex-shrink:0;color:var(--red)}
-
-/* ===== reveal / order ===== */
-.vlogo{width:74px;height:74px;border-radius:20px;background:var(--grad-v);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 40px -8px rgba(52,211,153,.6);margin-bottom:8px}
-.vlogo svg{width:42px;height:42px}
 .benefits{width:100%;max-width:350px;display:flex;flex-direction:column;gap:8px;margin-top:16px}
-.ben{display:flex;gap:11px;align-items:center;font-size:14px;color:#dfe6ee;text-align:left;background:rgba(255,255,255,.03);border:1px solid var(--bd);border-radius:11px;padding:11px 13px;opacity:0;transform:translateY(8px);animation:noteIn .5s forwards}
+.ben{display:flex;gap:11px;align-items:center;font-size:14px;color:#dfe6ee;text-align:left;background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:11px;padding:11px 13px;opacity:0;transform:translateY(8px);animation:fIn .5s forwards}
 .ben .ck{width:22px;height:22px;border-radius:7px;background:var(--wa-d);color:var(--wa);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px}
-
-/* ===== demo agenda ===== */
-.agenda{width:100%;max-width:330px;background:var(--panel);border:1px solid var(--bd);border-radius:16px;overflow:hidden;margin-top:14px}
-.agenda .ah{background:var(--panel2);padding:11px 14px;font-size:12px;color:var(--mut);text-align:left;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between}
-.appt{display:flex;align-items:center;gap:11px;padding:11px 14px;border-bottom:1px solid var(--bd);opacity:0;transform:translateX(14px);animation:gin .5s forwards}
-.appt .tm{font-size:12px;color:var(--wa);font-weight:700;width:48px;text-align:left}
-.appt .who{flex:1;text-align:left}.appt .who b{font-size:13.5px;display:block}.appt .who span{font-size:11.5px;color:var(--mut)}
-.appt .ok{color:var(--wa);font-size:14px}
-.demostep{font-size:13.5px;color:var(--gold);font-weight:600;margin-top:14px;min-height:20px}
-
-/* ===== result / form ===== */
 .gauge{width:100%;max-width:330px;background:var(--panel);border:1px solid var(--bd);border-radius:16px;padding:18px;margin-top:12px}
 .glab{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.1em}
 .gnow{font-size:19px;font-weight:800;color:var(--red);margin:3px 0 12px}
 .grec{font-size:19px;font-weight:800;margin-top:3px}
 .unlock{font-size:13px;color:var(--wa);font-weight:700;margin-top:12px}
-form{width:100%;max-width:330px;display:flex;flex-direction:column;gap:10px;margin-top:16px}
-form input,form select{width:100%;padding:14px 15px;border-radius:12px;border:1px solid var(--bd2);background:var(--panel);color:var(--tx);font-size:15px;font-family:inherit}
-form input::placeholder{color:var(--dim)}
-.ok-msg{text-align:center}
+
+/* scene 7 booking mock */
+.bk{width:100%;max-width:330px;background:#0e1420;border:1px solid var(--bd2);border-radius:18px;overflow:hidden;text-align:left;box-shadow:0 20px 50px -16px #000}
+.bk-h{background:var(--grad-v);color:#04150F;padding:13px 16px;font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px}
+.bk-b{padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.bk-f{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.bk-val{background:var(--panel2);border:1px solid var(--bd);border-radius:10px;padding:11px 13px;font-size:14px;color:var(--tx);min-height:42px;display:flex;align-items:center;transition:border-color .3s}
+.bk-val.fill{border-color:var(--wa);color:#fff}
+.bk-row{display:flex;gap:9px}.bk-row>div{flex:1}
+.bk-cta{background:var(--wa);color:#04150F;text-align:center;font-weight:800;padding:13px;border-radius:11px;font-size:15px;transition:.2s}
+.bk-done{text-align:center;padding:8px}
+.confirm{display:inline-flex;align-items:center;gap:8px;background:rgba(37,211,102,.14);border:1px solid var(--wa);color:var(--wa);font-weight:700;padding:11px 18px;border-radius:30px;font-size:14px}
 
 .center{justify-content:center}
 .fade-up{opacity:0;animation:fu .7s forwards}@keyframes fu{to{opacity:1;transform:none}}
-.muted-s{color:var(--mut)}
 </style>
 </head>
 <body>
 <div id="app"><div id="stage">
-  <div class="top">
-    <span class="pill" id="sceneLbl">Escena 1 de 8</span>
-    <div class="pbar"><i id="pbar"></i></div>
-    <button class="mute" id="muteBtn">🔊</button>
-  </div>
+  <button class="mute" id="muteBtn">🔊</button>
 
   <!-- ESCENA 1 -->
   <section class="scene active" id="s1" style="padding:0">
@@ -164,67 +127,37 @@ form input::placeholder{color:var(--dim)}
     <div class="taphint" id="tapHint">toca para vivir la experiencia 🔊</div>
     <div class="s1c">
       <h1 class="lead" style="padding:0 24px">Tienes <span class="gv" id="msgCount">47</span><br>mensajes sin responder</h1>
-      <div class="dwrap" id="d1" style="margin-top:16px;padding:0 24px;align-items:flex-start"></div>
-      <button class="btn glow" id="b1" style="margin:22px 0 0;max-width:300px;opacity:0" onclick="go('s2')">¿Qué pasó? →</button>
+      <div class="chat" id="d1" style="margin-top:16px;padding:0 24px"></div>
+      <button class="btn glow" id="b1" style="margin:22px 0 0;opacity:0" onclick="go('s2')">¿Qué pasó? →</button>
     </div>
   </section>
 
-  <!-- ESCENA 2 -->
+  <!-- ESCENA 2: saturación interactiva -->
   <section class="scene center" id="s2">
-    <div class="charwrap" style="width:240px;height:240px">
-      <img class="wachar-img" style="width:150px;height:150px" src="assets/char/wa-saturado.jpg" alt="WhatsApp saturado">
-      <div class="floaters" id="fl2"></div>
-    </div>
-    <div class="dwrap" id="d2" style="margin-top:14px"></div>
-    <button class="btn glow" id="b2" style="margin-top:18px;opacity:0" onclick="go('s3')">Eso sí me pasa 😮‍💨</button>
+    <div class="charwrap" style="width:130px;height:130px;margin-bottom:6px"><img class="wachar-img" style="width:120px;height:120px" src="assets/char/wa-saturado.jpg" alt=""></div>
+    <div class="pend" id="pend2">Sin responder: 0</div>
+    <div class="flood" id="flood2"></div>
+    <div class="chat" id="d2" style="margin-top:8px"></div>
+    <button class="btn glow" id="b2" style="margin-top:14px;opacity:0" onclick="go('s3')">Eso sí me pasa 😮‍💨</button>
   </section>
 
-  <!-- ESCENA 3: diagnóstico -->
+  <!-- ESCENA 3: diagnóstico conversacional -->
   <section class="scene center" id="s3">
-    <div class="kick">Diagnóstico · 30 segundos</div>
-    <div id="q-giro">
-      <div class="q serif">¿Qué tipo de negocio<br>tienes?</div>
-      <div class="opts">
-        <div class="opt" onclick="setQ('giro','barberia',this)"><span class="em">💈</span>Barbería</div>
-        <div class="opt" onclick="setQ('giro','estetica',this)"><span class="em">💅</span>Estética / Uñas</div>
-        <div class="opt" onclick="setQ('giro','spa',this)"><span class="em">🧖</span>Spa</div>
-        <div class="opt" onclick="setQ('giro','consultorio',this)"><span class="em">🩺</span>Consultorio / Clínica</div>
-        <div class="opt" onclick="setQ('giro','veterinaria',this)"><span class="em">🐾</span>Veterinaria</div>
-        <div class="opt" onclick="setQ('giro','otro',this)"><span class="em">✨</span>Otro negocio con citas</div>
-      </div>
-    </div>
-    <div id="q-citas" style="display:none">
-      <div class="q serif">¿Cuántas citas<br>manejas por semana?</div>
-      <div class="opts">
-        <div class="opt" onclick="setQ('citas','10',this)"><span class="em">1️⃣</span>1 a 10</div>
-        <div class="opt" onclick="setQ('citas','30',this)"><span class="em">2️⃣</span>11 a 30</div>
-        <div class="opt" onclick="setQ('citas','60',this)"><span class="em">3️⃣</span>31 a 60</div>
-        <div class="opt" onclick="setQ('citas','90',this)"><span class="em">🔥</span>Más de 60</div>
-      </div>
-    </div>
-    <div id="q-dolor" style="display:none">
-      <div class="q serif">¿Qué es lo que más<br>te duele hoy?</div>
-      <div class="opts">
-        <div class="opt" onclick="setQ('dolor','No contesto a tiempo',this)"><span class="em">⏰</span>No contesto a tiempo</div>
-        <div class="opt" onclick="setQ('dolor','Se me olvidan citas',this)"><span class="em">😵</span>Se me olvidan citas</div>
-        <div class="opt" onclick="setQ('dolor','Me cancelan mucho',this)"><span class="em">❌</span>Me cancelan mucho</div>
-        <div class="opt" onclick="setQ('dolor','No doy seguimiento',this)"><span class="em">📭</span>No doy seguimiento</div>
-        <div class="opt" onclick="setQ('dolor','Todo desordenado en WhatsApp',this)"><span class="em">🌀</span>Todo desordenado en WhatsApp</div>
-      </div>
-    </div>
+    <div class="charwrap" style="width:84px;height:84px;margin-bottom:8px"><img class="wachar-img" style="width:84px;height:84px" src="assets/char/wa-saturado.jpg" alt=""></div>
+    <div class="chat" id="d3"></div>
+    <div class="chips" id="chips3"></div>
   </section>
 
-  <!-- ESCENA 4: pérdida -->
-  <section class="scene center" id="s4">
-    <div class="calc" id="calcLbl">Calculando caos operativo…</div>
-    <div id="lossCards" style="width:100%;max-width:350px"></div>
-    <div class="dwrap" id="d4" style="margin-top:12px"></div>
-    <button class="btn glow" id="b4" style="margin-top:18px;opacity:0" onclick="go('s5')">Continuar →</button>
+  <!-- ESCENA 4: clientes que se van (WhatsApp real) -->
+  <section class="scene" id="s4" style="padding:54px 18px max(28px,env(safe-area-inset-bottom))">
+    <div style="font-size:11px;color:var(--mut);letter-spacing:.04em;margin-bottom:12px">📱 Mientras tú trabajas, en tu WhatsApp…</div>
+    <div class="chat" id="d4" style="max-width:400px;flex:1;justify-content:flex-start;overflow-y:auto;width:100%"></div>
+    <button class="btn glow" id="b4" style="margin-top:14px;opacity:0;align-self:center" onclick="go('s5')">Continuar →</button>
   </section>
 
   <!-- ESCENA 5: punto de quiebre -->
   <section class="scene center" id="s5" style="background:radial-gradient(ellipse at 50% 40%,#0a0d12,#04060a)">
-    <div class="charwrap tired"><img class="wachar-img" src="assets/char/wa-cansado.jpg" alt="WhatsApp agotado"></div>
+    <div class="charwrap tired" style="width:180px;height:180px"><img class="wachar-img" style="width:170px;height:170px" src="assets/char/wa-cansado.jpg" alt=""></div>
     <div class="cant" id="cant5"></div>
     <h2 class="lead serif" id="who5" style="margin-top:22px;opacity:0">Entonces…<br><span class="gv">¿quién sí puede?</span></h2>
     <button class="btn glow" id="b5" style="margin-top:22px;opacity:0" onclick="go('s6')">Muéstrame la solución →</button>
@@ -234,52 +167,53 @@ form input::placeholder{color:var(--dim)}
   <section class="scene" id="s6" style="padding:0">
     <video id="s6vid" class="bgvid" playsinline muted loop preload="auto" poster="assets/video/scene6-poster.jpg"><source src="assets/video/scene6.mp4" type="video/mp4"></video>
     <div class="bgvid-ov" style="background:linear-gradient(180deg,rgba(7,11,18,.62),rgba(7,11,18,.9))"></div>
-    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;padding:64px 24px max(28px,env(safe-area-inset-bottom));overflow-y:auto">
-      <div class="vlogo" id="vl6"></div>
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;padding:54px 24px max(28px,env(safe-area-inset-bottom));overflow-y:auto">
+      <img id="ic6" src="assets/vylta-icon.png" width="80" height="80" style="border-radius:20px;box-shadow:0 14px 40px -8px rgba(52,211,153,.5);margin-bottom:10px" alt="VYLTA">
       <h2 class="lead serif">Conoce <span class="gv">VYLTA</span></h2>
       <p class="sub">La app que convierte tus mensajes, citas y recordatorios en un sistema automático para tu negocio.</p>
-      <div class="dwrap" id="d6" style="margin-top:14px"></div>
+      <div class="chat" id="d6" style="margin-top:14px"></div>
       <div class="benefits" id="ben6"></div>
       <button class="btn glow" id="b6" style="margin-top:18px;opacity:0" onclick="go('s7')">Ver cómo funciona →</button>
     </div>
   </section>
 
-  <!-- ESCENA 7: demo -->
+  <!-- ESCENA 7: demo conversación + reserva -->
   <section class="scene center" id="s7">
-    <div class="kick">Así trabaja VYLTA por ti</div>
-    <div class="agenda" id="ag7">
-      <div class="ah"><span>Hoy · tu agenda</span><span id="agcount">0 citas</span></div>
-      <div id="agbody"></div>
+    <div id="s7chat-wrap" style="width:100%;display:flex;flex-direction:column;align-items:center">
+      <div class="kick">Así trabaja VYLTA por ti</div>
+      <div class="chat" id="d7"></div>
     </div>
-    <div class="demostep" id="demostep"></div>
-    <button class="btn glow" id="b7" style="margin-top:18px;opacity:0" onclick="go('s8')">Quiero esto en mi negocio →</button>
+    <div id="s7book" style="display:none;width:100%;display:none;flex-direction:column;align-items:center">
+      <div class="bk" id="bk7">
+        <div class="bk-h">📅 Reserva tu cita</div>
+        <div class="bk-b">
+          <div><div class="bk-f">Servicio</div><div class="bk-val" id="bkServ">Elige…</div></div>
+          <div class="bk-row"><div><div class="bk-f">Fecha</div><div class="bk-val" id="bkFecha">—</div></div><div><div class="bk-f">Hora</div><div class="bk-val" id="bkHora">—</div></div></div>
+          <div><div class="bk-f">Tu nombre</div><div class="bk-val" id="bkNom">—</div></div>
+          <div><div class="bk-f">Tu teléfono</div><div class="bk-val" id="bkTel">—</div></div>
+          <div class="bk-cta" id="bkBtn">Confirmar cita</div>
+        </div>
+      </div>
+    </div>
+    <div id="s7done" style="display:none;text-align:center">
+      <div class="confirm">✅ ¡Cita confirmada!</div>
+      <p class="sub" style="margin:14px auto">Tu cliente agendó solo. Tú no escribiste nada.</p>
+    </div>
+    <button class="btn glow" id="b7" style="margin-top:16px;opacity:0" onclick="go('s8')">Quiero esto en mi negocio →</button>
   </section>
 
-  <!-- ESCENA 8: resultado + lead -->
+  <!-- ESCENA 8: resultado + CTA (sin form) -->
   <section class="scene center" id="s8">
-    <div id="s8result">
-      <div class="kick" style="color:var(--gold)">✦ Diagnóstico completado</div>
-      <h2 class="lead serif">Tu negocio opera en<br><span style="color:var(--red)">modo manual</span></h2>
-      <div class="gauge">
-        <div class="glab">Nivel actual</div><div class="gnow">⚠️ Caos controlado</div>
-        <div class="glab">Nivel recomendado</div><div class="grec gv">⚡ Agenda automatizada con VYLTA</div>
-        <div class="unlock">🎁 Desbloqueaste tu prueba gratis</div>
-      </div>
-      <form id="leadForm" onsubmit="return submitLead(event)">
-        <input name="nombre" placeholder="Tu nombre" required autocomplete="name">
-        <input name="negocio" id="leadNegocio" placeholder="Tipo de negocio" required>
-        <input name="wa" placeholder="Tu WhatsApp" inputmode="tel" required autocomplete="tel">
-        <button class="btn gold" type="submit">Quiero mi acceso gratis →</button>
-      </form>
-      <div class="note">Sin tarjeta. Sin compromiso. Configuración rápida.</div>
+    <img class="wachar-img" style="width:120px;height:120px;margin-bottom:4px" src="assets/char/wa-aliviado.jpg" alt="">
+    <div class="kick" style="color:var(--gold)">✦ Diagnóstico completado</div>
+    <h2 class="lead serif">Tu negocio opera en<br><span style="color:var(--red)">modo manual</span></h2>
+    <div class="gauge">
+      <div class="glab">Nivel actual</div><div class="gnow">⚠️ Caos controlado</div>
+      <div class="glab">Nivel recomendado</div><div class="grec gv">⚡ Agenda automatizada con VYLTA</div>
+      <div class="unlock">🎁 Desbloqueaste tu prueba gratis</div>
     </div>
-    <div id="s8ok" style="display:none" class="ok-msg">
-      <img class="wachar-img" style="margin:0 auto 4px;display:block;width:130px;height:130px" src="assets/char/wa-aliviado.jpg" alt="WhatsApp aliviado">
-      <div class="vlogo" style="margin:0 auto 14px"><span id="vl8"></span></div>
-      <h2 class="lead serif">¡Listo! 🎉</h2>
-      <p class="sub" style="margin:14px auto">Estás a un paso de convertir tu WhatsApp en una <b class="wac">máquina de citas</b>.</p>
-      <a class="btn" id="finalCta" href="#">Abrir VYLTA ahora →</a>
-    </div>
+    <a class="btn gold" id="finalCta" href="#" style="margin-top:18px">Probar VYLTA gratis →</a>
+    <div class="note">Sin tarjeta. Sin compromiso. Configuración rápida.</div>
   </section>
 
 </div></div>
@@ -288,23 +222,16 @@ form input::placeholder{color:var(--dim)}
 "use strict";
 const $=id=>document.getElementById(id);
 const state={giro:'barberia',citas:'30',dolor:'',muted:false};
-const GIRO={barberia:{l:'barbería',t:180},estetica:{l:'estética',t:350},spa:{l:'spa',t:600},consultorio:{l:'consultorio',t:500},veterinaria:{l:'veterinaria',t:400},otro:{l:'negocio',t:300}};
-const SVG_WA='<svg viewBox="0 0 120 120"><defs></defs><path d="M60 8C32 8 9 30 9 58c0 11 4 21 10 29L11 112l27-7c7 4 14 6 22 6 28 0 51-22 51-50S88 8 60 8z" fill="#25D366"/><circle cx="44" cy="56" r="5" fill="#063d22"/><circle cx="76" cy="56" r="5" fill="#063d22"/><path d="M46 56c0 3-2 5-2 5M78 56c0 3-2 5-2 5" stroke="#063d22" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".5"/><path d="M48 78c4 4 20 4 24 0" stroke="#063d22" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M92 40c3 2 5 6 4 10" stroke="#9be7b8" stroke-width="3" stroke-linecap="round" fill="none" opacity=".7"/></svg>';
-const SVG_V='<svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16M6 5l6 14 6-14" stroke="#04150F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const GIRO={barberia:{l:'barbería',s:'Corte de cabello'},estetica:{l:'estética',s:'Manicure'},spa:{l:'spa',s:'Masaje relajante'},consultorio:{l:'consultorio',s:'Consulta'},veterinaria:{l:'veterinaria',s:'Consulta veterinaria'},otro:{l:'negocio',s:'Servicio'}};
 const ORDER=['s1','s2','s3','s4','s5','s6','s7','s8'];
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 
-/* ---------- audio engine ---------- */
+/* audio */
 let AC=null;function ac(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC;}
-function tone(f,d,type,g,delay){const c=ac();if(!c||state.muted)return;const o=c.createOscillator(),gn=c.createGain();o.type=type||'sine';o.frequency.value=f;o.connect(gn);gn.connect(c.destination);const t=c.currentTime+(delay||0);gn.gain.setValueAtTime(0,t);gn.gain.linearRampToValueAtTime(g||.15,t+.02);gn.gain.exponentialRampToValueAtTime(.0001,t+(d||.2));o.start(t);o.stop(t+(d||.2)+.05);}
+function tone(f,d,type,g,delay){const c=ac();if(!c||state.muted)return;const o=c.createOscillator(),gn=c.createGain();o.type=type||'sine';o.frequency.value=f;o.connect(gn);gn.connect(c.destination);const t=c.currentTime+(delay||0);gn.gain.setValueAtTime(0,t);gn.gain.linearRampToValueAtTime(g||.13,t+.02);gn.gain.exponentialRampToValueAtTime(.0001,t+(d||.2));o.start(t);o.stop(t+(d||.2)+.05);}
 function vib(p){if(navigator.vibrate){try{navigator.vibrate(p);}catch(e){}}}
-function sfxMsg(){tone(680,.13,'sine',.13);tone(920,.12,'sine',.11,.11);vib(16);}
-function sfxSend(){tone(900,.1,'sine',.1);tone(1180,.09,'sine',.08,.08);}
-function sfxType(){tone(300,.04,'square',.03);}
-let ringT=null;
-function startRing(){stopRing();const r=()=>{tone(600,.3,'sine',.18);tone(820,.3,'sine',.18,.32);vib([200,120,200]);};r();ringT=setInterval(r,1500);}
-function stopRing(){if(ringT)clearInterval(ringT);ringT=null;vib(0);}
-/* music */
+function sfxMsg(){tone(680,.13,'sine',.12);tone(920,.12,'sine',.1,.11);vib(16);}
+function sfxSend(){tone(900,.1,'sine',.09);tone(1180,.09,'sine',.07,.08);}
 let music=null,fadeT=null;const MBASE=.06;
 function fadeMusic(tg,ms){if(!music)return;clearInterval(fadeT);const s=music.volume||0,n=Math.max(1,Math.round((ms||800)/50));let i=0;fadeT=setInterval(()=>{i++;try{music.volume=Math.max(0,Math.min(1,s+(tg-s)*i/n));}catch(e){}if(i>=n)clearInterval(fadeT);},50);}
 function startMusic(){if(music)return;music=new Audio('assets/audio/ambient.m4a');music.loop=true;music.volume=0;music.play().catch(()=>{});fadeMusic(state.muted?0:MBASE,4500);}
@@ -312,115 +239,143 @@ function duck(on){if(!music||state.muted)return;fadeMusic(on?.02:MBASE,500);}
 let curVoice=null;
 function voice(key){stopVoice();if(state.muted)return;duck(true);curVoice=new Audio('assets/audio/'+key+'.m4a');curVoice.onended=()=>duck(false);curVoice.play().catch(()=>duck(false));}
 function stopVoice(){if(curVoice){try{curVoice.pause();}catch(e){}curVoice=null;}duck(false);}
-$('muteBtn').onclick=function(){state.muted=!state.muted;this.textContent=state.muted?'🔇':'🔊';if(state.muted){stopVoice();stopRing();fadeMusic(0,400);if(music)setTimeout(()=>{if(state.muted&&music)music.pause();},450);}else if(music){music.play().catch(()=>{});fadeMusic(MBASE,800);}};
-document.addEventListener('visibilitychange',()=>{if(document.hidden){stopRing();stopVoice();if(music)music.pause();}else if(!state.muted&&music){music.play().catch(()=>{});fadeMusic(MBASE,800);}});
+$('muteBtn').onclick=function(){state.muted=!state.muted;this.textContent=state.muted?'🔇':'🔊';if(state.muted){stopVoice();fadeMusic(0,400);if(music)setTimeout(()=>{if(state.muted&&music)music.pause();},450);}else if(music){music.play().catch(()=>{});fadeMusic(MBASE,800);}};
+document.addEventListener('visibilitychange',()=>{if(document.hidden){stopVoice();if(music)music.pause();}else if(!state.muted&&music){music.play().catch(()=>{});fadeMusic(MBASE,800);}});
 
-/* ---------- scene control ---------- */
-let started=false;
-function setProgress(id){const i=ORDER.indexOf(id);$('pbar').style.width=((i+1)/8*100)+'%';$('sceneLbl').textContent='Escena '+(i+1)+' de 8';}
-function go(id){document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');setProgress(id);stopVoice();(SCENE[id]||(()=>{}))();}
-const dbubble=(wrap,html,d)=>{const e=document.createElement('div');e.className='dbub';e.style.animationDelay=(d||0)+'ms';e.innerHTML=html;$(wrap).appendChild(e);};
-async function typeThen(wrap,html,pre){await wait(pre||500);const t=document.createElement('div');t.className='typing';t.innerHTML='<i></i><i></i><i></i>';$(wrap).appendChild(t);for(let k=0;k<3;k++){sfxType();await wait(130);}await wait(700);t.remove();dbubble(wrap,html);sfxMsg();}
+/* helpers */
+function now(){const d=new Date();let h=d.getHours()%12||12,m=d.getMinutes();return h+':'+String(m).padStart(2,'0')+(d.getHours()<12?' a.m.':' p.m.');}
+function bubble(wrap,cls,html,tick){const e=document.createElement('div');e.className='bub '+cls;e.innerHTML=html+'<span class="t">'+now()+(tick?'<span class="tk">✓✓</span>':'')+'</span>';$(wrap).appendChild(e);$(wrap).scrollTop=$(wrap).scrollHeight;return e;}
+async function botType(wrap,cls,html,pre,tick){await wait(pre||500);const t=document.createElement('div');t.className='typing';$(wrap).appendChild(t);$(wrap).scrollTop=$(wrap).scrollHeight;await wait(750);t.remove();bubble(wrap,cls,html,tick);sfxMsg();}
 
-/* ---------- SCENE 1 ---------- */
-const NOTES1=['¿Tienes lugar hoy?','¿Cuánto cobras?','¿Me confirmas mi cita?','¿Tienes a las 6?','Hola, ¿agendas?','¿Me reagendas? 🙏'];
+/* scene control (no progress shown) */
+function go(id){document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');stopVoice();(SCENE[id]||(()=>{}))();}
+
+/* ===== S1 ===== */
 async function scene1(){
   const h=$('tapHint');if(h)h.style.display='none';
   const v=$('s1vid');if(v){try{v.muted=true;v.currentTime=0;v.play();}catch(e){}}
-  vib(30);
-  const N=47;let c=0;$('msgCount').textContent='0';const it=setInterval(()=>{c+=3;if(c>=N){c=N;clearInterval(it);}$('msgCount').textContent=c;},55);
-  await wait(700);
-  voice('wa-open');
-  await typeThen('d1','Oye… <b>tenemos que hablar.</b>',600);
-  await wait(700);$('b1').style.opacity='1';
+  vib(30);let c=0;$('msgCount').textContent='0';const it=setInterval(()=>{c+=3;if(c>=47){c=47;clearInterval(it);}$('msgCount').textContent=c;},55);
+  await wait(700);voice('wa-open');
+  await botType('d1','in','Oye… <b>tú y yo tenemos que hablar.</b>',600);
+  await wait(600);$('b1').style.opacity='1';
 }
-/* ---------- SCENE 2 ---------- */
-const FLOAT2=[['¿Tienes lugar hoy?',8,12],['¿Me reagendas?',58,6],['¿Cuánto cobras?',4,34],['¿Horario a las 6?',60,30],['Ya no voy a poder ir 😔',12,58],['¿Me confirmas?',56,54]];
+/* ===== S2 saturación interactiva ===== */
+const FLOODMSGS=['¿Tienes lugar hoy?','¿Cuánto cobras?','¿Me confirmas mi cita?','¿Atiendes a las 6?','Hola, ¿agendas?','¿Me reagendas? 🙏','¿Sigues abierto?','¿Aceptas tarjeta?','¿Cuánto el servicio?','¿Hay cita mañana?'];
 async function scene2(){
-  $('d2').innerHTML='';const fl=$('fl2');fl.innerHTML='';
-  FLOAT2.forEach((f,i)=>{const s=document.createElement('span');s.textContent=f[0];s.style.left=f[1]+'%';s.style.top=f[2]+'%';s.style.animationDelay=(i*.25)+'s';fl.appendChild(s);sfxMsg();});
-  await wait(600);voice('wa-saturado');
-  await typeThen('d2','No me malinterpretes… <b>me gusta ayudarte.</b>',400);
-  await typeThen('d2','Pero me usas como tu agenda, tu recepcionista, tu lista de clientes, tu recordatorio… y hasta tu asistente.',900);
-  await typeThen('d2','Y mientras tú atiendes a alguien… <b>otros se van con tu competencia.</b>',1400);
-  await wait(600);$('b2').style.opacity='1';
+  const fl=$('flood2');fl.innerHTML='';$('d2').innerHTML='';$('b2').style.opacity='0';
+  let pend=0;const setP=()=>{$('pend2').textContent='Sin responder: '+pend;};setP();
+  let i=0;const spawn=()=>{
+    if(i>=10)return;
+    const m=FLOODMSGS[i%FLOODMSGS.length];i++;pend++;setP();sfxMsg();
+    const row=document.createElement('div');row.className='fmsg';
+    row.innerHTML='<div class="av"></div><div class="tx">'+m+'</div><button class="rb">Responder</button>';
+    row.querySelector('.rb').onclick=()=>{row.style.opacity='.3';row.querySelector('.rb').textContent='✓';row.querySelector('.rb').disabled=true;sfxSend();};
+    fl.appendChild(row);fl.scrollTop=fl.scrollHeight;
+  };
+  const iv=setInterval(spawn,620);spawn();
+  await wait(6400);clearInterval(iv);
+  voice('wa-saturado');
+  await botType('d2','in','No te das abasto, ¿verdad? 😮‍💨',500);
+  await botType('d2','in','Me usas como <b>agenda, recepcionista, recordatorio</b>… y mientras, otros se van con tu competencia.',1100);
+  await wait(700);$('b2').style.opacity='1';
 }
-/* ---------- SCENE 3 diagnostic ---------- */
-function scene3(){$('q-giro').style.display='';$('q-citas').style.display='none';$('q-dolor').style.display='none';}
-function setQ(k,v,el){state[k]=v;if(el){el.parentNode.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');}sfxSend();vib(12);
-  setTimeout(()=>{
-    if(k==='giro'){$('q-giro').style.display='none';$('q-citas').style.display='';}
-    else if(k==='citas'){$('q-citas').style.display='none';$('q-dolor').style.display='';}
-    else if(k==='dolor'){go('s4');}
-  },240);}
-/* ---------- SCENE 4 loss ---------- */
-const LOSS=[['👤','Cliente que preguntó por tu horario','No recibió respuesta a tiempo.','Perdido'],['📅','Tenía cita contigo','No recibió recordatorio. No asistió.','No asistió'],['🔁','Quería reagendar','Se quedó enterrado entre tus chats.','Olvidado']];
+/* ===== S3 diagnóstico conversacional ===== */
+const Q3=[
+ {k:'giro',q:'Oye, ya que estamos… <b>¿a qué te dedicas?</b>',opts:[['Barbería','barberia'],['Estética/Uñas','estetica'],['Spa','spa'],['Consultorio','consultorio'],['Veterinaria','veterinaria'],['Otro','otro']]},
+ {k:'citas',q:'Va. ¿Y <b>cuántas citas</b> manejas por semana?',opts:[['1 a 10','10'],['11 a 30','30'],['31 a 60','60'],['Más de 60','90']]},
+ {k:'dolor',q:'Última… <b>¿qué es lo que más te cuesta?</b>',opts:[['No contesto a tiempo','No contesto a tiempo'],['Se me olvidan citas','Se me olvidan citas'],['Me cancelan mucho','Me cancelan mucho'],['Todo desordenado aquí','Todo desordenado en WhatsApp']]}
+];
+let q3i=0;
+async function scene3(){q3i=0;$('d3').innerHTML='';$('chips3').innerHTML='';askQ();}
+async function askQ(){
+  const q=Q3[q3i];$('chips3').innerHTML='';
+  await botType('d3','in',q.q,400);
+  await wait(250);
+  q.opts.forEach(([label,val])=>{const c=document.createElement('button');c.className='chip';c.textContent=label;c.onclick=()=>pickQ(label,val);$('chips3').appendChild(c);});
+}
+function pickQ(label,val){
+  state[Q3[q3i].k]=val;sfxSend();vib(12);
+  bubble('d3','out',label,true);$('chips3').innerHTML='';
+  q3i++;
+  if(q3i<Q3.length)setTimeout(askQ,500);
+  else setTimeout(()=>go('s4'),700);
+}
+/* ===== S4 clientes que se van ===== */
+const LEAVERS=[
+ [['client','Hola, ¿tienes lugar para hoy? 🙏',600],['client','¿Hola? 👀',2600],['client','Bueno… ya conseguí en otro lado 👎',2200]],
+ [['client','¿Me confirmas mi cita de mañana?',900],['client','Si no me dices, mejor lo cancelo.',2400]],
+ [['client','¿Sigues teniendo espacio?',900],['client','Ya vi que tardas… encontré otra opción. 😕',2400]]
+];
 async function scene4(){
-  $('calcLbl').style.display='';$('calcLbl').textContent='Calculando caos operativo…';$('lossCards').innerHTML='';$('d4').innerHTML='';
-  vib(40);await wait(1700);$('calcLbl').style.display='none';
-  for(const L of LOSS){const c=document.createElement('div');c.className='lcard';c.innerHTML='<div class="nm">'+L[0]+' '+L[1]+'</div><div class="ds">'+L[2]+'</div><span class="st">'+L[3]+'</span>';$('lossCards').appendChild(c);sfxMsg();vib(20);await wait(950);}
+  $('d4').innerHTML='';$('b4').style.opacity='0';
   voice('wa-perdida');
-  await typeThen('d4','¿Lo ves? No es que tu negocio no venda.',500);
-  await typeThen('d4','Es que muchas oportunidades se quedan atrapadas… <b>aquí dentro de mí.</b>',1100);
-  await typeThen('d4','Cada mensaje sin responder… <b>es una cita menos.</b>',1300);
-  await wait(600);$('b4').style.opacity='1';
+  for(const conv of LEAVERS){
+    for(const[cls,txt,pre]of conv){await wait(pre);bubble('d4',cls,txt);sfxMsg();}
+    await wait(500);
+    const lost=document.createElement('div');lost.className='bub left';lost.style.cssText='align-self:flex-start;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.4);color:#f87171;font-size:12px;font-weight:700;border-radius:20px;padding:6px 12px';lost.textContent='✕ Cliente perdido';$('d4').appendChild(lost);$('d4').scrollTop=$('d4').scrollHeight;vib([30,40]);
+    await wait(700);
+  }
+  await wait(500);$('b4').style.opacity='1';
 }
-/* ---------- SCENE 5 break ---------- */
+/* ===== S5 ===== */
 const CANT=['No puedo organizar tu negocio completo.','No puedo confirmar tus citas por ti.','No puedo recordarle a cada cliente que llegue.','No puedo recuperar a los que ya se fueron.','No puedo ordenar tu agenda mientras trabajas.'];
-const XICON='<svg viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>';
+const XI='<svg viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>';
 async function scene5(){
   $('cant5').innerHTML='';$('who5').style.opacity='0';$('b5').style.opacity='0';
   await wait(500);voice('wa-quiebre');
   const intro=document.createElement('div');intro.className='li';intro.style.color='#9aa6b2';intro.innerHTML='<span>Yo puedo <b style="color:#cbd3dd">recibir</b> mensajes…</span>';$('cant5').appendChild(intro);
-  await wait(1400);
-  for(const t of CANT){const li=document.createElement('div');li.className='li';li.innerHTML=XICON+'<span>'+t+'</span>';$('cant5').appendChild(li);tone(220,.18,'sine',.12);vib(14);await wait(1100);}
-  await wait(500);$('who5').style.opacity='1';$('who5').classList.add('fade-up');vib([30,40,90]);
-  await wait(900);$('b5').style.opacity='1';
+  await wait(1300);
+  for(const t of CANT){const li=document.createElement('div');li.className='li';li.innerHTML=XI+'<span>'+t+'</span>';$('cant5').appendChild(li);tone(220,.18,'sine',.1);vib(14);await wait(1000);}
+  await wait(400);$('who5').style.opacity='1';$('who5').classList.add('fade-up');vib([30,40,90]);
+  await wait(800);$('b5').style.opacity='1';
 }
-/* ---------- SCENE 6 reveal ---------- */
+/* ===== S6 ===== */
 const BEN=['Agenda tus citas en segundos','Recordatorios automáticos por WhatsApp','Menos cancelaciones y olvidos','Tus clientes reservan desde un link','Clientes, equipo y horarios en un solo lugar'];
 async function scene6(){
-  $('vl6').innerHTML=SVG_V;$('d6').innerHTML='';$('ben6').innerHTML='';$('b6').style.opacity='0';
+  $('d6').innerHTML='';$('ben6').innerHTML='';$('b6').style.opacity='0';
   {const v=$('s6vid');if(v){try{v.muted=true;v.currentTime=0;v.play();}catch(e){}}}
-  for(const t of ['🎉','✨'])tone(660,.12,'sine',.12);
-  vib([20,30,60]);
-  await wait(400);voice('wa-vylta');
-  await typeThen('d6','VYLTA no me reemplaza…',500);
-  await typeThen('d6','<b>me vuelve inteligente.</b> 🧠',900);
-  await wait(400);
-  BEN.forEach((b,i)=>{const e=document.createElement('div');e.className='ben';e.style.animationDelay=(i*.18)+'s';e.innerHTML='<span class="ck">✓</span>'+b;$('ben6').appendChild(e);});
-  await wait(1600);$('b6').style.opacity='1';
+  tone(660,.12,'sine',.1);vib([20,30,60]);
+  await wait(500);voice('wa-vylta');
+  await botType('d6','in','VYLTA no me reemplaza…',500);
+  await botType('d6','in','<b>me vuelve inteligente.</b> 🧠',900);
+  await wait(300);BEN.forEach((b,i)=>{const e=document.createElement('div');e.className='ben';e.style.animationDelay=(i*.18)+'s';e.innerHTML='<span class="ck">✓</span>'+b;$('ben6').appendChild(e);});
+  await wait(1500);$('b6').style.opacity='1';
 }
-/* ---------- SCENE 7 demo ---------- */
-const STEPS=[['08:30','nueva reserva','Entra desde tu link público','reserva'],['10:00','recordatorio','VYLTA avisa por WhatsApp 24h antes','rem'],['12:30','confirmada ✓','El cliente confirmó solo','conf']];
+/* ===== S7 demo conversación + reserva ===== */
 async function scene7(){
-  const b=$('agbody');b.innerHTML='';$('demostep').textContent='';$('agcount').textContent='0 citas';$('b7').style.opacity='0';
-  const msgs=['Entra una reserva nueva…','VYLTA la agenda sola…','Manda el recordatorio por WhatsApp…','El cliente confirma…','Tu agenda queda ordenada ✨'];
-  const data=[['09:00','María G.','Corte + barba'],['11:30','Carlos M.','Servicio'],['16:00','Ana P.','Tratamiento']];
-  for(let i=0;i<data.length;i++){
-    $('demostep').textContent=msgs[i];await wait(900);
-    const a=document.createElement('div');a.className='appt';a.innerHTML='<span class="tm">'+data[i][0]+'</span><span class="who"><b>'+data[i][1]+'</b><span>'+data[i][2]+'</span></span><span class="ok">✓</span>';b.appendChild(a);sfxMsg();vib(16);$('agcount').textContent=(i+1)+' citas';
-    await wait(700);
-  }
-  $('demostep').textContent='Tu WhatsApp deja de cargar con todo. Y tú atiendes mejor. 💚';
-  voice('wa-final');
-  await wait(1400);$('b7').style.opacity='1';
+  $('d7').innerHTML='';$('b7').style.opacity='0';
+  $('s7chat-wrap').style.display='flex';$('s7book').style.display='none';$('s7done').style.display='none';
+  await wait(500);
+  bubble('d7','client','Hola, ¿tienes espacio? 🙂');sfxMsg();
+  await botType('d7','out','¡Claro! 😄 Aquí tienes mi link para que agendes tú mismo, cuando quieras 👇',900,true);
+  await wait(500);
+  const lb=document.createElement('div');lb.className='linkbub';lb.innerHTML='🔗 book.vylta.lat/tu-negocio';$('d7').appendChild(lb);sfxSend();
+  await wait(1600);
+  // transición a reserva
+  $('s7chat-wrap').style.display='none';$('s7book').style.display='flex';
+  const set=(id,val)=>{const e=$(id);e.textContent=val;e.classList.add('fill');sfxMsg();vib(12);};
+  await wait(700);set('bkServ',GIRO[state.giro].s);
+  await wait(900);set('bkFecha','Mié 18 jun');
+  await wait(700);set('bkHora','4:00 p.m.');
+  await wait(900);set('bkNom','Andrea L.');
+  await wait(800);set('bkTel','55 1234 5678');
+  await wait(900);const btn=$('bkBtn');btn.style.background='#fff';btn.textContent='Confirmando…';tone(900,.1,'sine',.1);
+  await wait(900);
+  $('s7book').style.display='none';$('s7done').style.display='block';tone(660,.13,'sine',.13);tone(880,.12,'sine',.11,.12);vib([40,50,120]);
+  voice('wa-demo');
+  await wait(2400);$('b7').style.opacity='1';
 }
-/* ---------- SCENE 8 ---------- */
-function scene8(){$('leadNegocio').value=GIRO[state.giro].l.charAt(0).toUpperCase()+GIRO[state.giro].l.slice(1);$('vl8').innerHTML=SVG_V;}
-function submitLead(e){e.preventDefault();const f=e.target;const data={nombre:f.nombre.value,negocio:f.negocio.value,wa:f.wa.value,giro:state.giro,citas:state.citas,dolor:state.dolor,ts:new Date().toISOString()};
-  try{localStorage.setItem('vylta_lead',JSON.stringify(data));}catch(_){}
-  tone(660,.14,'sine',.14);tone(880,.13,'sine',.12,.12);tone(1100,.14,'sine',.1,.24);vib([40,50,120]);
-  $('s8result').style.display='none';$('s8ok').style.display='';
+/* ===== S8 ===== */
+function scene8(){
   $('finalCta').href='https://vylta.lat/'+(GIRO[state.giro]?state.giro:'')+'?src=experiencia&utm_source=experiencia&utm_medium=funnel';
-  return false;}
+  voice('wa-final');
+}
 
 const SCENE={s1:scene1,s2:scene2,s3:scene3,s4:scene4,s5:scene5,s6:scene6,s7:scene7,s8:scene8};
 
-/* boot: first tap starts audio + scene1 */
+let started=false;
 function boot(){if(started)return;started=true;ac();startMusic();scene1();}
 ['click','touchstart'].forEach(ev=>document.addEventListener(ev,boot,{once:true}));
-setProgress('s1');
 </script>
 </body>
 </html>
