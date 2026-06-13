@@ -231,13 +231,17 @@ form input::placeholder{color:var(--dim)}
   </section>
 
   <!-- ESCENA 6: revelación -->
-  <section class="scene center" id="s6">
-    <div class="vlogo" id="vl6"></div>
-    <h2 class="lead serif">Conoce <span class="gv">VYLTA</span></h2>
-    <p class="sub">La app que convierte tus mensajes, citas y recordatorios en un sistema automático para tu negocio.</p>
-    <div class="dwrap" id="d6" style="margin-top:14px"></div>
-    <div class="benefits" id="ben6"></div>
-    <button class="btn glow" id="b6" style="margin-top:18px;opacity:0" onclick="go('s7')">Ver cómo funciona →</button>
+  <section class="scene" id="s6" style="padding:0">
+    <video id="s6vid" class="bgvid" playsinline muted loop preload="auto" poster="assets/video/scene6-poster.jpg"><source src="assets/video/scene6.mp4" type="video/mp4"></video>
+    <div class="bgvid-ov" style="background:linear-gradient(180deg,rgba(7,11,18,.62),rgba(7,11,18,.9))"></div>
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;padding:64px 24px max(28px,env(safe-area-inset-bottom));overflow-y:auto">
+      <div class="vlogo" id="vl6"></div>
+      <h2 class="lead serif">Conoce <span class="gv">VYLTA</span></h2>
+      <p class="sub">La app que convierte tus mensajes, citas y recordatorios en un sistema automático para tu negocio.</p>
+      <div class="dwrap" id="d6" style="margin-top:14px"></div>
+      <div class="benefits" id="ben6"></div>
+      <button class="btn glow" id="b6" style="margin-top:18px;opacity:0" onclick="go('s7')">Ver cómo funciona →</button>
+    </div>
   </section>
 
   <!-- ESCENA 7: demo -->
@@ -377,6 +381,7 @@ async function scene5(){
 const BEN=['Agenda tus citas en segundos','Recordatorios automáticos por WhatsApp','Menos cancelaciones y olvidos','Tus clientes reservan desde un link','Clientes, equipo y horarios en un solo lugar'];
 async function scene6(){
   $('vl6').innerHTML=SVG_V;$('d6').innerHTML='';$('ben6').innerHTML='';$('b6').style.opacity='0';
+  {const v=$('s6vid');if(v){try{v.muted=true;v.currentTime=0;v.play();}catch(e){}}}
   for(const t of ['🎉','✨'])tone(660,.12,'sine',.12);
   vib([20,30,60]);
   await wait(400);voice('wa-vylta');
