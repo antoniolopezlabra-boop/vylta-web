@@ -58,6 +58,15 @@ h1,h2{font-weight:800;letter-spacing:-.02em;line-height:1.12}
 @keyframes slump{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(4px) rotate(1deg)}}
 .wachar-img{object-fit:contain;-webkit-mask-image:radial-gradient(circle,#000 54%,transparent 76%);mask-image:radial-gradient(circle,#000 54%,transparent 76%)}
 
+/* WhatsApp UI skin (scenes 3 & 4) */
+.waui{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;background:#0b141a}
+.wahead{display:flex;align-items:center;gap:10px;padding:max(12px,env(safe-area-inset-top)) 14px 11px;background:#1f2c34;box-shadow:0 1px 0 rgba(0,0,0,.4);z-index:2}
+.wahead .bk{color:#aebac1;font-size:22px;line-height:1}
+.wahead .av{width:38px;height:38px;border-radius:50%;object-fit:cover}
+.wahead .nm{font-weight:600;font-size:16px;color:#e9edef;line-height:1.15}
+.wahead .st{font-size:12px;color:#25d366}
+.wawall{flex:1;overflow-y:auto;padding:16px 12px;display:flex;flex-direction:column;gap:8px;background-color:#0b141a;background-image:radial-gradient(rgba(255,255,255,.025) 1px,transparent 1px);background-size:22px 22px}
+.wafoot{padding:10px 12px max(14px,env(safe-area-inset-bottom));background:#0b141a;border-top:1px solid #1f2c34}
 /* chat (whatsapp) */
 .chat{width:100%;max-width:370px;display:flex;flex-direction:column;gap:8px}
 .bub{max-width:86%;padding:10px 13px;font-size:14.5px;text-align:left;line-height:1.4;opacity:0;transform:translateY(8px) scale(.98);animation:bub .4s forwards;box-shadow:0 4px 14px rgba(0,0,0,.3)}
@@ -124,7 +133,7 @@ h1,h2{font-weight:800;letter-spacing:-.02em;line-height:1.12}
   <section class="scene active" id="s1" style="padding:0">
     <video id="s1vid" class="bgvid" playsinline muted loop autoplay preload="auto" poster="assets/video/scene1-poster.jpg"><source src="assets/video/scene1.mp4" type="video/mp4"></video>
     <div class="bgvid-ov"></div>
-    <div class="taphint" id="tapHint">toca para vivir la experiencia 🔊</div>
+    <button class="btn glow" id="startBtn" style="position:absolute;z-index:4;top:50%;left:50%;transform:translate(-50%,-50%);max-width:250px" onclick="boot()">▶  Toca para empezar 🔊</button>
     <div class="s1c">
       <h1 class="lead" style="padding:0 24px">Tienes <span class="gv" id="msgCount">47</span><br>mensajes sin responder</h1>
       <div class="chat" id="d1" style="margin-top:16px;padding:0 24px"></div>
@@ -142,17 +151,21 @@ h1,h2{font-weight:800;letter-spacing:-.02em;line-height:1.12}
   </section>
 
   <!-- ESCENA 3: diagnóstico conversacional -->
-  <section class="scene center" id="s3">
-    <div class="charwrap" style="width:84px;height:84px;margin-bottom:8px"><img class="wachar-img" style="width:84px;height:84px" src="assets/char/wa-saturado.jpg" alt=""></div>
-    <div class="chat" id="d3"></div>
-    <div class="chips" id="chips3"></div>
+  <section class="scene" id="s3" style="padding:0">
+    <div class="waui">
+      <div class="wahead"><span class="bk">‹</span><img class="av" src="assets/vylta-icon.png" alt=""><div><div class="nm">VYLTA</div><div class="st">en línea</div></div></div>
+      <div class="wawall" id="d3"></div>
+      <div class="wafoot"><div class="chips" id="chips3" style="max-width:none"></div></div>
+    </div>
   </section>
 
   <!-- ESCENA 4: clientes que se van (WhatsApp real) -->
-  <section class="scene" id="s4" style="padding:54px 18px max(28px,env(safe-area-inset-bottom))">
-    <div style="font-size:11px;color:var(--mut);letter-spacing:.04em;margin-bottom:12px">📱 Mientras tú trabajas, en tu WhatsApp…</div>
-    <div class="chat" id="d4" style="max-width:400px;flex:1;justify-content:flex-start;overflow-y:auto;width:100%"></div>
-    <button class="btn glow" id="b4" style="margin-top:14px;opacity:0;align-self:center" onclick="go('s5')">Continuar →</button>
+  <section class="scene" id="s4" style="padding:0">
+    <div class="waui">
+      <div class="wahead"><span class="bk">‹</span><div class="av" style="background:#33444f;display:flex;align-items:center;justify-content:center;font-size:18px">👥</div><div><div class="nm">Tus clientes</div><div class="st" id="s4st">en línea</div></div></div>
+      <div class="wawall" id="d4"></div>
+      <div class="wafoot" style="text-align:center"><button class="btn glow" id="b4" style="opacity:0;max-width:300px" onclick="go('s5')">Continuar →</button></div>
+    </div>
   </section>
 
   <!-- ESCENA 5: punto de quiebre -->
@@ -231,10 +244,11 @@ function tone(f,d,type,g,delay){const c=ac();if(!c||state.muted)return;const o=c
 function vib(p){if(navigator.vibrate){try{navigator.vibrate(p);}catch(e){}}}
 function sfxMsg(){tone(680,.13,'sine',.12);tone(920,.12,'sine',.1,.11);vib(16);}
 function sfxSend(){tone(900,.1,'sine',.09);tone(1180,.09,'sine',.07,.08);}
-let music=null,fadeT=null;const MBASE=.06;
+let music=null,fadeT=null,musicSrc='ambient.m4a';const MBASE=.04;
 function fadeMusic(tg,ms){if(!music)return;clearInterval(fadeT);const s=music.volume||0,n=Math.max(1,Math.round((ms||800)/50));let i=0;fadeT=setInterval(()=>{i++;try{music.volume=Math.max(0,Math.min(1,s+(tg-s)*i/n));}catch(e){}if(i>=n)clearInterval(fadeT);},50);}
-function startMusic(){if(music)return;music=new Audio('assets/audio/ambient.m4a');music.loop=true;music.volume=0;music.play().catch(()=>{});fadeMusic(state.muted?0:MBASE,4500);}
-function duck(on){if(!music||state.muted)return;fadeMusic(on?.02:MBASE,500);}
+function startMusic(){if(music)return;music=new Audio('assets/audio/'+musicSrc);music.loop=true;music.volume=0;music.play().catch(()=>{});fadeMusic(state.muted?0:MBASE,4500);}
+function switchMusic(file){if(file===musicSrc)return;musicSrc=file;if(!music)return;fadeMusic(0,700);setTimeout(()=>{try{music.pause();}catch(e){}music=new Audio('assets/audio/'+file);music.loop=true;music.volume=0;if(!state.muted)music.play().catch(()=>{});fadeMusic(state.muted?0:MBASE,1400);},760);}
+function duck(on){if(!music||state.muted)return;fadeMusic(on?.015:MBASE,500);}
 let curVoice=null;
 function voice(key){stopVoice();if(state.muted)return;duck(true);curVoice=new Audio('assets/audio/'+key+'.m4a');curVoice.onended=()=>duck(false);curVoice.play().catch(()=>duck(false));}
 function stopVoice(){if(curVoice){try{curVoice.pause();}catch(e){}curVoice=null;}duck(false);}
@@ -251,7 +265,7 @@ function go(id){document.querySelectorAll('.scene').forEach(s=>s.classList.remov
 
 /* ===== S1 ===== */
 async function scene1(){
-  const h=$('tapHint');if(h)h.style.display='none';
+  const h=$('startBtn');if(h)h.style.display='none';
   const v=$('s1vid');if(v){try{v.muted=true;v.currentTime=0;v.play();}catch(e){}}
   vib(30);let c=0;$('msgCount').textContent='0';const it=setInterval(()=>{c+=3;if(c>=47){c=47;clearInterval(it);}$('msgCount').textContent=c;},55);
   await wait(700);voice('wa-open');
@@ -332,6 +346,7 @@ async function scene5(){
 const BEN=['Agenda tus citas en segundos','Recordatorios automáticos por WhatsApp','Menos cancelaciones y olvidos','Tus clientes reservan desde un link','Clientes, equipo y horarios en un solo lugar'];
 async function scene6(){
   $('d6').innerHTML='';$('ben6').innerHTML='';$('b6').style.opacity='0';
+  switchMusic('ambient-up.m4a');
   {const v=$('s6vid');if(v){try{v.muted=true;v.currentTime=0;v.play();}catch(e){}}}
   tone(660,.12,'sine',.1);vib([20,30,60]);
   await wait(500);voice('wa-vylta');
