@@ -284,7 +284,14 @@ function sfxSend(){tone(900,.1,'sine',.09);tone(1180,.09,'sine',.07,.08);}
    iOS ignores element.volume but the baked level + pause/play handle it). */
 let music=null,fadeT=null,musicSrc='ambient.m4a';const MBASE=1,DUCK=.4;
 function fadeMusic(tg,ms){if(!music)return;clearInterval(fadeT);tg=state.muted?0:tg;const s=music.volume||0,n=Math.max(1,Math.round((ms||700)/50));let i=0;fadeT=setInterval(()=>{i++;try{music.volume=Math.max(0,Math.min(1,s+(tg-s)*i/n));}catch(e){}if(i>=n)clearInterval(fadeT);},50);}
-function startMusic(){if(music)return;music=new Audio('assets/audio/'+musicSrc);music.loop=true;music.preload='auto';music.volume=0;music.play().catch(()=>{});fadeMusic(MBASE,3500);}
+function startMusic(){if(music)return;music=new Audio('assets/audio/'+musicSrc);music.loop=true;music.preload='auto';music.volume=0;
+  let ok=false;
+  const go=()=>{if(ok||state.muted||!music)return;music.play().then(()=>{ok=true;fadeMusic(MBASE,3000);}).catch(()=>{});};
+  go();                                   // try now (gesture)
+  music.addEventListener('canplay',go);   // retry once it can play (Android load race)
+  music.addEventListener('canplaythrough',go);
+  ['pointerdown','touchend','click'].forEach(ev=>document.addEventListener(ev,go)); // retry on later taps
+  music.load();}
 function switchMusic(file){if(file===musicSrc)return;musicSrc=file;if(!music)return;fadeMusic(0,600);setTimeout(()=>{try{music.src='assets/audio/'+file;music.volume=0;music.play().catch(()=>{});}catch(e){}fadeMusic(MBASE,1200);},650);}
 function duck(on){if(!music||state.muted)return;fadeMusic(on?DUCK:MBASE,400);}
 let curVoice=null;
