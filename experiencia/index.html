@@ -294,9 +294,13 @@ function startMusic(){if(music)return;music=new Audio('assets/audio/'+musicSrc);
   music.load();}
 function switchMusic(file){if(file===musicSrc)return;musicSrc=file;if(!music)return;fadeMusic(0,600);setTimeout(()=>{try{music.src='assets/audio/'+file;music.volume=0;music.play().catch(()=>{});}catch(e){}fadeMusic(MBASE,1200);},650);}
 function duck(on){if(!music||state.muted)return;fadeMusic(on?DUCK:MBASE,400);}
-let curVoice=null;
-function voice(key){stopVoice();if(state.muted)return;duck(true);curVoice=new Audio('assets/audio/'+key+'.m4a');curVoice.onended=()=>duck(false);curVoice.play().catch(()=>duck(false));}
-function stopVoice(){if(curVoice){try{curVoice.pause();}catch(e){}curVoice=null;}duck(false);}
+let curVoice=null,voiceEnded=true;
+function voice(key){stopVoice();voiceEnded=false;if(state.muted){voiceEnded=true;return;}duck(true);curVoice=new Audio('assets/audio/'+key+'.m4a');
+  curVoice.onended=()=>{duck(false);voiceEnded=true;};curVoice.onerror=()=>{voiceEnded=true;};
+  curVoice.play().catch(()=>{voiceEnded=true;});}
+function stopVoice(){if(curVoice){try{curVoice.pause();}catch(e){}curVoice=null;}duck(false);voiceEnded=true;}
+/* resolves when the current voice finishes (or muted / safety cap) — gates 'next' buttons */
+function awaitVoice(){return new Promise(res=>{const t0=Date.now();(function c(){if(voiceEnded||Date.now()-t0>28000)return res();setTimeout(c,120);})();});}
 $('muteBtn').onclick=function(){state.muted=!state.muted;this.textContent=state.muted?'🔇':'🔊';if(state.muted){stopVoice();fadeMusic(0,400);if(music)setTimeout(()=>{if(state.muted&&music)music.pause();},450);}else if(music){music.play().catch(()=>{});fadeMusic(MBASE,800);}};
 document.addEventListener('visibilitychange',()=>{if(document.hidden){stopVoice();if(music)music.pause();}else if(!state.muted&&music){music.play().catch(()=>{});fadeMusic(MBASE,800);}});
 
@@ -315,7 +319,7 @@ async function scene1(){
   vib(30);let c=0;$('msgCount').textContent='0';const it=setInterval(()=>{c+=3;if(c>=47){c=47;clearInterval(it);}$('msgCount').textContent=c;},55);
   await wait(700);voice('wa-open');
   await botType('d1','in','Oye… <b>tú y yo tenemos que hablar.</b>',600);
-  await wait(600);$('b1').style.opacity='1';
+  await awaitVoice();$('b1').style.opacity='1';
 }
 /* ===== S2 saturación interactiva ===== */
 const FLOODMSGS=['¿Tienes lugar hoy?','¿Cuánto cobras?','¿Me confirmas mi cita?','¿Atiendes a las 6?','Hola, ¿agendas?','¿Me reagendas? 🙏','¿Sigues abierto?','¿Aceptas tarjeta?','¿Cuánto el servicio?','¿Hay cita mañana?'];
@@ -335,7 +339,7 @@ async function scene2(){
   voice('wa-saturado');
   await botType('d2','in','No te das abasto, ¿verdad? 😮‍💨',500);
   await botType('d2','in','Me usas como <b>agenda, recepcionista, recordatorio</b>… y mientras, otros se van con tu competencia.',1100);
-  await wait(700);$('b2').style.opacity='1';
+  await awaitVoice();$('b2').style.opacity='1';
 }
 /* ===== S3 diagnóstico conversacional ===== */
 const Q3=[
@@ -373,7 +377,7 @@ async function scene4(){
     const lost=document.createElement('div');lost.className='bub left';lost.style.cssText='align-self:flex-start;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.4);color:#f87171;font-size:12px;font-weight:700;border-radius:20px;padding:6px 12px';lost.textContent='✕ Cliente perdido';$('d4').appendChild(lost);$('d4').scrollTop=$('d4').scrollHeight;vib([30,40]);
     await wait(700);
   }
-  await wait(500);$('b4').style.opacity='1';
+  await awaitVoice();$('b4').style.opacity='1';
 }
 /* ===== S5 ===== */
 const CANT=['No puedo organizar tu negocio completo.','No puedo confirmar tus citas por ti.','No puedo recordarle a cada cliente que llegue.','No puedo recuperar a los que ya se fueron.','No puedo ordenar tu agenda mientras trabajas.'];
@@ -385,7 +389,7 @@ async function scene5(){
   await wait(1300);
   for(const t of CANT){const li=document.createElement('div');li.className='li';li.innerHTML=XI+'<span>'+t+'</span>';$('cant5').appendChild(li);tone(220,.18,'sine',.1);vib(14);await wait(1000);}
   await wait(400);$('who5').style.opacity='1';$('who5').classList.add('fade-up');vib([30,40,90]);
-  await wait(800);$('b5').style.opacity='1';
+  await awaitVoice();$('b5').style.opacity='1';
 }
 /* ===== S6 ===== */
 const BEN=['Agenda tus citas en segundos','Recordatorios automáticos por WhatsApp','Menos cancelaciones y olvidos','Tus clientes reservan desde un link','Clientes, equipo y horarios en un solo lugar'];
@@ -398,7 +402,7 @@ async function scene6(){
   await botType('d6','in','VYLTA no me reemplaza…',500);
   await botType('d6','in','<b>me vuelve inteligente.</b> 🧠',900);
   await wait(300);BEN.forEach((b,i)=>{const e=document.createElement('div');e.className='ben';e.style.animationDelay=(i*.18)+'s';e.innerHTML='<span class="ck">✓</span>'+b;$('ben6').appendChild(e);});
-  await wait(1500);$('b6').style.opacity='1';
+  await awaitVoice();$('b6').style.opacity='1';
 }
 /* ===== S7 demo conversación + reserva ===== */
 async function scene7(){
@@ -422,7 +426,7 @@ async function scene7(){
   await wait(900);
   $('s7book').style.display='none';$('s7done').style.display='block';tone(660,.13,'sine',.13);tone(880,.12,'sine',.11,.12);vib([40,50,120]);
   voice('wa-demo');
-  await wait(2400);$('b7').style.opacity='1';
+  await awaitVoice();$('b7').style.opacity='1';
 }
 /* ===== S8 ===== */
 function scene8(){
