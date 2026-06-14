@@ -58,23 +58,31 @@ h1,h2{font-weight:800;letter-spacing:-.02em;line-height:1.12}
 @keyframes slump{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(4px) rotate(1deg)}}
 .wachar-img{object-fit:contain;-webkit-mask-image:radial-gradient(circle,#000 54%,transparent 76%);mask-image:radial-gradient(circle,#000 54%,transparent 76%)}
 
-/* WhatsApp UI skin (scenes 3 & 4) */
+/* Authentic WhatsApp UI skin (scenes 3 & 4) */
 .waui{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;background:#0b141a}
-.wahead{display:flex;align-items:center;gap:10px;padding:max(12px,env(safe-area-inset-top)) 14px 11px;background:#1f2c34;box-shadow:0 1px 0 rgba(0,0,0,.4);z-index:2}
-.wahead .bk{color:#aebac1;font-size:22px;line-height:1}
-.wahead .av{width:38px;height:38px;border-radius:50%;object-fit:cover}
-.wahead .nm{font-weight:600;font-size:16px;color:#e9edef;line-height:1.15}
-.wahead .st{font-size:12px;color:#25d366}
-.wawall{flex:1;overflow-y:auto;padding:16px 12px;display:flex;flex-direction:column;gap:8px;background-color:#0b141a;background-image:radial-gradient(rgba(255,255,255,.025) 1px,transparent 1px);background-size:22px 22px}
-.wafoot{padding:10px 12px max(14px,env(safe-area-inset-bottom));background:#0b141a;border-top:1px solid #1f2c34}
+.wahead{display:flex;align-items:center;gap:9px;padding:max(12px,env(safe-area-inset-top)) 50px 9px 10px;background:#1f2c34;box-shadow:0 1px 2px rgba(0,0,0,.3);z-index:2}
+.wahead .bk{color:#e9edef;font-size:25px;line-height:1;display:flex;align-items:center;justify-content:center;flex:0 0 22px;width:22px}
+.wahead .av{width:40px;height:40px;border-radius:50%;object-fit:cover;flex:0 0 auto;background:#0b141a}
+.wahead .who{flex:1 1 auto;text-align:left;min-width:0}
+.wahead .nm{font-weight:600;font-size:16.5px;color:#e9edef;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wahead .st{font-size:12.5px;color:#8696a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wahead svg{width:21px;height:21px;color:#aebac1;flex-shrink:0;margin-left:4px}
+.wawall{flex:1;overflow-y:auto;padding:14px 9px;display:flex;flex-direction:column;gap:5px;background-color:#0b141a;background-image:radial-gradient(rgba(255,255,255,.022) 1px,transparent 1px);background-size:24px 24px}
+.wafoot{padding:8px 9px max(10px,env(safe-area-inset-bottom));background:#111b21;display:flex;flex-direction:column;gap:9px}
+.wainputbar{display:flex;align-items:center;gap:8px}
+.wainput{flex:1;background:#2a3942;border-radius:22px;padding:11px 16px;color:#8696a0;font-size:14.5px;text-align:left}
+.wainputbar svg{width:23px;height:23px;color:#8696a0;flex-shrink:0}
+.wasend{width:42px;height:42px;border-radius:50%;background:#00a884;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.wasend svg{width:22px;height:22px;color:#0b141a}
 /* chat (whatsapp) */
 .chat{width:100%;max-width:370px;display:flex;flex-direction:column;gap:8px}
 .bub{max-width:86%;padding:10px 13px;font-size:14.5px;text-align:left;line-height:1.4;opacity:0;transform:translateY(8px) scale(.98);animation:bub .4s forwards;box-shadow:0 4px 14px rgba(0,0,0,.3)}
-.bub.in{align-self:flex-start;background:var(--wa-bub);color:#eef3f6;border-radius:12px 12px 12px 3px}
-.bub.in b{color:var(--wa)}
-.bub.out{align-self:flex-end;background:#134d33;color:#eafff3;border-radius:12px 12px 3px 12px}
-.bub.client{align-self:flex-start;background:var(--wa-bub);color:#eef3f6;border-radius:12px 12px 12px 3px}
-.bub .t{display:block;text-align:right;font-size:10px;color:#7c8a99;margin-top:3px}
+.bub.in{align-self:flex-start;background:#202c33;color:#e9edef;border-radius:8px 8px 8px 2px}
+.bub.in b{color:#25d366}
+.bub.out{align-self:flex-end;background:#005c4b;color:#e9edef;border-radius:8px 8px 2px 8px}
+.bub.client{align-self:flex-start;background:#202c33;color:#e9edef;border-radius:8px 8px 8px 2px}
+.bub .t{display:block;text-align:right;font-size:10.5px;color:#8696a0;margin-top:2px}
+.bub.out .t{color:#8fc7b5}
 .bub .t .tk{color:#53bdeb;margin-left:2px}
 .bub.left{align-self:flex-start}
 @keyframes bub{to{opacity:1;transform:none}}
@@ -153,18 +161,46 @@ h1,h2{font-weight:800;letter-spacing:-.02em;line-height:1.12}
   <!-- ESCENA 3: diagnóstico conversacional -->
   <section class="scene" id="s3" style="padding:0">
     <div class="waui">
-      <div class="wahead"><span class="bk">‹</span><img class="av" src="assets/vylta-icon.png" alt=""><div><div class="nm">VYLTA</div><div class="st">en línea</div></div></div>
+      <div class="wahead">
+        <span class="bk">‹</span>
+        <img class="av" src="assets/vylta-icon.png" alt="">
+        <div class="who"><div class="nm">VYLTA</div><div class="st">en línea</div></div>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1v-3.5l4 4v-11l-4 4z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .7-.2 1l-2.3 2.2z"/></svg>
+      </div>
       <div class="wawall" id="d3"></div>
-      <div class="wafoot"><div class="chips" id="chips3" style="max-width:none"></div></div>
+      <div class="wafoot">
+        <div class="chips" id="chips3" style="max-width:none"></div>
+        <div class="wainputbar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+          <div class="wainput">Elige una respuesta…</div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 011 1v9a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1z"/><circle cx="12" cy="13" r="3.2"/></svg>
+          <span class="wasend"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 14a3 3 0 003-3V6a3 3 0 00-6 0v5a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 006 6.9V21h2v-3.1A7 7 0 0019 11h-2z"/></svg></span>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- ESCENA 4: clientes que se van (WhatsApp real) -->
   <section class="scene" id="s4" style="padding:0">
     <div class="waui">
-      <div class="wahead"><span class="bk">‹</span><div class="av" style="background:#33444f;display:flex;align-items:center;justify-content:center;font-size:18px">👥</div><div><div class="nm">Tus clientes</div><div class="st" id="s4st">en línea</div></div></div>
+      <div class="wahead">
+        <span class="bk">‹</span>
+        <div class="av" style="background:#6a7480;display:flex;align-items:center;justify-content:center;font-size:19px">👥</div>
+        <div class="who"><div class="nm">Tus clientes</div><div class="st" id="s4st">en línea</div></div>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 10.5V7a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1v-3.5l4 4v-11l-4 4z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .7-.2 1l-2.3 2.2z"/></svg>
+      </div>
       <div class="wawall" id="d4"></div>
-      <div class="wafoot" style="text-align:center"><button class="btn glow" id="b4" style="opacity:0;max-width:300px" onclick="go('s5')">Continuar →</button></div>
+      <div class="wafoot">
+        <button class="btn glow" id="b4" style="opacity:0" onclick="go('s5')">Continuar →</button>
+        <div class="wainputbar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+          <div class="wainput">Mensaje</div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 011 1v9a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1z"/><circle cx="12" cy="13" r="3.2"/></svg>
+          <span class="wasend"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 14a3 3 0 003-3V6a3 3 0 00-6 0v5a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 006 6.9V21h2v-3.1A7 7 0 0019 11h-2z"/></svg></span>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -244,11 +280,11 @@ function tone(f,d,type,g,delay){const c=ac();if(!c||state.muted)return;const o=c
 function vib(p){if(navigator.vibrate){try{navigator.vibrate(p);}catch(e){}}}
 function sfxMsg(){tone(680,.13,'sine',.12);tone(920,.12,'sine',.1,.11);vib(16);}
 function sfxSend(){tone(900,.1,'sine',.09);tone(1180,.09,'sine',.07,.08);}
-let music=null,fadeT=null,musicSrc='ambient.m4a';const MBASE=.04;
+let music=null,fadeT=null,musicSrc='ambient.m4a';const MBASE=.03;
 function fadeMusic(tg,ms){if(!music)return;clearInterval(fadeT);const s=music.volume||0,n=Math.max(1,Math.round((ms||800)/50));let i=0;fadeT=setInterval(()=>{i++;try{music.volume=Math.max(0,Math.min(1,s+(tg-s)*i/n));}catch(e){}if(i>=n)clearInterval(fadeT);},50);}
 function startMusic(){if(music)return;music=new Audio('assets/audio/'+musicSrc);music.loop=true;music.volume=0;music.play().catch(()=>{});fadeMusic(state.muted?0:MBASE,4500);}
 function switchMusic(file){if(file===musicSrc)return;musicSrc=file;if(!music)return;fadeMusic(0,700);setTimeout(()=>{try{music.pause();}catch(e){}music=new Audio('assets/audio/'+file);music.loop=true;music.volume=0;if(!state.muted)music.play().catch(()=>{});fadeMusic(state.muted?0:MBASE,1400);},760);}
-function duck(on){if(!music||state.muted)return;fadeMusic(on?.015:MBASE,500);}
+function duck(on){if(!music||state.muted)return;fadeMusic(on?.008:MBASE,400);}
 let curVoice=null;
 function voice(key){stopVoice();if(state.muted)return;duck(true);curVoice=new Audio('assets/audio/'+key+'.m4a');curVoice.onended=()=>duck(false);curVoice.play().catch(()=>duck(false));}
 function stopVoice(){if(curVoice){try{curVoice.pause();}catch(e){}curVoice=null;}duck(false);}
