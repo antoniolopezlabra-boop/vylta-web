@@ -280,11 +280,14 @@ function tone(f,d,type,g,delay){const c=ac();if(!c||state.muted)return;const o=c
 function vib(p){if(navigator.vibrate){try{navigator.vibrate(p);}catch(e){}}}
 function sfxMsg(){tone(680,.13,'sine',.12);tone(920,.12,'sine',.1,.11);vib(16);}
 function sfxSend(){tone(900,.1,'sine',.09);tone(1180,.09,'sine',.07,.08);}
-let music=null,fadeT=null,musicSrc='ambient.m4a';const MBASE=.03;
-function fadeMusic(tg,ms){if(!music)return;clearInterval(fadeT);const s=music.volume||0,n=Math.max(1,Math.round((ms||800)/50));let i=0;fadeT=setInterval(()=>{i++;try{music.volume=Math.max(0,Math.min(1,s+(tg-s)*i/n));}catch(e){}if(i>=n)clearInterval(fadeT);},50);}
-function startMusic(){if(music)return;music=new Audio('assets/audio/'+musicSrc);music.loop=true;music.volume=0;music.play().catch(()=>{});fadeMusic(state.muted?0:MBASE,4500);}
-function switchMusic(file){if(file===musicSrc)return;musicSrc=file;if(!music)return;fadeMusic(0,700);setTimeout(()=>{try{music.pause();}catch(e){}music=new Audio('assets/audio/'+file);music.loop=true;music.volume=0;if(!state.muted)music.play().catch(()=>{});fadeMusic(state.muted?0:MBASE,1400);},760);}
-function duck(on){if(!music||state.muted)return;fadeMusic(on?.008:MBASE,400);}
+/* music via Web Audio GainNode — iOS Safari ignores element.volume, gain works */
+let music=null,musicGain=null,musicNode=null,musicSrc='ambient.m4a';const MBASE=.08;
+function fadeMusic(tg,ms){const c=ac();tg=state.muted?0:Math.max(0,tg);if(musicGain&&c){const t=c.currentTime,cur=musicGain.gain.value;musicGain.gain.cancelScheduledValues(t);musicGain.gain.setValueAtTime(cur,t);musicGain.gain.linearRampToValueAtTime(tg,t+Math.max(.05,(ms||800)/1000));}else if(music){try{music.volume=tg;}catch(e){}}}
+function startMusic(){if(music)return;const c=ac();music=new Audio('assets/audio/'+musicSrc);music.loop=true;music.preload='auto';
+  try{musicNode=c.createMediaElementSource(music);musicGain=c.createGain();musicGain.gain.value=0;musicNode.connect(musicGain);musicGain.connect(c.destination);}catch(e){music.volume=0;}
+  music.play().catch(()=>{});fadeMusic(MBASE,4000);}
+function switchMusic(file){if(file===musicSrc)return;musicSrc=file;if(!music)return;fadeMusic(0,600);setTimeout(()=>{try{music.src='assets/audio/'+file;music.play().catch(()=>{});}catch(e){}fadeMusic(MBASE,1200);},650);}
+function duck(on){if(!music||state.muted)return;fadeMusic(on?.025:MBASE,400);}
 let curVoice=null;
 function voice(key){stopVoice();if(state.muted)return;duck(true);curVoice=new Audio('assets/audio/'+key+'.m4a');curVoice.onended=()=>duck(false);curVoice.play().catch(()=>duck(false));}
 function stopVoice(){if(curVoice){try{curVoice.pause();}catch(e){}curVoice=null;}duck(false);}
