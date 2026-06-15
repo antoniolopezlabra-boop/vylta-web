@@ -10,11 +10,12 @@
 <link rel="preload" as="fetch" href="assets/audio/wa-open.m4a" crossorigin>
 <!-- GA4 + Google Ads -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DC4M60185V"></script>
+<script src="/track.js"></script>
 <script>
 window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());
 gtag('config','G-DC4M60185V',{linker:{domains:['vylta.lat','app.vylta.lat']}});
 gtag('config','AW-591393013');
-function trk(n,p){try{gtag('event',n,p||{});}catch(e){}}
+function trk(n,p){try{gtag('event',n,p||{});}catch(e){}try{if(window.vfunnel)window.vfunnel(n,p);}catch(e){}}
 window.addEventListener('load',function(){trk('exp_open');});
 </script>
 <style>

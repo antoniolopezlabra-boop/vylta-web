@@ -10,6 +10,7 @@
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-591393013"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','AW-591393013');gtag('config','G-DC4M60185V');</script>
+<script src="/track.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -58,12 +59,12 @@ h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;-
     <div class="card feat">
       <div class="h"><span class="n">1</span> Empieza desde la web</div>
       <p>Crea tu cuenta en 2 minutos desde tu navegador, sin instalar nada. Ideal para empezar desde la computadora.</p>
-      <a class="btn" href="https://app.vylta.lat/register?src=experiencia&utm_source=experiencia&utm_medium=funnel&utm_campaign=veterinaria" onclick="gtag('event','cta_web',{giro:'veterinaria'})">Crear mi cuenta gratis →</a>
+      <a class="btn" href="https://app.vylta.lat/register?src=experiencia&utm_source=experiencia&utm_medium=funnel&utm_campaign=veterinaria" onclick="gtag('event','cta_web',{giro:'veterinaria'});window.vfunnel&&vfunnel('cta_web',{giro:'veterinaria'})">Crear mi cuenta gratis →</a>
     </div>
     <div class="card">
       <div class="h"><span class="n">2</span> Descarga la app</div>
       <p>Llévala en tu celular <b>Android</b> y gestiona tu negocio desde donde estés.</p>
-      <a class="store" href="https://play.google.com/store/apps/details?id=lat.vylta.app" onclick="gtag('event','cta_play',{giro:'veterinaria'})"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M3.6 2.4 13 12 3.6 21.6c-.3-.2-.5-.6-.5-1V3.4c0-.4.2-.8.5-1z" fill="#34D399"/><path d="M13 12 3.6 2.4c.3-.1.7-.1 1 .1l11 6.3L13 12z" fill="#06B6D4"/><path d="M13 12 16 8.8l5.3 3c.6.4.6 1.4 0 1.8L16 15.2 13 12z" fill="#FBBF24"/><path d="M13 12 16 15.2l-11 6.3c-.3.2-.7.2-1 .1L13 12z" fill="#A78BFA"/></svg><span><small>Disponible en</small><b>Google Play</b></span></a>
+      <a class="store" href="https://play.google.com/store/apps/details?id=lat.vylta.app" onclick="gtag('event','cta_play',{giro:'veterinaria'});window.vfunnel&&vfunnel('cta_play',{giro:'veterinaria'})"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M3.6 2.4 13 12 3.6 21.6c-.3-.2-.5-.6-.5-1V3.4c0-.4.2-.8.5-1z" fill="#34D399"/><path d="M13 12 3.6 2.4c.3-.1.7-.1 1 .1l11 6.3L13 12z" fill="#06B6D4"/><path d="M13 12 16 8.8l5.3 3c.6.4.6 1.4 0 1.8L16 15.2 13 12z" fill="#FBBF24"/><path d="M13 12 16 15.2l-11 6.3c-.3.2-.7.2-1 .1L13 12z" fill="#A78BFA"/></svg><span><small>Disponible en</small><b>Google Play</b></span></a>
       <div class="soon">📱 iPhone: <b style="color:#94A3B8">muy pronto</b> en la App Store</div>
     </div>
   </div>
@@ -76,4 +77,5 @@ h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;-
   </div>
   <div class="promo">Inicia GRATIS hoy · Sin tarjeta · Cancela cuando quieras</div>
   <div class="foot">VYLTA · Tu negocio, en automático<br><a href="https://vylta.lat/">vylta.lat</a> · <a href="https://vylta.lat/#pricing">Ver planes</a> · <a href="https://vylta.lat/privacy">Privacidad</a></div>
-</div></body></html>
+</div><script>window.vfunnel&&vfunnel('giro_view',{giro:'veterinaria'})</script>
+</body></html>
