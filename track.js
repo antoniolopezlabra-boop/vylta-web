@@ -13,6 +13,26 @@
   }
   function qp(n) { try { return new URLSearchParams(location.search).get(n) || null; } catch (e) { return null; } }
 
+  // Fase 2: añade vf_sid (y vf_giro) a los enlaces de registro para atribuir
+  // sesión → cliente al cruzar de vylta.lat a app.vylta.lat (otro origen).
+  function attachSid() {
+    try {
+      var s = sid();
+      var links = document.querySelectorAll('a[href*="app.vylta.lat/register"]');
+      for (var i = 0; i < links.length; i++) {
+        try {
+          var u = new URL(links[i].href);
+          if (!u.searchParams.get('vf_sid')) u.searchParams.set('vf_sid', s);
+          var g = links[i].getAttribute('data-giro') || u.searchParams.get('utm_campaign') || qp('giro');
+          if (g && !u.searchParams.get('vf_giro')) u.searchParams.set('vf_giro', g);
+          links[i].href = u.toString();
+        } catch (e) {}
+      }
+    } catch (e) {}
+  }
+  if (document.readyState !== 'loading') attachSid();
+  else document.addEventListener('DOMContentLoaded', attachSid);
+
   window.vfunnel = function (name, extra) {
     extra = extra || {};
     var body = {
