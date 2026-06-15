@@ -8,6 +8,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
 <link rel="preload" as="fetch" href="assets/audio/wa-open.m4a" crossorigin>
+<!-- GA4 + Google Ads -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DC4M60185V"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());
+gtag('config','G-DC4M60185V',{linker:{domains:['vylta.lat','app.vylta.lat']}});
+gtag('config','AW-591393013');
+function trk(n,p){try{gtag('event',n,p||{});}catch(e){}}
+window.addEventListener('load',function(){trk('exp_open');});
+</script>
 <style>
 :root{
   --bg:#070B12;--bg2:#0C1119;--panel:#121826;--panel2:#1A2230;
@@ -310,7 +319,7 @@ function bubble(wrap,cls,html,tick){const e=document.createElement('div');e.clas
 async function botType(wrap,cls,html,pre,tick){await wait(pre||500);const t=document.createElement('div');t.className='typing';$(wrap).appendChild(t);$(wrap).scrollTop=$(wrap).scrollHeight;await wait(750);t.remove();bubble(wrap,cls,html,tick);sfxMsg();}
 
 /* scene control (no progress shown) */
-function go(id){document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');stopVoice();(SCENE[id]||(()=>{}))();}
+function go(id){document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');stopVoice();trk('exp_scene',{scene_num:ORDER.indexOf(id)+1,scene_name:id});if(id==='s8')trk('exp_finish');(SCENE[id]||(()=>{}))();}
 
 /* ===== S1 ===== */
 async function scene1(){
@@ -432,13 +441,14 @@ async function scene7(){
 function scene8(){
   {const v=$('s8vid');if(v){try{v.muted=true;v.currentTime=0;v.play();}catch(e){}}}
   $('finalCta').href='https://vylta.lat/'+(GIRO[state.giro]?state.giro:'')+'?src=experiencia&utm_source=experiencia&utm_medium=funnel';
+  $('finalCta').onclick=function(){trk('exp_cta_click',{giro:state.giro});};
   voice('wa-cierre');
 }
 
 const SCENE={s1:scene1,s2:scene2,s3:scene3,s4:scene4,s5:scene5,s6:scene6,s7:scene7,s8:scene8};
 
 let started=false;
-function boot(){if(started)return;started=true;ac();startMusic();scene1();}
+function boot(){if(started)return;started=true;ac();startMusic();trk('exp_start');trk('exp_scene',{scene_num:1,scene_name:'s1'});scene1();}
 ['click','touchstart'].forEach(ev=>document.addEventListener(ev,boot,{once:true}));
 </script>
 </body>
