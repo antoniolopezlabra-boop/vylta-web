@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>VYLTA · Programa de Embajadores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070B12;--bg2:#0C1119;--panel:#121826;--panel2:#1A2230;
+  --bd:rgba(255,255,255,.09);--bd2:rgba(255,255,255,.18);
+  --tx:#F2F5F8;--mut:#94A3B8;--dim:#5B6678;
+  --green:#10B981;--green2:#34D399;--cyan:#06B6D4;--gold:#E8B873;--gold2:#C9963F;
+  --wa:#25D366;--red:#F87171;--amber:#FBBF24;
+  --grad-v:linear-gradient(135deg,#34D399 0%,#06B6D4 100%);
+  --grad-gold:linear-gradient(135deg,#E8B873,#C9963F);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.55;-webkit-font-smoothing:antialiased}
+.serif{font-family:'Playfair Display',serif}
+.gv{background:var(--grad-v);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.gg{background:var(--grad-gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.wac{color:var(--wa)} .grn{color:var(--green2)} .gld{color:var(--gold)} .red{color:var(--red)}
+
+/* progress + nav */
+#bar{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grad-v);z-index:100;transition:width .15s}
+#dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:90;display:flex;flex-direction:column;gap:9px}
+#dots button{width:10px;height:10px;border-radius:50%;border:1px solid var(--bd2);background:transparent;cursor:pointer;transition:.2s;padding:0}
+#dots button.on{background:var(--green2);border-color:var(--green2);transform:scale(1.25)}
+#counter{position:fixed;left:18px;bottom:16px;z-index:90;font-size:12px;color:var(--dim);font-weight:600;letter-spacing:.05em}
+#hint{position:fixed;right:18px;bottom:16px;z-index:90;font-size:11.5px;color:var(--dim)}
+
+/* sections */
+.s{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:80px 22px;position:relative;scroll-snap-align:start}
+main{scroll-snap-type:y proximity}
+.wrap{width:100%;max-width:920px;margin:0 auto}
+.kick{font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--green2);font-weight:800;margin-bottom:18px}
+h1{font-weight:900;letter-spacing:-.025em;line-height:1.05;font-size:clamp(34px,7vw,68px)}
+h2{font-weight:900;letter-spacing:-.02em;line-height:1.1;font-size:clamp(28px,5.2vw,48px)}
+.lead{font-size:clamp(17px,2.4vw,21px);color:var(--mut);max-width:40ch;margin:22px auto 0}
+.big{font-size:clamp(44px,11vw,104px);font-weight:900;letter-spacing:-.03em;line-height:1}
+.tag{display:inline-block;padding:7px 16px;border-radius:30px;border:1px solid var(--bd2);background:rgba(255,255,255,.04);font-size:13px;font-weight:700;color:var(--mut)}
+
+/* cards / grids */
+.grid{display:grid;gap:16px;margin-top:30px;text-align:left}
+.g3{grid-template-columns:repeat(3,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:720px){.g3,.g2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--bd);border-radius:18px;padding:22px}
+.card h3{font-size:18px;font-weight:800;margin-bottom:8px}
+.card p{font-size:14.5px;color:var(--mut)}
+.ico{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:rgba(52,211,153,.12)}
+
+.steps{display:flex;flex-direction:column;gap:14px;margin-top:28px;text-align:left;max-width:640px;margin-left:auto;margin-right:auto}
+.step{display:flex;gap:16px;align-items:flex-start;background:var(--panel);border:1px solid var(--bd);border-radius:16px;padding:18px 20px}
+.step .n{flex:0 0 38px;width:38px;height:38px;border-radius:50%;background:var(--grad-v);color:#04150F;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:17px}
+.step b{font-size:16px} .step p{font-size:14px;color:var(--mut);margin-top:3px}
+
+/* tiers */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+@media(max-width:720px){.tiers{grid-template-columns:1fr}}
+.tier{border:1px solid var(--bd2);border-radius:18px;padding:24px;background:var(--panel);position:relative;overflow:hidden}
+.tier.top{border-color:var(--gold);background:linear-gradient(180deg,rgba(232,184,115,.1),var(--panel))}
+.tier .pct{font-size:46px;font-weight:900;line-height:1}
+.tier .rng{font-size:14px;color:var(--mut);margin-top:6px;font-weight:600}
+.tier .crown{position:absolute;top:12px;right:14px;font-size:18px}
+
+/* calculator */
+.calc{background:var(--panel);border:1px solid var(--bd2);border-radius:22px;padding:26px;margin-top:26px;text-align:left}
+.calc .row{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.calc label{font-size:14px;color:var(--mut);font-weight:600}
+.calc .val{font-size:30px;font-weight:900;color:var(--green2)}
+input[type=range]{-webkit-appearance:none;width:100%;height:8px;border-radius:6px;background:var(--panel2);outline:none;margin-top:14px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--green2);cursor:pointer;box-shadow:0 4px 14px rgba(52,211,153,.5);border:3px solid #04150F}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:var(--green2);cursor:pointer;border:3px solid #04150F}
+.seg{display:inline-flex;background:var(--panel2);border-radius:12px;padding:4px;gap:4px;margin-top:6px}
+.seg button{border:none;background:transparent;color:var(--mut);font-weight:700;font-size:13.5px;padding:8px 14px;border-radius:9px;cursor:pointer}
+.seg button.on{background:var(--grad-v);color:#04150F}
+.out{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+@media(max-width:640px){.out{grid-template-columns:1fr}}
+.out .o{background:var(--bg2);border:1px solid var(--bd);border-radius:14px;padding:18px}
+.out .o .lab{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);font-weight:700}
+.out .o .num{font-size:26px;font-weight:900;margin-top:6px}
+.out .o.hi .num{background:var(--grad-gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.tierbadge{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:800;padding:8px 14px;border-radius:30px;background:rgba(52,211,153,.12);color:var(--green2);margin-top:4px}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;margin-top:26px;font-size:14.5px;overflow:hidden;border-radius:16px;border:1px solid var(--bd)}
+.tbl th,.tbl td{padding:14px 16px;text-align:right}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.tbl thead th{background:var(--panel2);color:var(--mut);text-transform:uppercase;font-size:11.5px;letter-spacing:.06em;font-weight:800}
+.tbl tbody tr{border-top:1px solid var(--bd)}
+.tbl tbody td{background:var(--panel);color:var(--tx)}
+.tbl .h{font-weight:900;color:var(--green2)}
+.tbl tr.amb td{background:linear-gradient(90deg,rgba(232,184,115,.08),var(--panel))}
+
+/* ramp chart */
+.chart{display:flex;align-items:flex-end;gap:8px;height:230px;margin-top:30px;padding:0 4px}
+.chart .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end}
+.chart .b{width:100%;max-width:52px;border-radius:8px 8px 0 0;background:var(--grad-v);transition:height .8s cubic-bezier(.2,.8,.2,1);min-height:3px}
+.chart .b.fade{opacity:.45}
+.chart .cl{font-size:11px;color:var(--dim);font-weight:600}
+.chart .cv{font-size:11px;color:var(--mut);font-weight:700}
+
+.note{font-size:13px;color:var(--dim);margin-top:18px;max-width:52ch;margin-left:auto;margin-right:auto}
+.pill{display:inline-flex;gap:8px;align-items:center;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.3);color:#dffce9;padding:9px 16px;border-radius:30px;font-size:13.5px;font-weight:600;margin:6px}
+.cta{display:inline-flex;align-items:center;gap:10px;background:var(--grad-gold);color:#231703;font-weight:800;font-size:17px;padding:16px 30px;border-radius:14px;border:none;margin-top:30px;box-shadow:0 14px 38px -10px rgba(201,150,63,.5)}
+.fade-in{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.fade-in.show{opacity:1;transform:none}
+.muted{color:var(--mut)} .small{font-size:13.5px}
+hr.sep{border:none;height:1px;background:var(--bd);margin:26px 0}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="dots"></div>
+<div id="counter"></div>
+<div id="hint">↓ / → para avanzar</div>
+
+<main>
+
+  <!-- 1. PORTADA -->
+  <section class="s" id="sec">
+    <div class="wrap">
+      <div class="kick">Programa de Embajadores</div>
+      <h1>Ayuda a crecer negocios.<br><span class="gv">Gana mientras lo haces.</span></h1>
+      <p class="lead">El plan completo de cómo funciona ser embajador de VYLTA: cómo registras, cuánto ganas, y cuándo se te paga.</p>
+      <div style="margin-top:34px"><span class="tag">⏱️ Sesión de ~1.5 hrs · idea general</span></div>
+    </div>
+  </section>
+
+  <!-- 2. LA OPORTUNIDAD -->
+  <section class="s">
+    <div class="wrap">
+      <div class="kick">Por qué ahora</div>
+      <h2>Millones de negocios en México<br>todavía agendan <span class="red">en el caos.</span></h2>
+      <p class="lead">Barberías, estéticas, spas, consultorios… atienden y al mismo tiempo contestan WhatsApp, anotan citas en papel y pierden clientes que no respondieron a tiempo.</p>
+      <div class="grid g3 fade-in">
+        <div class="card"><div class="ico">😵‍💫</div><h3>Saturados</h3><p>El dueño es recepcionista, agenda y recordatorio — todo a la vez.</p></div>
+        <div class="card"><div class="ico">📉</div><h3>Pierden clientes</h3><p>Quien no recibe respuesta rápida, se va con la competencia.</p></div>
+        <div class="card"><div class="ico">🚪</div><h3>Sin sistema</h3><p>Nadie les ha dado una herramienta simple… hasta hoy.</p></div>
+      </div>
+      <p class="lead" style="margin-top:30px">Tú vas a ser quien les lleve la solución. <b class="grn">Y por cada uno que entra, ganas.</b></p>
+    </div>
+  </section>
+
+  <!-- 3. QUÉ ES VYLTA -->
+  <section class="s">
+    <div class="wrap">
+      <div class="kick">Lo que vas a recomendar</div>
+      <h2>VYLTA convierte el WhatsApp<br>en un <span class="gv">sistema automático.</span></h2>
+      <div class="grid g2 fade-in">
+        <div class="card"><div class="ico">🔗</div><h3>Link de citas</h3><p>El cliente agenda solo, desde un enlace. El dueño no escribe nada.</p></div>
+        <div class="card"><div class="ico">🔔</div><h3>Recordatorios por WhatsApp</h3><p>Automáticos. Menos cancelaciones, menos olvidos.</p></div>
+        <div class="card"><div class="ico">📅</div><h3>Agenda y clientes</h3><p>Todo ordenado en un solo lugar, en el celular.</p></div>
+        <div class="card"><div class="ico">⚡</div><h3>Listo en minutos</h3><p>Sin instalar nada complicado. Empezar es gratis.</p></div>
+      </div>
+      <p class="note">Plan principal: <b class="grn">Premium $399 MXN/mes</b> (citas ilimitadas + WhatsApp). Es sobre este pago que ganas tu comisión.</p>
+    </div>
+  </section>
+
+  <!-- 4. QUÉ ES SER EMBAJADOR -->
+  <section class="s">
+    <div class="wrap">
+      <div class="kick">Tu rol</div>
+      <h2>Eres un <span class="gg">Embajador VYLTA.</span></h2>
+      <p class="lead">No vendes un producto cualquiera. Llevas una herramienta que de verdad le cambia el día a un negocio — y construyes un ingreso que se acumula.</p>
+      <div class="steps fade-in">
+        <div class="step"><div class="n">1</div><div><b>Tu código único</b><p>Recibes un código personal. Cada negocio que lo usa, queda ligado a ti para siempre.</p></div></div>
+        <div class="step"><div class="n">2</div><div><b>Tu portal</b><p>Entras a tu panel y ves tus clientes, tus comisiones y cuánto te van a pagar — en tiempo real.</p></div></div>
+        <div class="step"><div class="n">3</div><div><b>Tu ingreso recurrente</b><p>Mientras tus clientes pagan su suscripción, tú cobras un porcentaje. Mes con mes.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. LAS REGLAS DE GANANCIA -->
+  <section class="s">
+    <div class="wrap">
+      <div class="kick">Cómo se gana</div>
+      <h2>Entre más traes, <span class="gv">más alto tu %.</span></h2>
+      <p class="lead">Tu porcentaje depende de cuántos clientes <b>que pagan</b> juntes en el mes.</p>
+      <div class="tiers fade-in">
+        <div class="tier"><div class="pct gv">20%</div><div class="rng">de 0 a 10 clientes</div></div>
+        <div class="tier"><div class="pct gv">25%</div><div class="rng">de 11 a 15 clientes</div></div>
+        <div class="tier top"><div class="crown">👑</div><div class="pct gg">30%</div><div class="rng">de 16 en adelante</div></div>
+      </div>
+      <div class="grid g3" style="margin-top:24px;text-align:left">
+        <div class="card"><div class="ico">💸</div><h3>Sobre cada cobro</h3><p>Ganas tu % de <b>cada pago</b> que hace tu cliente, no solo el primero.</p></div>
+        <div class="card"><div class="ico">6️⃣</div><h3>Durante 6 cobros</h3><p>Cada cliente te genera comisión en sus <b>primeros 6 pagos</b> reales. Después, ya no.</p></div>
+        <div class="card"><div class="ico">🎁</div><h3>Mes de cortesía</h3><p>Si el primer mes es gratis, el primer cobro es el mes 2 — y ahí empiezan tus 6.</p></div>
+      </div>
+      <p class="note">El % se fija cada mes según lo que juntes ESE mes. Si un mes traes 16 (30%) y otro 5 (20%), cada camada conserva su porcentaje.</p>
+    </div>
+  </section>
+
+  <!-- 6. CALCULADORA -->
+  <section class="s">
+    <div class="wrap">
+      <div class="kick">Tu potencial</div>
+      <h2>¿Cuánto puedes <span class="gg">ganar?</span></h2>
+      <div class="calc fade-in">
+        <div class="row">
+          <label>Clientes que pagan, cada mes</label>
+          <div class="val" id="cNum">8</div>
+        </div>
+        <input type="range" id="cRange" min="1" max="30" value="8">
+        <div class="row" style="margin-top:18px">
+          <label>Plan que contratan</label>
+          <div class="seg" id="planSeg">
+            <button data-p="399" class="on">Premium · $399</button>
+            <button data-p="799">Luxury · $799</button>
+          </div>
+        </div>
+        <div style="margin-top:20px"><span class="tierbadge" id="cTier">Tu tier: 20%</span></div>
+        <div class="out">
+          <div class="o"><div class="lab">Por cliente / mes</div><div class="num grn" id="oUnit">$79</div></div>
+          <div class="o"><div class="lab">Ingreso mensual (en régimen)</div><div class="num" id="oMonth">$2,394</div></div>
+          <div class="o hi"><div class="lab">Acumulado primer año</div><div class="num" id="oYear">$0</div></div>
+        </div>
+        <p class="note" style="margin-top:18px">“En régimen” = cuando ya tienes 6 camadas activas pagando a la vez (a partir del mes ~6). Cada cliente paga durante 6 meses, así que tus ingresos se <b class="grn">apilan</b>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. ESCENARIOS -->
+  <section class="s">
+    <div class="wrap">
+      <div class="kick">Tres caminos</div>
+      <h2>De constante… a <span class="gg">imparable.</span></h2>
+      <p class="lead small">Suponiendo que traes esa cantidad de clientes <b>cada mes</b> (plan Premium $399).</p>
+      <table class="tbl fade-in">
+        <thead><tr><th>Escenario</th><th>Clientes/mes</th><th>Tu %</th><th>Mensual en régimen</th><th>Primer año</th></tr></thead>
+        <tbody id="scenBody"></tbody>
+      </table>
+      <p class="note">Números antes de impuestos, ilustrativos. Lo real depende de cuántos pagan y se quedan. Pero la mecánica es esta: <b class="grn">constancia = ingreso que crece solo.</b></p>
+    </div>
+  </section>
+
+  <!-- 8. EFECTO ACUMULADO -->
+  <section class="s">
+    <div class="wrap">
+      <div class="kick">El efecto bola de nieve</div>
+      <h2>Tu ingreso <span class="gv">se apila.</span></h2>
+      <p class="lead small">Cada mes sumas una camada nueva — y las anteriores siguen pagando. Mira cómo crece trayendo <b id="rampN">8</b> clientes/mes:</p>
+      <div class="chart fade-in" id="ramp"></div>
+      <p class="note">Sube hasta llegar a “régimen” (6 camadas activas) y se estabiliza ahí. Después, mantener = mantener tu ingreso; crecer = subirlo.</p>
+    </div>
+  </section>
+
+  <!-- 9. CÓMO REGISTRAR -->
+  <section class="s">
+    <div class="wrap">
+      <div class="kick">El proceso</div>
+      <h2>Registrar un cliente es <span class="gv">simple.</span></h2>
+      <div class="steps fade-in">
+        <div class="step"><div class="n">1</div><div><b>Le muestras VYLTA</b><p>Le enseñas cómo le ordena las citas y los recordatorios. Le das tu código.</p></div></div>
+        <div class="step"><div class="n">2</div><div><b>Descarga la app y se da de alta</b><p>En el alta, escribe <b>tu código de embajador</b> y lo aplica. Queda ligado a ti.</p></div></div>
+        <div class="step"><div class="n">3</div><div><b>Activa su plan</b><p>Cuando contrata Premium y hace su <b>primer pago real</b>, empieza a contar para ti.</p></div></div>
+        <div class="step"><div class="n">4</div><div><b>Tú ya estás ganando</b><p>Desde su primer cobro y por 6 cobros, tu comisión corre automática.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. CUÁNDO SE PAGA -->
+  <section class="s">
+    <div class="wrap">
+      <div class="kick">Tu pago</div>
+      <h2>Cada mes, <span class="gg">tu corte.</span></h2>
+      <div class="grid g3 fade-in">
+        <div class="card"><div class="ico">🗓️</div><h3>Cierre mensual</h3><p>El sistema cierra el mes y suma todo lo que tus clientes pagaron.</p></div>
+        <div class="card"><div class="ico">🧾</div><h3>Tu corte</h3><p>Se genera tu corte con el total a pagarte. Lo ves en tu portal.</p></div>
+        <div class="card"><div class="ico">🏦</div><h3>Depósito</h3><p>Se te paga por transferencia a la cuenta que registres en tu perfil.</p></div>
+      </div>
+      <p class="note">Solo se comisiona dinero <b>realmente cobrado</b>. Si un cliente pide reembolso, esa comisión se ajusta — para que todo sea justo y transparente, de los dos lados.</p>
+    </div>
+  </section>
+
+  <!-- 11. REGLAS CLARAS -->
+  <section class="s">
+    <div class="wrap">
+      <div class="kick">Reglas claras = confianza</div>
+      <h2>Para que <span class="gv">no haya dudas.</span></h2>
+      <div class="grid g2 fade-in">
+        <div class="card"><h3>✅ El cliente es tuyo</h3><p>Una vez aplica tu código, queda ligado a ti. Nadie te lo quita.</p></div>
+        <div class="card"><h3>⏳ 6 cobros por cliente</h3><p>Ganas exactamente 6 cobros reales por cliente. Un mes saltado no se pierde: cuentan cobros, no calendario.</p></div>
+        <div class="card"><h3>📊 % por mes</h3><p>Tu tier se calcula con los clientes que pagan ese mes. Buen mes, mejor %.</p></div>
+        <div class="card"><h3>↩️ Reembolsos</h3><p>Si devuelven un pago, esa comisión se revierte. Solo ganas sobre dinero que sí entró.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. CIERRE -->
+  <section class="s">
+    <div class="wrap">
+      <div class="kick">Tu momento</div>
+      <h1 class="serif">Cada negocio que ayudas<br><span class="gg">te paga de vuelta.</span></h1>
+      <p class="lead">No es suerte. Es constancia. Trae uno, luego otro… y deja que el sistema haga el resto, mes con mes.</p>
+      <div style="margin-top:14px">
+        <span class="pill">🤝 Tú llevas la solución</span>
+        <span class="pill">💚 El negocio crece</span>
+        <span class="pill">💰 Tú cobras recurrente</span>
+      </div>
+      <div><button class="cta" onclick="document.getElementById('sec').scrollIntoView()">Empecemos a construir tu red →</button></div>
+      <p class="note" style="margin-top:28px">¿Dudas? Anótalas — al final de la sesión las resolvemos todas.</p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const fmt=n=>'$'+Math.round(n).toLocaleString('es-MX');
+const secs=$$('.s');
+
+/* ---- nav: dots, bar, counter, keyboard ---- */
+const dots=$('#dots');
+secs.forEach((_,i)=>{const b=document.createElement('button');b.onclick=()=>secs[i].scrollIntoView();dots.appendChild(b);});
+function onScroll(){
+  const y=scrollY, h=document.body.scrollHeight-innerHeight;
+  $('#bar').style.width=(h>0?(y/h*100):0)+'%';
+  let cur=0; secs.forEach((s,i)=>{if(s.getBoundingClientRect().top<innerHeight*0.5)cur=i;});
+  $$('#dots button').forEach((b,i)=>b.classList.toggle('on',i===cur));
+  $('#counter').textContent=(cur+1)+' / '+secs.length;
+}
+addEventListener('scroll',onScroll,{passive:true});
+addEventListener('keydown',e=>{
+  let cur=0; secs.forEach((s,i)=>{if(s.getBoundingClientRect().top<innerHeight*0.5)cur=i;});
+  if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();secs[Math.min(cur+1,secs.length-1)].scrollIntoView();}
+  if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();secs[Math.max(cur-1,0)].scrollIntoView();}
+});
+
+/* ---- reveal on scroll ---- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show');}),{threshold:.18});
+$$('.fade-in').forEach(el=>io.observe(el));
+
+/* ---- commission math ---- */
+const REG_MONTHS=6;          // cada cliente paga 6 cobros
+function tierRate(n){return n>=16?0.30:n>=11?0.25:0.20;}
+function tierPct(n){return Math.round(tierRate(n)*100);}
+
+/* En régimen: 6 camadas activas a la vez (cada una paga 6 meses).
+   Mensual régimen = 6 camadas × n clientes × precio × tasa. */
+function monthlyRegimen(n,price){return REG_MONTHS*n*price*tierRate(n);}
+
+/* Acumulado primer año (12 meses): camada del mes k aporta min(12-k+1,6) cobros.
+   k=1..12 → cobros activos ese rango. Suma de comisiones del año. */
+function yearTotal(n,price){
+  const rate=tierRate(n), perClientMonth=n*price*rate; let total=0;
+  for(let month=1;month<=12;month++){
+    // # camadas que están cobrando este mes = las de los últimos 6 meses (1..month, máx 6)
+    const cohorts=Math.min(month,REG_MONTHS);
+    total+=cohorts*perClientMonth;
+  }
+  return total;
+}
+
+/* ---- calculator ---- */
+let price=399;
+function calc(){
+  const n=+$('#cRange').value;
+  $('#cNum').textContent=n;
+  $('#cTier').textContent='Tu tier: '+tierPct(n)+'%';
+  $('#oUnit').textContent=fmt(price*tierRate(n));
+  $('#oMonth').textContent=fmt(monthlyRegimen(n,price));
+  $('#oYear').textContent=fmt(yearTotal(n,price));
+  $('#rampN').textContent=n;
+  drawRamp(n);
+}
+$('#cRange').addEventListener('input',calc);
+$('#planSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;price=+b.dataset.p;$$('#planSeg button').forEach(x=>x.classList.toggle('on',x===b));calc();});
+
+/* ---- scenarios table ---- */
+const SCEN=[['Conservador',3,'😌'],['Realista',8,'💪'],['Ambicioso',16,'🚀']];
+$('#scenBody').innerHTML=SCEN.map(([name,n,emo],i)=>{
+  const cls=i===2?' class="amb"':'';
+  return `<tr${cls}><td>${emo} ${name}</td><td>${n}</td><td class="h">${tierPct(n)}%</td><td>${fmt(monthlyRegimen(n,399))}</td><td>${fmt(yearTotal(n,399))}</td></tr>`;
+}).join('');
+
+/* ---- ramp chart (12 meses, n clientes/mes) ---- */
+function drawRamp(n){
+  const el=$('#ramp'); el.innerHTML='';
+  const vals=[]; for(let m=1;m<=12;m++){vals.push(Math.min(m,REG_MONTHS)*n*399*tierRate(n));}
+  const max=Math.max(...vals)||1;
+  vals.forEach((v,i)=>{
+    const col=document.createElement('div');col.className='col';
+    const inReg=i+1>=REG_MONTHS;
+    col.innerHTML=`<div class="cv">${'$'+Math.round(v/1000)+'k'}</div><div class="b${inReg?'':' fade'}" style="height:0"></div><div class="cl">M${i+1}</div>`;
+    el.appendChild(col);
+    setTimeout(()=>{col.querySelector('.b').style.height=(v/max*100)+'%';},60+i*55);
+  });
+}
+
+calc(); onScroll();
+</script>
+</body>
+</html>
