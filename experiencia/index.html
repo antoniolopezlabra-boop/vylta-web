@@ -149,7 +149,7 @@ h1,h2{font-weight:800;letter-spacing:-.02em;line-height:1.12}
 
   <!-- ESCENA 1 -->
   <section class="scene active" id="s1" style="padding:0">
-    <video id="s1vid" class="bgvid" playsinline muted loop autoplay preload="auto" poster="assets/video/scene1-poster.jpg"><source src="assets/video/scene1.mp4" type="video/mp4"></video>
+    <video id="s1vid" class="bgvid" playsinline muted loop preload="none" poster="assets/video/scene1-poster.jpg"><source src="assets/video/scene1.mp4" type="video/mp4"></video>
     <div class="bgvid-ov"></div>
     <button class="btn glow" id="startBtn" style="position:absolute;z-index:4;top:50%;left:50%;transform:translate(-50%,-50%);max-width:250px" onclick="boot()">▶  Toca para empezar 🔊</button>
     <div class="s1c">
@@ -224,7 +224,7 @@ h1,h2{font-weight:800;letter-spacing:-.02em;line-height:1.12}
 
   <!-- ESCENA 6: revelación -->
   <section class="scene" id="s6" style="padding:0">
-    <video id="s6vid" class="bgvid" playsinline muted loop preload="auto" poster="assets/video/scene6-poster.jpg"><source src="assets/video/scene6.mp4" type="video/mp4"></video>
+    <video id="s6vid" class="bgvid" playsinline muted loop preload="none" poster="assets/video/scene6-poster.jpg"><source src="assets/video/scene6.mp4" type="video/mp4"></video>
     <div class="bgvid-ov" style="background:linear-gradient(180deg,rgba(7,11,18,.62),rgba(7,11,18,.9))"></div>
     <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;padding:54px 24px max(28px,env(safe-area-inset-bottom));overflow-y:auto">
       <img id="ic6" src="assets/vylta-icon.png" width="80" height="80" style="border-radius:20px;box-shadow:0 14px 40px -8px rgba(52,211,153,.5);margin-bottom:10px" alt="VYLTA">
@@ -263,7 +263,7 @@ h1,h2{font-weight:800;letter-spacing:-.02em;line-height:1.12}
 
   <!-- ESCENA 8: resultado + CTA (sin form) -->
   <section class="scene" id="s8" style="padding:0">
-    <video id="s8vid" class="bgvid" playsinline muted loop preload="auto" poster="assets/video/scene8-poster.jpg"><source src="assets/video/scene8.mp4" type="video/mp4"></video>
+    <video id="s8vid" class="bgvid" playsinline muted loop preload="none" poster="assets/video/scene8-poster.jpg"><source src="assets/video/scene8.mp4" type="video/mp4"></video>
     <div class="bgvid-ov" style="background:linear-gradient(180deg,rgba(7,11,18,.45),rgba(7,11,18,.94))"></div>
     <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;width:100%;padding:54px 24px max(28px,env(safe-area-inset-bottom))">
       <div class="kick" style="color:var(--gold)">✦ Tu diagnóstico está listo</div>
@@ -329,7 +329,10 @@ async function scene1(){
   vib(30);let c=0;$('msgCount').textContent='0';const it=setInterval(()=>{c+=3;if(c>=47){c=47;clearInterval(it);}$('msgCount').textContent=c;},55);
   await wait(700);voice('wa-open');
   await botType('d1','in','Oye… <b>tú y yo tenemos que hablar.</b>',600);
-  await awaitVoice();$('b1').style.opacity='1';
+  // Mostrar el botón APENAS aparece el mensaje (~2s). NO esperar a que termine la
+  // voz: ese gate (awaitVoice) dejaba la pantalla sin botón 10-25s y mataba el
+  // paso s1→s2 (~85% de abandono). La voz sigue sonando de fondo, sin bloquear.
+  $('b1').style.opacity='1';
 }
 /* ===== S2 saturación interactiva ===== */
 const FLOODMSGS=['¿Tienes lugar hoy?','¿Cuánto cobras?','¿Me confirmas mi cita?','¿Atiendes a las 6?','Hola, ¿agendas?','¿Me reagendas? 🙏','¿Sigues abierto?','¿Aceptas tarjeta?','¿Cuánto el servicio?','¿Hay cita mañana?'];
@@ -349,7 +352,7 @@ async function scene2(){
   voice('wa-saturado');
   await botType('d2','in','No te das abasto, ¿verdad? 😮‍💨',500);
   await botType('d2','in','Me usas como <b>agenda, recepcionista, recordatorio</b>… y mientras, otros se van con tu competencia.',1100);
-  await awaitVoice();$('b2').style.opacity='1';
+  $('b2').style.opacity='1';  /* ungate: botón tras el contenido, sin esperar la voz */
 }
 /* ===== S3 diagnóstico conversacional ===== */
 const Q3=[
@@ -387,7 +390,7 @@ async function scene4(){
     const lost=document.createElement('div');lost.className='bub left';lost.style.cssText='align-self:flex-start;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.4);color:#f87171;font-size:12px;font-weight:700;border-radius:20px;padding:6px 12px';lost.textContent='✕ Cliente perdido';$('d4').appendChild(lost);$('d4').scrollTop=$('d4').scrollHeight;vib([30,40]);
     await wait(700);
   }
-  await awaitVoice();$('b4').style.opacity='1';
+  $('b4').style.opacity='1';  /* ungate: botón tras el contenido, sin esperar la voz */
 }
 /* ===== S5 ===== */
 const CANT=['No puedo organizar tu negocio completo.','No puedo confirmar tus citas por ti.','No puedo recordarle a cada cliente que llegue.','No puedo recuperar a los que ya se fueron.','No puedo ordenar tu agenda mientras trabajas.'];
@@ -399,7 +402,7 @@ async function scene5(){
   await wait(1300);
   for(const t of CANT){const li=document.createElement('div');li.className='li';li.innerHTML=XI+'<span>'+t+'</span>';$('cant5').appendChild(li);tone(220,.18,'sine',.1);vib(14);await wait(1000);}
   await wait(400);$('who5').style.opacity='1';$('who5').classList.add('fade-up');vib([30,40,90]);
-  await awaitVoice();$('b5').style.opacity='1';
+  $('b5').style.opacity='1';  /* ungate: botón tras el contenido, sin esperar la voz */
 }
 /* ===== S6 ===== */
 const BEN=['Agenda tus citas en segundos','Recordatorios automáticos por WhatsApp','Menos cancelaciones y olvidos','Tus clientes reservan desde un link','Clientes, equipo y horarios en un solo lugar'];
@@ -412,7 +415,7 @@ async function scene6(){
   await botType('d6','in','VYLTA no me reemplaza…',500);
   await botType('d6','in','<b>me vuelve inteligente.</b> 🧠',900);
   await wait(300);BEN.forEach((b,i)=>{const e=document.createElement('div');e.className='ben';e.style.animationDelay=(i*.18)+'s';e.innerHTML='<span class="ck">✓</span>'+b;$('ben6').appendChild(e);});
-  await awaitVoice();$('b6').style.opacity='1';
+  $('b6').style.opacity='1';  /* ungate: botón tras el contenido, sin esperar la voz */
 }
 /* ===== S7 demo conversación + reserva ===== */
 async function scene7(){
@@ -436,7 +439,7 @@ async function scene7(){
   await wait(900);
   $('s7book').style.display='none';$('s7done').style.display='block';tone(660,.13,'sine',.13);tone(880,.12,'sine',.11,.12);vib([40,50,120]);
   voice('wa-demo');
-  await awaitVoice();$('b7').style.opacity='1';
+  $('b7').style.opacity='1';  /* ungate: botón tras el contenido, sin esperar la voz */
 }
 /* ===== S8 ===== */
 function scene8(){
