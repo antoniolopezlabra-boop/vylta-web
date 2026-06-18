@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>VYLTA · Agenda y recordatorios por WhatsApp para tu negocio</title>
+<meta name="description" content="Citas, recordatorios automáticos por WhatsApp y un link para que tus clientes reserven solos. Empieza gratis.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;800&display=swap" rel="stylesheet">
+<!-- GA4 + Google Ads -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DC4M60185V"></script>
+<script src="/track.js"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());
+gtag('config','G-DC4M60185V',{linker:{domains:['vylta.lat','app.vylta.lat']}});
+gtag('config','AW-591393013');
+/* ───────────── META PIXEL ─────────────
+   ⚠️ PENDIENTE: reemplazar META_PIXEL_ID con tu Pixel ID real (15-16 dígitos).
+   Sin un ID válido el pixel no envía nada (no rompe la página). */
+var META_PIXEL_ID='META_PIXEL_ID';
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+try{if(META_PIXEL_ID&&META_PIXEL_ID!=='META_PIXEL_ID'){fbq('init',META_PIXEL_ID);fbq('track','PageView');}}catch(e){}
+/* helper unificado: GA4 + funnel (Supabase) + Pixel */
+function trk(n,p){try{gtag('event',n,p||{});}catch(e){}try{if(window.vfunnel)window.vfunnel(n,p);}catch(e){}}
+function lead(){try{if(window.fbq&&META_PIXEL_ID!=='META_PIXEL_ID')fbq('track','Lead');}catch(e){}}
+window.addEventListener('load',function(){trk('ld_open');});
+</script>
+<style>
+:root{
+  --bg:#070B12;--panel:#121826;--panel2:#1A2230;--bd:rgba(255,255,255,.09);--bd2:rgba(255,255,255,.18);
+  --tx:#F2F5F8;--mut:#94A3B8;--dim:#5B6678;--green:#10B981;--green2:#34D399;--cyan:#06B6D4;--wa:#25D366;--gold:#E8B873;
+  --grad-v:linear-gradient(135deg,#34D399 0%,#06B6D4 100%);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.55;-webkit-font-smoothing:antialiased}
+.serif{font-family:'Playfair Display',serif}
+.gv{background:var(--grad-v);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.wrap{width:100%;max-width:1040px;margin:0 auto;padding:0 22px}
+.sec{padding:64px 0}
+.chip{display:inline-block;padding:8px 16px;border-radius:30px;border:1px solid var(--bd2);background:rgba(52,211,153,.07);font-size:13px;font-weight:700;color:var(--green2);letter-spacing:.02em}
+h1{font-weight:900;letter-spacing:-.025em;line-height:1.06;font-size:clamp(32px,6vw,56px);margin:18px 0}
+h2{font-weight:900;letter-spacing:-.02em;line-height:1.12;font-size:clamp(26px,4.4vw,40px)}
+.lead{font-size:clamp(16px,2.2vw,20px);color:var(--mut);max-width:42ch}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-weight:800;font-size:17px;padding:16px 28px;border-radius:14px;border:none;cursor:pointer;background:var(--grad-v);color:#04150F;text-decoration:none;box-shadow:0 14px 36px -10px rgba(37,211,102,.5);transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.store{display:inline-flex;align-items:center;gap:10px;background:#0d1320;border:1px solid var(--bd2);border-radius:13px;padding:11px 17px;text-decoration:none;color:var(--tx)}
+.store small{display:block;font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.1em}.store b{font-size:15px}
+.sub{font-size:13px;color:var(--dim);margin-top:12px}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding-top:48px}
+@media(max-width:860px){.hero{grid-template-columns:1fr;text-align:center}.lead{margin-left:auto;margin-right:auto}.hero .actions{justify-content:center}}
+.actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:26px}
+/* phone mock */
+.phone{justify-self:center;width:280px;max-width:80vw;background:#0b141a;border:10px solid #0F172A;border-radius:38px;padding:14px;box-shadow:0 40px 90px -24px #000;position:relative}
+.wah{display:flex;align-items:center;gap:9px;background:#1f2c34;border-radius:12px 12px 0 0;padding:11px 12px;margin:-14px -14px 0}
+.wah .av{width:34px;height:34px;border-radius:50%;background:var(--grad-v)}
+.wah .nm{font-weight:700;font-size:14px}.wah .st{font-size:11px;color:#8696a0}
+.wall{background:#0b141a;padding:14px 6px;display:flex;flex-direction:column;gap:8px}
+.b{max-width:85%;padding:9px 12px;font-size:13px;border-radius:9px;line-height:1.35}
+.b.in{align-self:flex-start;background:#202c33}
+.b.out{align-self:flex-end;background:#005c4b}
+.bk{background:#0e1420;border:1px solid var(--bd2);border-radius:12px;margin-top:6px;overflow:hidden}
+.bk .h{background:var(--grad-v);color:#04150F;font-weight:800;font-size:12px;padding:8px 11px}
+.bk .r{padding:9px 11px;font-size:12px;border-bottom:1px solid var(--bd);color:var(--mut)}.bk .r b{color:#fff;float:right}
+.bk .cf{background:var(--wa);color:#04150F;text-align:center;font-weight:800;font-size:13px;padding:9px}
+.grid{display:grid;gap:18px}.g3{grid-template-columns:repeat(3,1fr)}@media(max-width:760px){.g3{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--bd);border-radius:18px;padding:24px}
+.card .ic{width:48px;height:48px;border-radius:13px;background:rgba(52,211,153,.12);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px}
+.card h3{font-size:18px;font-weight:800;margin-bottom:7px}.card p{font-size:14.5px;color:var(--mut)}
+.bens{display:flex;flex-direction:column;gap:12px;max-width:560px;margin:22px auto 0;text-align:left}
+.ben{display:flex;gap:13px;align-items:center;font-size:15.5px}
+.ben .ck{flex:0 0 26px;width:26px;height:26px;border-radius:8px;background:rgba(52,211,153,.14);color:var(--green2);display:flex;align-items:center;justify-content:center;font-weight:800}
+.price{text-align:center;background:linear-gradient(180deg,rgba(52,211,153,.06),var(--panel));border:1px solid var(--bd2);border-radius:22px;padding:34px;max-width:520px;margin:0 auto}
+.price .free{font-size:34px;font-weight:900}.price .then{color:var(--mut);font-size:15px;margin-top:6px}
+.center{text-align:center}
+footer{border-top:1px solid var(--bd);padding:28px 0;text-align:center;color:var(--dim);font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="sec">
+  <div class="wrap hero">
+    <div>
+      <span class="chip">Para barberías · estéticas · spas · consultorios</span>
+      <h1>Tu agenda y tus recordatorios,<br><span class="gv">en automático por WhatsApp.</span></h1>
+      <p class="lead">Tus clientes reservan solos desde un link. VYLTA les recuerda su cita por WhatsApp. Tú dejas de ser recepcionista.</p>
+      <div class="actions">
+        <a class="btn" href="https://app.vylta.lat/register?src=landing&utm_source=landing-directo&utm_medium=cta&utm_campaign=empieza" onclick="trk('ld_cta_web');lead()">Empieza gratis →</a>
+        <a class="store" href="https://play.google.com/store/apps/details?id=lat.vylta.app" onclick="trk('ld_cta_play')">
+          <svg viewBox="0 0 24 24" width="24" height="24"><path d="M3.6 2.4 13 12 3.6 21.6c-.3-.2-.5-.6-.5-1V3.4c0-.4.2-.8.5-1z" fill="#34D399"/><path d="M13 12 3.6 2.4c.3-.1.7-.1 1 .1l11 6.3L13 12z" fill="#06B6D4"/><path d="M13 12 16 8.8l5.3 3c.6.4.6 1.4 0 1.8L16 15.2 13 12z" fill="#FBBF24"/><path d="M13 12 16 15.2l-11 6.3c-.3.2-.7.2-1 .1L13 12z" fill="#A78BFA"/></svg>
+          <span><small>Disponible en</small><b>Google Play</b></span>
+        </a>
+      </div>
+      <p class="sub">Sin tarjeta · Empezar es gratis · Listo en minutos</p>
+    </div>
+    <div class="phone">
+      <div class="wah"><div class="av"></div><div><div class="nm">Tu negocio</div><div class="st">en línea</div></div></div>
+      <div class="wall">
+        <div class="b in">Hola, ¿tienes lugar hoy? 🙂</div>
+        <div class="b out">¡Claro! Agenda tú mismo aquí 👇</div>
+        <div class="bk">
+          <div class="h">📅 Reserva tu cita</div>
+          <div class="r">Servicio <b>Corte</b></div>
+          <div class="r">Hoy · 4:00 p.m. <b>✓</b></div>
+          <div class="cf">Cita confirmada ✅</div>
+        </div>
+        <div class="b in" style="font-size:12px;color:#8fc7b5">Te recuerdo 2 hrs antes 🔔</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="sec" style="background:#0a0f18">
+  <div class="wrap">
+    <h2 class="center">Tres cosas. <span class="gv">Cero complicación.</span></h2>
+    <div class="grid g3" style="margin-top:34px">
+      <div class="card"><div class="ic">🔗</div><h3>Tu link de citas</h3><p>Compártelo en tu WhatsApp y redes. Tus clientes agendan solos, cuando quieran.</p></div>
+      <div class="card"><div class="ic">🔔</div><h3>Recordatorios automáticos</h3><p>VYLTA les avisa por WhatsApp antes de su cita. Menos olvidos, menos cancelaciones.</p></div>
+      <div class="card"><div class="ic">📅</div><h3>Todo en orden</h3><p>Agenda, clientes y horarios en un solo lugar, desde tu celular.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFICIOS -->
+<section class="sec">
+  <div class="wrap center">
+    <h2>Deja de perder clientes<br>por <span class="gv">no contestar a tiempo.</span></h2>
+    <div class="bens">
+      <div class="ben"><span class="ck">✓</span> Agenda tus citas en segundos</div>
+      <div class="ben"><span class="ck">✓</span> Recordatorios por WhatsApp, sin que muevas un dedo</div>
+      <div class="ben"><span class="ck">✓</span> Tus clientes reservan desde un link, 24/7</div>
+      <div class="ben"><span class="ck">✓</span> Menos cancelaciones y citas olvidadas</div>
+      <div class="ben"><span class="ck">✓</span> Clientes, equipo y horarios en un solo lugar</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRECIO + CTA -->
+<section class="sec" style="background:#0a0f18">
+  <div class="wrap center">
+    <div class="price">
+      <span class="chip">Empieza hoy</span>
+      <div class="free gv" style="margin-top:14px">Gratis para empezar</div>
+      <div class="then">Y cuando estés listo, Premium $399 MXN/mes: citas ilimitadas + WhatsApp.</div>
+      <div style="margin-top:24px"><a class="btn" href="https://app.vylta.lat/register?src=landing&utm_source=landing-directo&utm_medium=cta-final&utm_campaign=empieza" onclick="trk('ld_cta_web');lead()">Crear mi cuenta gratis →</a></div>
+      <p class="sub">Sin tarjeta · Cancela cuando quieras</p>
+    </div>
+  </div>
+</section>
+
+<footer>VYLTA · Agenda y recordatorios por WhatsApp para tu negocio · vylta.lat</footer>
+
+</body>
+</html>
