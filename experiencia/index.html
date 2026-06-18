@@ -11,6 +11,7 @@
 <!-- GA4 + Google Ads -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DC4M60185V"></script>
 <script src="/track.js"></script>
+<script src="/meta-pixel.js"></script>
 <script>
 window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());
 gtag('config','G-DC4M60185V',{linker:{domains:['vylta.lat','app.vylta.lat']}});
@@ -452,7 +453,7 @@ async function scene7(){
 function scene8(){
   {const v=$('s8vid');if(v){try{v.muted=true;v.currentTime=0;v.play();}catch(e){}}}
   $('finalCta').href='https://vylta.lat/'+(GIRO[state.giro]?state.giro:'')+'?src=experiencia&utm_source=experiencia&utm_medium=funnel';
-  $('finalCta').onclick=function(){trk('exp_cta_click',{giro:state.giro});};
+  $('finalCta').onclick=function(){trk('exp_cta_click',{giro:state.giro});if(window.fbLead)fbLead();};
   voice('wa-cierre');
 }
 
