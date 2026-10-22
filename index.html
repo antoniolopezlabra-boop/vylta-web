@@ -1744,5 +1744,7 @@ footer.in-view .status-dot{animation-play-state:running}
 </script>
 
 <script>/* En iPhone/iPad la tienda de Apple va primero */(function(){if(!/iPhone|iPad|iPod|Macintosh.*Mobile/.test(navigator.userAgent))return;document.querySelectorAll('a[href*="apps.apple.com"]').forEach(function(a){var p=a.parentNode,g=p&&p.querySelector('a[href*="play.google.com"]');if(g&&g.compareDocumentPosition(a)&Node.DOCUMENT_POSITION_FOLLOWING){var m=a.style.marginTop;a.style.marginTop=g.style.marginTop;g.style.marginTop=m;p.insertBefore(a,g);}});})();</script>
+<script src="/track.js"></script>
+<script>/* Medición: visitas a la portada (con el utm del post de redes que las trajo) y clics a descargar o entrar */(function(){if(!window.vfunnel)return;vfunnel('home_view');document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a');if(!a)return;var h=a.href||'';if(/apps\.apple\.com|play\.google\.com/.test(h))vfunnel('store_click');else if(/app\.vylta\.lat\/(login|register)/.test(h))vfunnel('signup_click');},true);})();</script>
 </body>
 </html>

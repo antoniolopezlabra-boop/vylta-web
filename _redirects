@@ -1,0 +1,2 @@
+# Link corto de cada publicación de redes: vylta.lat/p/<código> → portada con su utm.
+/p/:code  /?utm_source=social&utm_medium=post&utm_campaign=:code  302

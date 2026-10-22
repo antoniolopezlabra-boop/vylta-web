@@ -12,6 +12,13 @@
     } catch (e) { return 'anon-' + Math.random().toString(36).slice(2, 10); }
   }
   function qp(n) { try { return new URLSearchParams(location.search).get(n) || null; } catch (e) { return null; } }
+  // utm de la visita: se guardan en la sesión para atribuir los clics posteriores
+  // aunque el visitante navegue a otra página del sitio.
+  function utm(n) {
+    var v = qp(n);
+    try { if (v) sessionStorage.setItem('vf_' + n, v); else v = sessionStorage.getItem('vf_' + n); } catch (e) {}
+    return v;
+  }
 
   // Fase 2: añade vf_sid (y vf_giro) a los enlaces de registro para atribuir
   // sesión → cliente al cruzar de vylta.lat a app.vylta.lat (otro origen).
@@ -24,6 +31,7 @@
           var u = new URL(links[i].href);
           if (!u.searchParams.get('vf_sid')) u.searchParams.set('vf_sid', s);
           var g = links[i].getAttribute('data-giro') || u.searchParams.get('utm_campaign') || qp('giro');
+          var c = utm('utm_campaign'); if (c && !u.searchParams.get('utm_campaign')) { u.searchParams.set('utm_campaign', c); u.searchParams.set('utm_source', utm('utm_source') || 'social'); }
           if (g && !u.searchParams.get('vf_giro')) u.searchParams.set('vf_giro', g);
           links[i].href = u.toString();
         } catch (e) {}
@@ -40,9 +48,9 @@
       event_name: name,
       scene_num: (extra.scene_num != null ? extra.scene_num : null),
       giro: extra.giro || qp('giro') || null,
-      utm_source: qp('utm_source'),
-      utm_medium: qp('utm_medium'),
-      utm_campaign: qp('utm_campaign'),
+      utm_source: utm('utm_source'),
+      utm_medium: utm('utm_medium'),
+      utm_campaign: utm('utm_campaign'),
       path: location.pathname,
       referrer: document.referrer || null
     };
