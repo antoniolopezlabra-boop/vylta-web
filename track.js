@@ -43,6 +43,9 @@
 
   window.vfunnel = function (name, extra) {
     extra = extra || {};
+    // Intención de registro o descarga: también se avisa a Meta (Lead) para
+    // que los anuncios puedan medirse y optimizarse con el píxel.
+    if (/^(store_click|signup_click|cta_appstore|cta_play|cta_web)$/.test(name) && window.fbLead) window.fbLead();
     var body = {
       session_id: sid(),
       event_name: name,
