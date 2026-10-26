@@ -31,7 +31,15 @@
           var u = new URL(links[i].href);
           if (!u.searchParams.get('vf_sid')) u.searchParams.set('vf_sid', s);
           var g = links[i].getAttribute('data-giro') || u.searchParams.get('utm_campaign') || qp('giro');
-          var c = utm('utm_campaign'); if (c && !u.searchParams.get('utm_campaign')) { u.searchParams.set('utm_campaign', c); u.searchParams.set('utm_source', utm('utm_source') || 'social'); }
+          // El origen real de la visita (anuncio, post) manda sobre el que trae
+          // fijo el botón (p. ej. utm_source=experiencia): si no, un registro que
+          // vino de un anuncio se contaba como "experiencia".
+          var src = utm('utm_source'), med = utm('utm_medium'), c = utm('utm_campaign');
+          if (src) {
+            u.searchParams.set('utm_source', src);
+            if (med) u.searchParams.set('utm_medium', med); else u.searchParams.delete('utm_medium');
+            if (c) u.searchParams.set('utm_campaign', c);
+          } else if (c && !u.searchParams.get('utm_campaign')) { u.searchParams.set('utm_campaign', c); u.searchParams.set('utm_source', 'social'); }
           if (g && !u.searchParams.get('vf_giro')) u.searchParams.set('vf_giro', g);
           links[i].href = u.toString();
         } catch (e) {}
