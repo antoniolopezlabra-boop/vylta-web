@@ -44,6 +44,20 @@
           links[i].href = u.toString();
         } catch (e) {}
       }
+      // Google Play: el origen viaja en "referrer" y Play Console lo muestra en
+      // Adquisición, así se ven las instalaciones que trajo cada anuncio.
+      var src2 = utm('utm_source');
+      if (src2) {
+        var plays = document.querySelectorAll('a[href*="play.google.com/store/apps/details"]');
+        for (var j = 0; j < plays.length; j++) {
+          try {
+            var pu = new URL(plays[j].href);
+            var r = 'utm_source=' + src2 + '&utm_medium=' + (utm('utm_medium') || 'web') + '&utm_campaign=' + (utm('utm_campaign') || 'vylta-lat');
+            pu.searchParams.set('referrer', r);
+            plays[j].href = pu.toString();
+          } catch (e) {}
+        }
+      }
     } catch (e) {}
   }
   if (document.readyState !== 'loading') attachSid();
