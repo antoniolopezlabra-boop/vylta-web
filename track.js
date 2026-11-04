@@ -46,17 +46,20 @@
       }
       // Google Play: el origen viaja en "referrer" y Play Console lo muestra en
       // Adquisición, así se ven las instalaciones que trajo cada anuncio.
-      var src2 = utm('utm_source');
-      if (src2) {
-        var plays = document.querySelectorAll('a[href*="play.google.com/store/apps/details"]');
-        for (var j = 0; j < plays.length; j++) {
-          try {
-            var pu = new URL(plays[j].href);
-            var r = 'utm_source=' + src2 + '&utm_medium=' + (utm('utm_medium') || 'web') + '&utm_campaign=' + (utm('utm_campaign') || 'vylta-lat');
-            pu.searchParams.set('referrer', r);
-            plays[j].href = pu.toString();
-          } catch (e) {}
-        }
+      // vf_sid también viaja: la app lo lee al abrir (install referrer) y
+      // enlaza la descarga con esta visita → columna "Origen" del panel.
+      var src2 = utm('utm_source') || 'vylta-web';
+      var plays = document.querySelectorAll('a[href*="play.google.com/store/apps/details"]');
+      for (var j = 0; j < plays.length; j++) {
+        try {
+          var pu = new URL(plays[j].href);
+          var g2 = plays[j].getAttribute('data-giro') || qp('giro') || '';
+          var r = 'utm_source=' + encodeURIComponent(src2) + '&utm_medium=' + encodeURIComponent(utm('utm_medium') || 'web') +
+            '&utm_campaign=' + encodeURIComponent(utm('utm_campaign') || 'vylta-lat') + '&vf_sid=' + encodeURIComponent(s) +
+            (g2 ? '&vf_giro=' + encodeURIComponent(g2) : '');
+          pu.searchParams.set('referrer', r);
+          plays[j].href = pu.toString();
+        } catch (e) {}
       }
     } catch (e) {}
   }
